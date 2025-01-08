@@ -3,8 +3,7 @@ package modele.dao.requetes.delete;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import javax.tools.Diagnostic;
-
+import modele.Diagnostic;
 import modele.dao.requetes.Requete;
 
 public class RequeteDeleteDiagnostic implements Requete<Diagnostic> {

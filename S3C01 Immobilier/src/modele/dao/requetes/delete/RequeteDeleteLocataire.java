@@ -20,6 +20,6 @@ public class RequeteDeleteLocataire implements Requete<Locataire> {
 
 	@Override
 	public void parametres(PreparedStatement prSt, Locataire donnee) throws SQLException {
-		prSt.setInt(1, donnee.getIdLocataire());
+		prSt.setString(1, donnee.getIdLocataire());
 	}
 }

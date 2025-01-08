@@ -18,7 +18,7 @@ public class ContratDeLocation {
 
     public ContratDeLocation(int idContratDeLocation, java.util.Date dateDebut, java.util.Date dateFin, double montantLoyer,
                               String provisionsCharges, String typeContrat, java.util.Date dateAnniversaire, double indiceICC,
-                              double montantCaution, Louable louable, List<Quittances> quittances) {
+                              double montantCaution, Louable louable) {
         this.idContratDeLocation = idContratDeLocation;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;

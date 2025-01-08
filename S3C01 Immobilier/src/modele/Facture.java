@@ -1,5 +1,6 @@
 package modele;
 
+import java.util.Date;
 import java.util.Objects;
 
 public class Facture {
@@ -8,13 +9,13 @@ public class Facture {
     private java.util.Date dateFacture;
     private String referenceDevis;
     private String entreprise;
-    private String datePaiement;
+    private Date datePaiement;
 
     private Entreprise entrepriseAssociee; // Relation avec Entreprise
     private Louable louable; // Relation avec Louable
 
     public Facture(int idFacture, double montant, java.util.Date dateFacture, String referenceDevis,
-                   String entreprise, String datePaiement, Entreprise entrepriseAssociee, Louable louable) {
+                   String entreprise, Date datePaiement, Entreprise entrepriseAssociee, Louable louable) {
         this.idFacture = idFacture;
         this.montant = montant;
         this.dateFacture = dateFacture;
@@ -65,11 +66,11 @@ public class Facture {
 		this.entreprise = entreprise;
 	}
 
-	public String getDatePaiement() {
+	public java.util.Date getDatePaiement() {
 		return datePaiement;
 	}
 
-	public void setDatePaiement(String datePaiement) {
+	public void setDatePaiement(Date datePaiement) {
 		this.datePaiement = datePaiement;
 	}
 
