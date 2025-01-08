@@ -55,11 +55,11 @@ public class Connexion extends JInternalFrame {
 		boutonAnnuler.addActionListener(gestionClic);
 	}
 	
-	public String getValeurChLogin() {
+	public String getUsername() {
 		return champUtilisateur.getText();
 	}
 	
-	public String getValeurPasswordField() {
+	public String getPassword() {
 		return new String(champMotDePasse.getPassword());
 	}
 }

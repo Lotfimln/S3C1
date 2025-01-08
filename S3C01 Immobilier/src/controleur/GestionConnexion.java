@@ -2,12 +2,10 @@ package controleur;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
 
-import modele.dao.CictOracleDataSource;
 import vue.AffichageDonnees;
 import vue.Connexion;
 import vue.FenetrePrincipale;
@@ -28,16 +26,14 @@ public class GestionConnexion implements ActionListener {
         switch (command) {
         case "Connecter":
             try {
-            	// Récupérer les identifiants de connexion
-                String login = fenetreConnexion.getValeurChLogin();
-                String password = fenetreConnexion.getValeurPasswordField();
+                // Initialisation de la connexion via Singleton
+                ConnexionBD connexionBD = ConnexionBD.getInstance(
+                    fenetreConnexion.getUsername(),
+                    fenetreConnexion.getPassword()
+                );
 
-                // Créer un accès à la base de données
-                CictOracleDataSource.creerAcces(login, password);
-
-                // Tester la connexion
-                Connection connection = CictOracleDataSource.getConnectionBD();
-                if (connection != null && !connection.isClosed()) {
+                // Test de la connexion
+                if (connexionBD.getConnection() != null) {
                     fenetrePrincipale.setConnecte(true);
                     JOptionPane.showMessageDialog(fenetreConnexion, "Connexion établie.");
                     this.fenetreConnexion.dispose();
@@ -52,6 +48,7 @@ public class GestionConnexion implements ActionListener {
                 JOptionPane.showMessageDialog(fenetreConnexion, "Erreur de connexion : " + e.getMessage());
             }
             break;
+
         case "Annuler":
             this.fenetreConnexion.dispose();
             break;
