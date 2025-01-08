@@ -6,13 +6,13 @@ public abstract class Louable {
     private int idLouable;
     private String adresse;
     private double superficie;
-    private String numeroFiscal;
-    private boolean statut;
+    private int numeroFiscal;
+    private String statut;
     private java.util.Date dateAnniversaire;
     private Assureur assurance; // Relation avec Assureur
     private Immeuble immeuble; // Relation avec Immeuble
 
-    public Louable(int idLouable, String adresse, double superficie, String numeroFiscal, boolean statut,
+    public Louable(int idLouable, String adresse, double superficie, int numeroFiscal, String statut,
                    java.util.Date dateAnniversaire, Assureur assurance) {
         this.idLouable = idLouable;
         this.adresse = adresse;
@@ -47,19 +47,19 @@ public abstract class Louable {
 		this.superficie = superficie;
 	}
 
-	public String getNumeroFiscal() {
+	public int getNumeroFiscal() {
 		return numeroFiscal;
 	}
 
-	public void setNumeroFiscal(String numeroFiscal) {
+	public void setNumeroFiscal(int numeroFiscal) {
 		this.numeroFiscal = numeroFiscal;
 	}
 
-	public boolean isStatut() {
+	public String getStatut() {
 		return statut;
 	}
 
-	public void setStatut(boolean statut) {
+	public void setStatut(String statut) {
 		this.statut = statut;
 	}
 

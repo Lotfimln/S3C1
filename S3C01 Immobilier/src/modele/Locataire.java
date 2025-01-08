@@ -3,14 +3,14 @@ package modele;
 import java.util.Objects;
 
 public class Locataire {
-    private int idLocataire;
+    private String idLocataire;
     private String nom;
     private String prenom;
     private String mail;
     private String telephone;
     private java.util.Date dateDepart;
 
-    public Locataire(int idLocataire, String nom, String prenom, String mail, String telephone, java.util.Date dateDepart) {
+    public Locataire(String idLocataire, String nom, String prenom, String mail, String telephone, java.util.Date dateDepart) {
         this.idLocataire = idLocataire;
         this.nom = nom;
         this.prenom = prenom;
@@ -19,11 +19,11 @@ public class Locataire {
         this.dateDepart = dateDepart;
     }
 
-	public int getIdLocataire() {
+	public String getIdLocataire() {
 		return idLocataire;
 	}
 
-	public void setIdLocataire(int idLocataire) {
+	public void setIdLocataire(String idLocataire) {
 		this.idLocataire = idLocataire;
 	}
 

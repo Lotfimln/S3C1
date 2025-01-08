@@ -10,7 +10,7 @@ public class RequeteUpdateAssureur implements Requete<Assureur> {
 
 	@Override
 	public String requete() {
-		return "UPDATE Assureur SET Prime = ?, DateAssurance = ?, SIRET = ? WHERE Id_Assurance = ?";
+		return "UPDATE Assureur SET Prime = ?, DateAssurance = ?, Nom = ? WHERE Id_Assurance = ?";
 	}
 
 	@Override
@@ -28,7 +28,8 @@ public class RequeteUpdateAssureur implements Requete<Assureur> {
 	    } else {
 	        prSt.setNull(2, java.sql.Types.DATE);
 	    }
-	    prSt.setInt(3, data.getIdAssurance()); 
+	    prSt.setString(3, data.getNom());
+	    prSt.setInt(4, data.getIdAssurance()); 
 	}
 
 }
