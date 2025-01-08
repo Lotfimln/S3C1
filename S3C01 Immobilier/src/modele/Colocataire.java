@@ -3,28 +3,28 @@ package modele;
 import java.util.Objects;
 
 public class Colocataire {
-    private String idLocataire;
-    private String idLocataire1;
+    private int idLocataire;
+    private int idLocataire1;
 
-    public Colocataire(String idLocataire, String idLocataire1) {
+    public Colocataire(int idLocataire, int idLocataire1) {
         this.idLocataire = idLocataire;
         this.idLocataire1 = idLocataire1;
     }
 
     // Getters et Setters
-    public String getIdLocataire() {
+    public int getIdLocataire() {
         return idLocataire;
     }
 
-    public void setIdLocataire(String idLocataire) {
+    public void setIdLocataire(int idLocataire) {
         this.idLocataire = idLocataire;
     }
 
-    public String getIdLocataire1() {
+    public int getIdLocataire1() {
         return idLocataire1;
     }
 
-    public void setIdLocataire1(String idLocataire1) {
+    public void setIdLocataire1(int idLocataire1) {
         this.idLocataire1 = idLocataire1;
     }
 

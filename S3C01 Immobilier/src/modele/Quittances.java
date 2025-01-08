@@ -7,7 +7,6 @@ public class Quittances {
     private java.util.Date datePaiement;
     private double montantLoyer;
     private double montantProvision;
-
     private Locataire locataire; // Relation avec Locataire
     private ContratDeLocation contratDeLocation; // Relation avec Contrat_de_location
 

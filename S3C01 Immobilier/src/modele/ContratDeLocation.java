@@ -15,7 +15,6 @@ public class ContratDeLocation {
     private double montantCaution;
 
     private Louable louable; // Relation avec Louable
-    private List<Quittances> quittances; // Relation avec Quittances
 
     public ContratDeLocation(int idContratDeLocation, java.util.Date dateDebut, java.util.Date dateFin, double montantLoyer,
                               String provisionsCharges, String typeContrat, java.util.Date dateAnniversaire, double indiceICC,
@@ -30,7 +29,6 @@ public class ContratDeLocation {
         this.indiceICC = indiceICC;
         this.montantCaution = montantCaution;
         this.louable = louable;
-        this.quittances = quittances;
     }
 
 	public int getIdContratDeLocation() {
@@ -113,26 +111,18 @@ public class ContratDeLocation {
 		this.louable = louable;
 	}
 
-	public List<Quittances> getQuittances() {
-		return quittances;
-	}
-
-	public void setQuittances(List<Quittances> quittances) {
-		this.quittances = quittances;
-	}
-
 	@Override
 	public String toString() {
 		return "ContratDeLocation [idContratDeLocation=" + idContratDeLocation + ", dateDebut=" + dateDebut
 				+ ", dateFin=" + dateFin + ", montantLoyer=" + montantLoyer + ", provisionsCharges=" + provisionsCharges
 				+ ", typeContrat=" + typeContrat + ", dateAnniversaire=" + dateAnniversaire + ", indiceICC=" + indiceICC
-				+ ", montantCaution=" + montantCaution + ", louable=" + louable + ", quittances=" + quittances + "]";
+				+ ", montantCaution=" + montantCaution + ", louable=" + louable + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		return Objects.hash(dateAnniversaire, dateDebut, dateFin, idContratDeLocation, indiceICC, louable,
-				montantCaution, montantLoyer, provisionsCharges, quittances, typeContrat);
+				montantCaution, montantLoyer, provisionsCharges, typeContrat);
 	}
 
 	@Override
@@ -151,6 +141,7 @@ public class ContratDeLocation {
 				&& Double.doubleToLongBits(montantCaution) == Double.doubleToLongBits(other.montantCaution)
 				&& Double.doubleToLongBits(montantLoyer) == Double.doubleToLongBits(other.montantLoyer)
 				&& Objects.equals(provisionsCharges, other.provisionsCharges)
-				&& Objects.equals(quittances, other.quittances) && Objects.equals(typeContrat, other.typeContrat);
+				&& Objects.equals(typeContrat, other.typeContrat);
 	}
+
 }

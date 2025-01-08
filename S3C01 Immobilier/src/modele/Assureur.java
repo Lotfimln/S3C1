@@ -6,9 +6,9 @@ public class Assureur {
     private int idAssurance;
     private String nom;
     private java.util.Date dateAssurance;
-    private int prime;
+    private String prime;
 
-    public Assureur(int idAssurance, String nom, java.util.Date dateAssurance, int prime) {
+    public Assureur(int idAssurance, String nom, java.util.Date dateAssurance, String prime) {
         this.idAssurance = idAssurance;
         this.nom = nom;
         this.dateAssurance = dateAssurance;
@@ -39,11 +39,11 @@ public class Assureur {
 		this.dateAssurance = dateAssurance;
 	}
 
-	public int getPrime() {
+	public String getPrime() {
 		return prime;
 	}
 
-	public void setPrime(int prime) {
+	public void setPrime(String prime) {
 		this.prime = prime;
 	}
 

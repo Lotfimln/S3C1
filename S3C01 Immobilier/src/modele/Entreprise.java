@@ -1,6 +1,5 @@
 package modele;
 
-import java.util.List;
 import java.util.Objects;
 
 public class Entreprise {
@@ -9,14 +8,11 @@ public class Entreprise {
     private String siren;
     private String adresse;
 
-    private List<Facture> factures; // Relation avec Facture
-
-    public Entreprise(int idEntreprise, String nom, String siren, String adresse, List<Facture> factures) {
+    public Entreprise(int idEntreprise, String nom, String siren, String adresse) {
         this.idEntreprise = idEntreprise;
         this.nom = nom;
         this.siren = siren;
         this.adresse = adresse;
-        this.factures = factures;
     }
 
 	public int getIdEntreprise() {
@@ -51,23 +47,14 @@ public class Entreprise {
 		this.adresse = adresse;
 	}
 
-	public List<Facture> getFactures() {
-		return factures;
-	}
-
-	public void setFactures(List<Facture> factures) {
-		this.factures = factures;
-	}
-
 	@Override
 	public String toString() {
-		return "Entreprise [idEntreprise=" + idEntreprise + ", nom=" + nom + ", siren=" + siren + ", adresse=" + adresse
-				+ ", factures=" + factures + "]";
+		return "Entreprise [idEntreprise=" + idEntreprise + ", nom=" + nom + ", siren=" + siren + ", adresse=" + adresse + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(adresse, factures, idEntreprise, nom, siren);
+		return Objects.hash(adresse, idEntreprise, nom, siren);
 	}
 
 	@Override
@@ -79,8 +66,9 @@ public class Entreprise {
 			return false;
 		}
 		Entreprise other = (Entreprise) obj;
-		return Objects.equals(adresse, other.adresse) && Objects.equals(factures, other.factures)
-				&& idEntreprise == other.idEntreprise && Objects.equals(nom, other.nom)
-				&& Objects.equals(siren, other.siren);
+		return Objects.equals(adresse, other.adresse) && idEntreprise == other.idEntreprise
+				&& Objects.equals(nom, other.nom) && Objects.equals(siren, other.siren);
 	}
+
+
 }

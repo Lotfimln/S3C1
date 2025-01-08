@@ -1,6 +1,5 @@
 package modele;
 
-import java.util.List;
 import java.util.Objects;
 
 public class IndexCompteur {
@@ -10,18 +9,13 @@ public class IndexCompteur {
     private double ancienneValeur;
     private java.util.Date dateReleve;
 
-    private List<Charge> charges; // Relation avec Charge (apparaitre)
-    private List<Immeuble> immeubles; // Relation avec Immeuble (Indexer)
-
     public IndexCompteur(int idIndexCompteur, String typeCompteur, double valeurCourante, double ancienneValeur,
-                         java.util.Date dateReleve, List<Charge> charges, List<Immeuble> immeubles) {
+                         java.util.Date dateReleve) {
         this.idIndexCompteur = idIndexCompteur;
         this.typeCompteur = typeCompteur;
         this.valeurCourante = valeurCourante;
         this.ancienneValeur = ancienneValeur;
         this.dateReleve = dateReleve;
-        this.charges = charges;
-        this.immeubles = immeubles;
     }
 
 	public int getIdIndexCompteur() {
@@ -64,33 +58,18 @@ public class IndexCompteur {
 		this.dateReleve = dateReleve;
 	}
 
-	public List<Charge> getCharges() {
-		return charges;
-	}
 
-	public void setCharges(List<Charge> charges) {
-		this.charges = charges;
-	}
-
-	public List<Immeuble> getImmeubles() {
-		return immeubles;
-	}
-
-	public void setImmeubles(List<Immeuble> immeubles) {
-		this.immeubles = immeubles;
-	}
 
 	@Override
 	public String toString() {
 		return "IndexCompteur [idIndexCompteur=" + idIndexCompteur + ", typeCompteur=" + typeCompteur
 				+ ", valeurCourante=" + valeurCourante + ", ancienneValeur=" + ancienneValeur + ", dateReleve="
-				+ dateReleve + ", charges=" + charges + ", immeubles=" + immeubles + "]";
+				+ dateReleve + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(ancienneValeur, charges, dateReleve, idIndexCompteur, immeubles, typeCompteur,
-				valeurCourante);
+		return Objects.hash(ancienneValeur, dateReleve, idIndexCompteur, typeCompteur, valeurCourante);
 	}
 
 	@Override
@@ -103,9 +82,9 @@ public class IndexCompteur {
 		}
 		IndexCompteur other = (IndexCompteur) obj;
 		return Double.doubleToLongBits(ancienneValeur) == Double.doubleToLongBits(other.ancienneValeur)
-				&& Objects.equals(charges, other.charges) && Objects.equals(dateReleve, other.dateReleve)
-				&& idIndexCompteur == other.idIndexCompteur && Objects.equals(immeubles, other.immeubles)
+				&& Objects.equals(dateReleve, other.dateReleve) && idIndexCompteur == other.idIndexCompteur
 				&& Objects.equals(typeCompteur, other.typeCompteur)
 				&& Double.doubleToLongBits(valeurCourante) == Double.doubleToLongBits(other.valeurCourante);
 	}
+
 }

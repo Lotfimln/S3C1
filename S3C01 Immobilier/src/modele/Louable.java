@@ -1,6 +1,5 @@
 package modele;
 
-import java.util.List;
 import java.util.Objects;
 
 public abstract class Louable {
@@ -10,15 +9,11 @@ public abstract class Louable {
     private String numeroFiscal;
     private boolean statut;
     private java.util.Date dateAnniversaire;
-
     private Assureur assurance; // Relation avec Assureur
-    private List<Facture> factures; // Relation avec Facture
-    private List<Diagnostic> diagnostics; // Relation avec Diagnostic
-    private List<ContratDeLocation> contratsDeLocation; // Relation avec Contrat_de_location
+    private Immeuble immeuble; // Relation avec Immeuble
 
     public Louable(int idLouable, String adresse, double superficie, String numeroFiscal, boolean statut,
-                   java.util.Date dateAnniversaire, Assureur assurance, List<Facture> factures,
-                   List<Diagnostic> diagnostics, List<ContratDeLocation> contratsDeLocation) {
+                   java.util.Date dateAnniversaire, Assureur assurance) {
         this.idLouable = idLouable;
         this.adresse = adresse;
         this.superficie = superficie;
@@ -26,9 +21,6 @@ public abstract class Louable {
         this.statut = statut;
         this.dateAnniversaire = dateAnniversaire;
         this.assurance = assurance;
-        this.factures = factures;
-        this.diagnostics = diagnostics;
-        this.contratsDeLocation = contratsDeLocation;
     }
 
 	public int getIdLouable() {
@@ -86,37 +78,21 @@ public abstract class Louable {
 	public void setAssurance(Assureur assurance) {
 		this.assurance = assurance;
 	}
-
-	public List<Facture> getFactures() {
-		return factures;
+	
+	public Immeuble getImmeuble() {
+		return immeuble;
+	}
+	
+	public void setImmeuble(Immeuble immeuble) {
+		this.immeuble = immeuble;
 	}
 
-	public void setFactures(List<Facture> factures) {
-		this.factures = factures;
-	}
-
-	public List<Diagnostic> getDiagnostics() {
-		return diagnostics;
-	}
-
-	public void setDiagnostics(List<Diagnostic> diagnostics) {
-		this.diagnostics = diagnostics;
-	}
-
-	public List<ContratDeLocation> getContratsDeLocation() {
-		return contratsDeLocation;
-	}
-
-	public void setContratsDeLocation(List<ContratDeLocation> contratsDeLocation) {
-		this.contratsDeLocation = contratsDeLocation;
-	}
 
 	@Override
 	public String toString() {
 		return "Louable [idLouable=" + idLouable + ", adresse=" + adresse + ", superficie=" + superficie
 				+ ", numeroFiscal=" + numeroFiscal + ", statut=" + statut + ", dateAnniversaire=" + dateAnniversaire
-				+ ", assurance=" + assurance + ", factures=" + factures + ", diagnostics=" + diagnostics
-				+ ", contratsDeLocation=" + contratsDeLocation + "]";
+				+ ", assurance=" + assurance + ", immeuble=" + immeuble + "]";
 	}
 
 	@Override
