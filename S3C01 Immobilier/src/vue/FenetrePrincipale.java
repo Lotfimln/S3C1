@@ -4,12 +4,13 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.WindowConstants;
 
 import controleur.GestionFenetrePrincipale;
 
 public class FenetrePrincipale extends JFrame {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	private JMenuItem menuItemConnecter;
@@ -19,7 +20,7 @@ public class FenetrePrincipale extends JFrame {
 	public FenetrePrincipale() {
 		this.setTitle("Immo' Gestion 31");
 		this.setSize(1000, 700);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.setLayout(null);
 
@@ -41,7 +42,7 @@ public class FenetrePrincipale extends JFrame {
 		this.menuItemDeconnecter = new JMenuItem("Deconnecter");
 		menuConnexion.add(this.menuItemDeconnecter);
 		this.menuItemDeconnecter.setEnabled(false); // Désactivé au démarrage
-		
+
 		// Menu Parametres
 		JMenu menuParametres = new JMenu("Paramètres");
 		menuBar.add(menuParametres);
