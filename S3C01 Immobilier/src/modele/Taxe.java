@@ -6,10 +6,10 @@ import java.util.Objects;
 public class Taxe {
     private int idTaxe;
     private double montantTaxeFoncieres;
-    private Date dateTaxe;
+    private java.util.Date dateTaxe;
     private Immeuble immeuble; // Relation avec Immeuble
 
-    public Taxe(int idTaxe, double montantTaxeFoncieres, Date dateTaxe, Immeuble immeuble) {
+    public Taxe(int idTaxe, double montantTaxeFoncieres, java.util.Date dateTaxe, Immeuble immeuble) {
         this.idTaxe = idTaxe;
         this.montantTaxeFoncieres = montantTaxeFoncieres;
         this.dateTaxe = dateTaxe;
@@ -36,7 +36,7 @@ public class Taxe {
 		return dateTaxe;
 	}
 
-	public void setDateTaxe(Date dateTaxe) {
+	public void setDateTaxe(java.util.Date dateTaxe) {
 		this.dateTaxe = dateTaxe;
 	}
 

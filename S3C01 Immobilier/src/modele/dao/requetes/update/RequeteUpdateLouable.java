@@ -1,6 +1,5 @@
 package modele.dao.requetes.update;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 

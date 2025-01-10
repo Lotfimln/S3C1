@@ -30,7 +30,7 @@ public class RequeteUpdateContratDeLocation implements Requete<ContratDeLocation
 	        prSt.setNull(2, java.sql.Types.DATE);
 	    }
 		prSt.setDouble(3, data.getMontantLoyer());
-		prSt.setString(4, data.getProvisionsCharges());
+		prSt.setDouble(4, data.getProvisionsCharges());
 		prSt.setString(5, data.getTypeContrat());
 		java.util.Date utilDate2 = data.getDateAnniversaire();
 		if (utilDate2 != null) {
