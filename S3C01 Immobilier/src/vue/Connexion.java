@@ -13,7 +13,7 @@ public class Connexion extends JInternalFrame {
 	private JTextField champUtilisateur;
 	private JPasswordField champMotDePasse;
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -54,11 +54,11 @@ public class Connexion extends JInternalFrame {
 		boutonConnecter.addActionListener(gestionClic);
 		boutonAnnuler.addActionListener(gestionClic);
 	}
-	
+
 	public String getUsername() {
 		return champUtilisateur.getText();
 	}
-	
+
 	public String getPassword() {
 		return new String(champMotDePasse.getPassword());
 	}
