@@ -64,6 +64,10 @@ public class GestionSelecteur implements ActionListener {
         // Récupérer toutes les données du type spécifié depuis le DAO
         List<T> donnees = dao.findAll();
 
+        // Affiche les données récupérées dans la console pour vérification
+        System.out.println("Données récupérées par findAll() :");
+        donnees.forEach(System.out::println);
+
         // Initialisation des colonnes et des données
         String[] colonnes;
         Object[][] data;
@@ -85,16 +89,14 @@ public class GestionSelecteur implements ActionListener {
         // Met à jour le tableau de la fenêtre avec les données
         JTable tableListeElements = fenetreAffichageDonnees.getTableListeElements();
         DefaultTableModel model = new DefaultTableModel(data, colonnes) {
-            /**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
+            private static final long serialVersionUID = 1L;
 
-			@Override
+            @Override
             public boolean isCellEditable(int row, int column) {
                 return false; // Rend les cellules non éditables
             }
         };
         tableListeElements.setModel(model); // Applique le nouveau modèle
     }
+
 }

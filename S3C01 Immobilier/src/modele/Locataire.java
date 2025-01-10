@@ -8,6 +8,7 @@ public class Locataire {
     private String prenom;
     private String mail;
     private String telephone;
+    private java.util.Date dateNaissance;
     private java.util.Date dateDepart;
 
     public Locataire(String idLocataire, String nom, String prenom, String mail, String telephone, java.util.Date dateDepart) {
@@ -57,6 +58,14 @@ public class Locataire {
 
 	public void setTelephone(String telephone) {
 		this.telephone = telephone;
+	}
+	
+	public java.util.Date getDateNaissance() {
+		return dateNaissance;
+	}
+
+	public void setDateNaissance(java.util.Date dateDepart) {
+		this.dateNaissance = dateDepart;
 	}
 
 	public java.util.Date getDateDepart() {
