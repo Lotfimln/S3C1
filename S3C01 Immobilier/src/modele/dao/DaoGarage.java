@@ -15,6 +15,8 @@ import modele.dao.requetes.delete.RequeteDeleteGarage;
 import modele.dao.requetes.delete.RequeteDeleteLouable;
 import modele.dao.requetes.select.RequeteSelectGarage;
 import modele.dao.requetes.select.RequeteSelectGarageByID;
+import modele.dao.requetes.select.RequeteSelectGarageLouable;
+import modele.dao.requetes.select.RequeteSelectGarageLouableByID;
 import modele.dao.requetes.update.RequeteUpdateGarage;
 
 public class DaoGarage implements Dao<Garage> {
@@ -73,7 +75,7 @@ public class DaoGarage implements Dao<Garage> {
 
 	@Override
 	public Garage findById(String... id) throws SQLException {
-		RequeteSelectGarageByID requeteSelectById = new RequeteSelectGarageByID();
+		RequeteSelectGarageLouableByID requeteSelectById = new RequeteSelectGarageLouableByID();
 	    DaoImmeuble daoImmeuble = new DaoImmeuble(this.connection);
 	    DaoAssureur daoAssureur = new DaoAssureur(this.connection);
 	    
@@ -97,7 +99,7 @@ public class DaoGarage implements Dao<Garage> {
 	}
 	@Override
 	public List<Garage> findAll() throws SQLException {
-		RequeteSelectGarage requeteSelectAll = new RequeteSelectGarage();
+		RequeteSelectGarageLouable requeteSelectAll = new RequeteSelectGarageLouable();
 		List<Garage> garages = new ArrayList<>();
 	    DaoImmeuble daoImmeuble = new DaoImmeuble(this.connection);
 	    DaoAssureur daoAssureur = new DaoAssureur(this.connection);

@@ -14,6 +14,8 @@ import modele.dao.requetes.delete.RequeteDeleteLogement;
 import modele.dao.requetes.delete.RequeteDeleteLouable;
 import modele.dao.requetes.select.RequeteSelectLogement;
 import modele.dao.requetes.select.RequeteSelectLogementByID;
+import modele.dao.requetes.select.RequeteSelectLogementLouable;
+import modele.dao.requetes.select.RequeteSelectLogementLouableByID;
 import modele.dao.requetes.update.RequeteUpdateLogement;
 
 public class DaoLogement implements Dao<Logement> {
@@ -73,7 +75,7 @@ public class DaoLogement implements Dao<Logement> {
 
 	@Override
 	public Logement findById(String... id) throws SQLException {
-		RequeteSelectLogementByID requeteSelectById = new RequeteSelectLogementByID();
+		RequeteSelectLogementLouableByID requeteSelectById = new RequeteSelectLogementLouableByID();
 	    DaoLouable daoLouable = new DaoLouable(this.connection);
 	    DaoAssureur daoAssureur = new DaoAssureur(this.connection);
 	    
@@ -97,7 +99,7 @@ public class DaoLogement implements Dao<Logement> {
 
 	@Override
 	public List<Logement> findAll() throws SQLException {
-		RequeteSelectLogement requeteSelectAll = new RequeteSelectLogement();
+		RequeteSelectLogementLouable requeteSelectAll = new RequeteSelectLogementLouable();
 		List<Logement> logements = new ArrayList<>();
 	    DaoLouable daoLouable = new DaoLouable(this.connection);
 	    DaoAssureur daoAssureur = new DaoAssureur(this.connection);
