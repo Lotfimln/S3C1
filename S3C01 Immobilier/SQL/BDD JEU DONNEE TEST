@@ -73,10 +73,9 @@ create table Louable(
     Id_Louable INT,
     Adresse VARCHAR2(50),
     Superficie NUMBER(10, 3),
-    NumeroFiscal NUMBER(12),
+    NumeroFiscal VARCHAR2(12),
     Statut VARCHAR2(1), -- Utiliser 'Y' pour vrai et 'N' pour faux
     DateAnniversaire DATE,
-    DateAcqui DATE,
     Id_Immeuble INT,
     Id_Assurance INT,
     constraint pk_louable primary key (Id_Louable),
@@ -265,10 +264,10 @@ INSERT INTO Index_Compteur (Id_Index_Compteur, TypeCompteur, ValeurCourante, Anc
 VALUES (2, 'Eau', 800.300, 700.200, TO_DATE('2024-01-01', 'YYYY-MM-DD'));
 
 -- Table Louable
-INSERT INTO Louable (Id_Louable, Adresse, Superficie, NumeroFiscal, Statut, DateAnniversaire, DateAcqui, Id_Immeuble, Id_Assurance)
-VALUES (1, '15 Rue des Lilas', 75.5, 123456789012, 'Y', TO_DATE('2023-01-01', 'YYYY-MM-DD'), TO_DATE('2022-01-01', 'YYYY-MM-DD'), 1, 1);
-INSERT INTO Louable (Id_Louable, Adresse, Superficie, NumeroFiscal, Statut, DateAnniversaire, DateAcqui, Id_Immeuble, Id_Assurance)
-VALUES (2, '20 Rue des Roses', 120.0, 987654321012, 'N', TO_DATE('2023-06-01', 'YYYY-MM-DD'), TO_DATE('2022-06-01', 'YYYY-MM-DD'), 2, 2);
+INSERT INTO Louable (Id_Louable, Adresse, Superficie, NumeroFiscal, Statut, DateAnniversaire, Id_Immeuble, Id_Assurance)
+VALUES (1, '15 Rue des Lilas', 75.5, 123456789012, 'Y', TO_DATE('2023-01-01', 'YYYY-MM-DD'), 1, 1);
+INSERT INTO Louable (Id_Louable, Adresse, Superficie, NumeroFiscal, Statut, DateAnniversaire, Id_Immeuble, Id_Assurance)
+VALUES (2, '20 Rue des Roses', 120.0, 987654321012, 'N', TO_DATE('2023-06-01', 'YYYY-MM-DD'), 2, 2);
 
 -- Table Garage
 INSERT INTO Garage (Id_Louable)

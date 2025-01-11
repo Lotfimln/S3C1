@@ -18,7 +18,7 @@ public class RequeteUpdateLouable implements Requete<Louable> {
 
 		prSt.setDouble(1, data.getSuperficie());
 		prSt.setString(2, data.getAdresse());
-		prSt.setLong(3, data.getNumeroFiscal());
+		prSt.setString(3, data.getNumeroFiscal());
 		prSt.setString(4, data.getStatut());
 		java.util.Date utilDate = data.getDateAnniversaire();
 	    if (utilDate != null) {

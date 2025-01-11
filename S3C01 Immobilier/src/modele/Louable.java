@@ -6,14 +6,13 @@ public abstract class Louable {
     protected int idLouable;
     private String adresse;
     private double superficie;
-    private long numeroFiscal;
+    private String numeroFiscal;
     private String statut;
     private java.util.Date dateAnniversaire;
-    private java.util.Date dateAcquisition;
     private Immeuble immeuble; // Relation avec Immeuble
     private Assureur assurance; // Relation avec Assureur
 
-    public Louable(int idLouable, String adresse, double superficie, long numeroFiscal, String statut,
+    public Louable(int idLouable, String adresse, double superficie, String numeroFiscal, String statut,
                    java.util.Date dateAnniversaire, Immeuble immeuble, Assureur assurance) {
         this.idLouable = idLouable;
         this.adresse = adresse;
@@ -52,11 +51,11 @@ public abstract class Louable {
 	    this.superficie = Math.round(superficie * 1000.0) / 1000.0; // Arrondir à 3 décimales
 	}
 
-	public long getNumeroFiscal() {
+	public String getNumeroFiscal() {
 		return numeroFiscal;
 	}
 
-	public void setNumeroFiscal(long numeroFiscal) {
+	public void setNumeroFiscal(String numeroFiscal) {
 	    if (String.valueOf(numeroFiscal).length() > 12) {
 	        throw new IllegalArgumentException("NumeroFiscal ne peut pas dépasser 12 chiffres");
 	    }
@@ -93,14 +92,6 @@ public abstract class Louable {
 
 	public void setImmeuble(Immeuble immeuble) {
 		this.immeuble = immeuble;
-	}
-
-	public java.util.Date getDateAcquisition() {
-		return dateAcquisition;
-	}
-
-	public void setDateAcquisition(java.util.Date dateAcquisition) {
-		this.dateAcquisition = dateAcquisition;
 	}
 
 	@Override

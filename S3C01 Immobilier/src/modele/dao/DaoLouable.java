@@ -23,7 +23,7 @@ public class DaoLouable implements Dao<Louable> {
 		try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
 			prSt.setString(1, donnees.getAdresse());
 			prSt.setDouble(2, donnees.getSuperficie());
-			prSt.setLong(3, donnees.getNumeroFiscal());
+			prSt.setString(3, donnees.getNumeroFiscal());
 			prSt.setString(4, donnees.getStatut());
 			java.util.Date utilDate = donnees.getDateAnniversaire();
             java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());  // Convertir en java.sql.Date

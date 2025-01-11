@@ -28,16 +28,19 @@ public class DaoGarage implements Dao<Garage> {
 	@Override
 	public void create(Garage donnees) throws SQLException {
 		String sql = "INSERT INTO Garage (Id_Louable) VALUES (?)";
-		try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
+		String sqlLouable = "INSERT INTO Louable (Id_Louable, Adresse, Superficie, NumeroFiscal, Statut, DateAnniversaire, Id_Immeuble, Id_Assurance) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+		try (PreparedStatement prSt = this.connection.prepareStatement(sql);
+			 PreparedStatement prStLouable = this.connection.prepareStatement(sqlLouable);
+				) {
+			// Insertion dans la table Logement
 			prSt.setInt(1, donnees.getIdLouable());
 			prSt.executeUpdate();
-		}
-			String sqlLouable = "INSERT INTO Louable (Id_Louable, Adresse, Superficie, NumeroFiscal, Statut, DateAnniversaire, Id_Immeuble, Id_Assurance) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-		try (PreparedStatement prStLouable = this.connection.prepareStatement(sqlLouable)) {
+			
+			// Insertion dans la table Louable
 			prStLouable.setInt(1, donnees.getIdLouable());
 			prStLouable.setString(2, donnees.getAdresse());
 			prStLouable.setDouble(3, donnees.getSuperficie());
-			prStLouable.setLong(4, donnees.getNumeroFiscal());
+			prStLouable.setString(4, donnees.getNumeroFiscal());
 			prStLouable.setString(5, donnees.getStatut());
 			java.util.Date utilDate = donnees.getDateAnniversaire();
             java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
@@ -45,15 +48,25 @@ public class DaoGarage implements Dao<Garage> {
 			prStLouable.setInt(7, donnees.getImmeuble().getIdImmeuble());
 			prStLouable.setInt(8, donnees.getAssurance().getIdAssurance());
 			prStLouable.executeUpdate();
+		} catch (SQLException e) {
+            String messageErreur = "Erreur lors de la création du garage avec Id_Garage = " + donnees.getIdLouable() + 
+                    ". Détails : " + e.getMessage();
+            System.err.println(messageErreur);
+            throw new SQLException(messageErreur, e);
 		}
-
 	}
+	
 	@Override
 	public void update(Garage donnees) throws SQLException {
 		RequeteUpdateGarage requeteUpdate = new RequeteUpdateGarage();
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteUpdate.requete())) {
 			requeteUpdate.parametres(prSt, donnees);
 			prSt.executeUpdate();
+		} catch (SQLException e) {
+            String messageErreur = "Erreur lors de la mise à jour du garage avec Id_Garage = " + donnees.getIdGarage() + 
+                    ". Détails : " + e.getMessage();
+            System.err.println(messageErreur);
+            throw new SQLException(messageErreur, e);
 		}
 	}
 
@@ -68,6 +81,11 @@ public class DaoGarage implements Dao<Garage> {
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteDeleteLouable.requete())) {
 			requeteDeleteLouable.parametres(prSt, donnees);
 			prSt.executeUpdate();
+		} catch (SQLException e) {
+            String messageErreur = "Erreur lors de la suppression du garage avec Id_Garage = " + donnees.getIdGarage() +
+                    ". Détails : " + e.getMessage();
+            System.err.println(messageErreur);
+            throw new SQLException(messageErreur, e);
 		}
 	}
 
@@ -90,14 +108,21 @@ public class DaoGarage implements Dao<Garage> {
 	                Assureur assureur = daoAssureur.findById(String.valueOf(idAssureur));
 
 					return new Garage(rs.getInt("Id_Louable"), rs.getString("Adresse"),
-							  rs.getDouble("Superficie"), rs.getInt("NumeroFiscal"),
-							  rs.getString("Statut"), rs.getDate("DateAnniversaire"),
-							  rs.getDate("DateAcqui"), immeuble, assureur, louable);
-				}
-			}
-		}
-		return null;
-	}
+							  rs.getDouble("Superficie"), rs.getString("NumeroFiscal"),
+							  rs.getString("Statut"), rs.getDate("DateAnniversaire"), 
+							  immeuble, assureur, louable);
+				} else {
+                    throw new SQLException("Aucun garage trouvé avec Id_Garage = " + id[0]);
+                }
+            }
+        } catch (SQLException e) {
+            String messageErreur = "Erreur lors de la récupération du garage avec Id_Garage = " + id[0] +
+                                    ". Détails : " + e.getMessage();
+            System.err.println(messageErreur);
+            throw new SQLException(messageErreur, e);
+        }
+    }
+	
 	@Override
 	public List<Garage> findAll() throws SQLException {
 		RequeteSelectGarageLouable requeteSelectAll = new RequeteSelectGarageLouable();
@@ -116,12 +141,15 @@ public class DaoGarage implements Dao<Garage> {
                 Immeuble immeuble = daoImmeuble.findById(String.valueOf(idImmeuble));
                 Assureur assureur = daoAssureur.findById(String.valueOf(idAssureur));
 
-				garages.add(new Garage(rs.getInt("Id_Louable"), rs.getString("Adresse"),
-						  rs.getDouble("Superficie"), rs.getInt("NumeroFiscal"),
-						  rs.getString("Statut"), rs.getDate("DateAnniversaire"),
-						  rs.getDate("DateAcqui"), immeuble, assureur, louable));
+				garages.add(new Garage(rs.getInt("Id_Louable"), rs.getString("Adresse"), rs.getDouble("Superficie"), 
+									   rs.getString("NumeroFiscal"), rs.getString("Statut"), rs.getDate("DateAnniversaire"), 
+									   immeuble, assureur, louable));
 			}
-		return garages;
-		}
-	}
+        } catch (SQLException e) {
+            String messageErreur = "Erreur lors de la récupération de la liste des logements. Détails : " + e.getMessage();
+            System.err.println(messageErreur);
+            throw new SQLException(messageErreur, e);
+        }
+        return garages;
+    }
 }

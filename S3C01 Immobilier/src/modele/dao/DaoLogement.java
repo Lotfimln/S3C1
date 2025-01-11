@@ -28,25 +28,33 @@ public class DaoLogement implements Dao<Logement> {
 	@Override
 	public void create(Logement donnees) throws SQLException {
 		String sql = "INSERT INTO Logement (Id_Louable, NbPièces) VALUES (?, ?)";
-		try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
+		String sqlLouable = "INSERT INTO Louable (Id_Louable, Adresse, Superficie, NumeroFiscal, Statut, DateAnniversaire, Id_Immeuble, Id_Assurance) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+		try (PreparedStatement prSt = this.connection.prepareStatement(sql);
+			 PreparedStatement prStLouable = this.connection.prepareStatement(sqlLouable);) {
+			// Insertion dans la table Logement
 			prSt.setInt(1, donnees.getIdLouable());
 			prSt.setInt(2, donnees.getNbPieces());
 			prSt.executeUpdate();
-		}
-			String sqlLouable = "INSERT INTO Louable (Id_Louable, Adresse, Superficie, NumeroFiscal, Statut, DateAnniversaire, Id_Immeuble, Id_Assurance) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-			try (PreparedStatement prStLouable = this.connection.prepareStatement(sqlLouable)) {
-				prStLouable.setInt(1, donnees.getIdLouable());
-				prStLouable.setString(2, donnees.getAdresse());
-				prStLouable.setDouble(3, donnees.getSuperficie());
-				prStLouable.setLong(4, donnees.getNumeroFiscal());
-				prStLouable.setString(5, donnees.getStatut());
-				java.util.Date utilDate = donnees.getDateAnniversaire();
-	            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-	            prStLouable.setDate(6, sqlDate);
-				prStLouable.setInt(7, donnees.getImmeuble().getIdImmeuble());
-				prStLouable.setInt(8, donnees.getAssurance().getIdAssurance());
-				prStLouable.executeUpdate();
+				
+			// Insertion dans la table Louable
+			prStLouable.setInt(1, donnees.getIdLouable());
+			prStLouable.setString(2, donnees.getAdresse());
+			prStLouable.setDouble(3, donnees.getSuperficie());
+			prStLouable.setString(4, donnees.getNumeroFiscal());
+			prStLouable.setString(5, donnees.getStatut());
+			java.util.Date utilDate = donnees.getDateAnniversaire();	            
+			java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+	        prStLouable.setDate(6, sqlDate);
+			prStLouable.setInt(7, donnees.getImmeuble().getIdImmeuble());
+			prStLouable.setInt(8, donnees.getAssurance().getIdAssurance());
+			prStLouable.executeUpdate();
 			}
+		catch (SQLException e) {
+	            String messageErreur = "Erreur lors de la création du logement avec Id_Louable = " + donnees.getIdLouable() + 
+                        ". Détails : " + e.getMessage();
+	            System.err.println(messageErreur);
+	            throw new SQLException(messageErreur, e);
+		}
 	}
 
 	@Override
@@ -55,6 +63,11 @@ public class DaoLogement implements Dao<Logement> {
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteUpdate.requete())) {
 			requeteUpdate.parametres(prSt, donnees);
 			prSt.executeUpdate();
+		} catch (SQLException e) {
+            String messageErreur = "Erreur lors de la mise à jour du logement avec Id_Louable = " + donnees.getIdLouable() + 
+                    ". Détails : " + e.getMessage();
+            System.err.println(messageErreur);
+            throw new SQLException(messageErreur, e);
 		}
 	}
 
@@ -69,6 +82,11 @@ public class DaoLogement implements Dao<Logement> {
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteDeleteLouable.requete())) {
 			requeteDeleteLouable.parametres(prSt, donnees);
 			prSt.executeUpdate();
+		} catch (SQLException e) {
+            String messageErreur = "Erreur lors de la suppression du logement avec Id_Louable = " + donnees.getIdLouable() +
+                    ". Détails : " + e.getMessage();
+            System.err.println(messageErreur);
+            throw new SQLException(messageErreur, e);
 		}
 	}
 
@@ -91,13 +109,19 @@ public class DaoLogement implements Dao<Logement> {
 	                Immeuble immeuble = daoImmeuble.findById(String.valueOf(idImmeuble));
 	                
 					return new Logement(rs.getInt("Id_Louable"), rs.getString("Adresse"), rs.getDouble("Superficie"),
-							   rs.getInt("Numero Fiscal"), rs.getString("Statut"), rs.getDate("DateAnniversaire"),
+							   rs.getString("Numero Fiscal"), rs.getString("Statut"), rs.getDate("DateAnniversaire"),
 							   immeuble, assureur, rs.getInt("NbPiece"), louable);
-				}
-			}
-		}
-		return null;
-	}
+				} else {
+                    throw new SQLException("Aucun logement trouvé avec Id_Louable = " + id[0]);
+                }
+            }
+        } catch (SQLException e) {
+            String messageErreur = "Erreur lors de la récupération du logement avec Id_Louable = " + id[0] +
+                                    ". Détails : " + e.getMessage();
+            System.err.println(messageErreur);
+            throw new SQLException(messageErreur, e);
+        }
+    }
 
 	@Override
 	public List<Logement> findAll() throws SQLException {
@@ -118,10 +142,14 @@ public class DaoLogement implements Dao<Logement> {
                 Assureur assureur = daoAssureur.findById(String.valueOf(idAssureur));
 
 				logements.add(new Logement(rs.getInt("Id_Louable"), rs.getString("Adresse"), rs.getDouble("Superficie"),
-										   rs.getInt("Numero Fiscal"), rs.getString("Statut"), rs.getDate("DateAnniversaire"),
+										   rs.getString("Numero Fiscal"), rs.getString("Statut"), rs.getDate("DateAnniversaire"),
 										   immeuble, assureur, rs.getInt("NbPiece"), louable));
 			}
-		}
-		return logements;
-	}
+        } catch (SQLException e) {
+            String messageErreur = "Erreur lors de la récupération de la liste des logements. Détails : " + e.getMessage();
+            System.err.println(messageErreur);
+            throw new SQLException(messageErreur, e);
+        }
+        return logements;
+    }
 }

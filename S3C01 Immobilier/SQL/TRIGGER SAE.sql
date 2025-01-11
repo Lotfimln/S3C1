@@ -10,13 +10,13 @@ create or replace trigger checkLocataireDateNais before insert or update on Loca
     end;
 /
 
--------------------------- LOGEMENT -------------------------------------
+-------------------------- LOUABLE -------------------------------------
 
 -- Déclencheur pour vérifier que la date d'acquisition du bien n'est pas ultérieure à la date actuelle
-create or replace trigger checkLogementDateAcqui before insert or update on Logement
+create or replace trigger checkLouableDateAcqui before insert or update on Louable
     for each row
     begin
-       if :NEW.DateAcqui > SYSDATE then
+       if :NEW.DateAnniversaire > SYSDATE then
           -- Si la la date d'acquisition est postérieure à la date actuelle
           raise_application_error(-20001, 'La date d''acquisition du logement ne peut pas être ultérieure à la date actuelle.'); end if;
     end;
