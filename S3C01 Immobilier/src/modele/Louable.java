@@ -14,14 +14,13 @@ public abstract class Louable {
     private Assureur assurance; // Relation avec Assureur
 
     public Louable(int idLouable, String adresse, double superficie, int numeroFiscal, String statut,
-                   java.util.Date dateAnniversaire, java.util.Date dateAcquisition, Immeuble immeuble, Assureur assurance) {
+                   java.util.Date dateAnniversaire, Immeuble immeuble, Assureur assurance) {
         this.idLouable = idLouable;
         this.adresse = adresse;
         this.superficie = superficie;
         this.numeroFiscal = numeroFiscal;
         this.statut = statut;
         this.dateAnniversaire = dateAnniversaire;
-        this.dateAcquisition = dateAcquisition;
         this.immeuble = immeuble;
         this.assurance = assurance;
     }
