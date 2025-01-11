@@ -29,12 +29,12 @@ public class DaoFacture implements Dao<Facture> {
 		try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
 			prSt.setDouble(1, donnees.getMontant());
 			java.util.Date utilDate = donnees.getDateFacture();
-            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());  
+            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
             prSt.setDate(2, sqlDate);
 			prSt.setString(3, donnees.getReferenceDevis());
 			prSt.setString(4, donnees.getEntreprise());
 			java.util.Date utilDate1 = donnees.getDatePaiement();
-            java.sql.Date sqlDate1 = new java.sql.Date(utilDate1.getTime());  
+            java.sql.Date sqlDate1 = new java.sql.Date(utilDate1.getTime());
             prSt.setDate(5, sqlDate1);
 			prSt.setInt(6, donnees.getEntrepriseAssociee().getIdEntreprise());
 			prSt.setInt(7, donnees.getLouable().getIdLouable());
@@ -74,7 +74,7 @@ public class DaoFacture implements Dao<Facture> {
 
 	                Entreprise entreprise = daoFacture.findById(String.valueOf(idEntreprise));
 	                Louable louable = daoEntreprise.findById(String.valueOf(idLouable));
-	                
+
 					return new Facture(rs.getInt("Id_Facture"), rs.getDouble("Montant"), rs.getDate("DateFacture"),
 							rs.getString("ReferenceDevis"), rs.getString("Entreprise"), rs.getDate("DatePaiement"),
 							entreprise, louable);
@@ -98,7 +98,7 @@ public class DaoFacture implements Dao<Facture> {
 
                 Entreprise entreprise = daoFacture.findById(String.valueOf(idEntreprise));
                 Louable louable = daoEntreprise.findById(String.valueOf(idLouable));
-                
+
 				factures.add(new Facture(rs.getInt("Id_Facture"), rs.getDouble("Montant"), rs.getDate("DateFacture"),
 						rs.getString("ReferenceDevis"), rs.getString("Entreprise"), rs.getDate("DatePaiement"),
 						entreprise, louable));

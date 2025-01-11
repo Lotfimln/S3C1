@@ -81,11 +81,11 @@ public abstract class Louable {
 	public void setAssurance(Assureur assurance) {
 		this.assurance = assurance;
 	}
-	
+
 	public Immeuble getImmeuble() {
 		return immeuble;
 	}
-	
+
 	public void setImmeuble(Immeuble immeuble) {
 		this.immeuble = immeuble;
 	}
@@ -121,5 +121,5 @@ public abstract class Louable {
 		Louable other = (Louable) obj;
 		return idLouable == other.idLouable;
 	}
- 
+
 }

@@ -66,6 +66,6 @@ public class Proprietes {
 	public void setSommeLoyers(int sommeLoyers) {
 		this.sommeLoyers = sommeLoyers;
 	}
-    
-    
+
+
 }

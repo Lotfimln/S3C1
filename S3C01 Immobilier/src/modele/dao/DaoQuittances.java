@@ -7,10 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import modele.Assureur;
 import modele.ContratDeLocation;
 import modele.Locataire;
-import modele.Louable;
 import modele.Quittances;
 import modele.dao.requetes.delete.RequeteDeleteQuittances;
 import modele.dao.requetes.select.RequeteSelectQuittances;
@@ -31,7 +29,7 @@ public class DaoQuittances implements Dao<Quittances> {
 		try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
 			prSt.setDouble(1, donnees.getMontantLoyer());
 			java.util.Date utilDate = donnees.getDatePaiement();
-            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());  
+            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
             prSt.setDate(2, sqlDate);
 			prSt.setDouble(3, donnees.getMontantLoyer());
 			prSt.setDouble(4, donnees.getMontantProvision());
@@ -64,7 +62,7 @@ public class DaoQuittances implements Dao<Quittances> {
 		RequeteSelectQuittancesByID requeteSelectById = new RequeteSelectQuittancesByID();
 	    DaoLocataire daoLocataire = new DaoLocataire(this.connection);
 	    DaoContratDeLocation daoContratDeLocation = new DaoContratDeLocation(this.connection);
-	    
+
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectById.requete())) {
 			requeteSelectById.parametres(prSt, id);
 			try (ResultSet rs = prSt.executeQuery()) {
@@ -73,7 +71,7 @@ public class DaoQuittances implements Dao<Quittances> {
 	                int idContratDeLocation = rs.getInt("Id_Contrat_de_location");
 	                Locataire locataire = daoLocataire.findById(String.valueOf(idLocataire));
 	                ContratDeLocation contratDeLocation = daoContratDeLocation.findById(String.valueOf(idContratDeLocation));
-	                
+
 					return new Quittances(rs.getInt("Id_Quittances"), rs.getDate("DateDerPaiement"),
 							rs.getDouble("MontantLoyer"), rs.getDouble("MontantProvision"), locataire,
 							contratDeLocation);
@@ -89,7 +87,7 @@ public class DaoQuittances implements Dao<Quittances> {
 		List<Quittances> quittances = new ArrayList<>();
 	    DaoLocataire daoLocataire = new DaoLocataire(this.connection);
 	    DaoContratDeLocation daoContratDeLocation = new DaoContratDeLocation(this.connection);
-	    
+
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectAll.requete());
 				ResultSet rs = prSt.executeQuery()) {
 			while (rs.next()) {
@@ -97,7 +95,7 @@ public class DaoQuittances implements Dao<Quittances> {
                 int idContratDeLocation = rs.getInt("Id_Contrat_de_location");
                 Locataire locataire = daoLocataire.findById(String.valueOf(idLocataire));
                 ContratDeLocation contratDeLocation = daoContratDeLocation.findById(String.valueOf(idContratDeLocation));
-                
+
 				quittances.add(new Quittances(rs.getInt("Id_Quittances"), rs.getDate("DatePaiement"),
 						rs.getDouble("MontantLoyer"), rs.getDouble("MontantProvision"), locataire,
 						contratDeLocation));

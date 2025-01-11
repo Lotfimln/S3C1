@@ -59,11 +59,11 @@ public class Locataire {
 	public void setTelephone(String telephone) {
 		this.telephone = telephone;
 	}
-	
+
 	public java.util.Date getDateNais() {
 		return dateNais;
 	}
-	
+
 	public java.util.Date getDateDepart() {
 		return dateDepart;
 	}

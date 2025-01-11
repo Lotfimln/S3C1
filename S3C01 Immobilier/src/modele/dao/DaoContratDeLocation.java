@@ -28,10 +28,10 @@ public class DaoContratDeLocation implements Dao<ContratDeLocation> {
 		try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
 			prSt.setInt(1, donnees.getIdContratDeLocation());
 			java.util.Date utilDate = donnees.getDateDebut();
-            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());  
+            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
             prSt.setDate(2, sqlDate);
 			java.util.Date utilDate1 = donnees.getDateFin();
-            java.sql.Date sqlDate1 = new java.sql.Date(utilDate1.getTime()); 
+            java.sql.Date sqlDate1 = new java.sql.Date(utilDate1.getTime());
             prSt.setDate(3, sqlDate1);
 			prSt.setDouble(4, donnees.getMontantLoyer());
 			prSt.setDouble(5, donnees.getProvisionsCharges());
@@ -72,7 +72,7 @@ public class DaoContratDeLocation implements Dao<ContratDeLocation> {
 				if (rs.next()) {
 	                int idLouable = rs.getInt("Id_Louable");
 	                Louable louable = daoLouable.findById(String.valueOf(idLouable));
-	                
+
 					return new ContratDeLocation(rs.getInt("Id_Contrat_de_location"), rs.getDate("DateDebut"),
 							rs.getDate("DateFin"), rs.getDouble("MontantLoyer"), rs.getDouble("ProvisionsCharges"),
 							rs.getString("TypeContrat"), rs.getDate("DateAnniversaire"), rs.getDouble("IndiceICC"),
@@ -88,13 +88,13 @@ public class DaoContratDeLocation implements Dao<ContratDeLocation> {
 		RequeteSelectContratDeLocation requeteSelectAll = new RequeteSelectContratDeLocation();
 		List<ContratDeLocation> contrats = new ArrayList<>();
 	    DaoLouable daoLouable = new DaoLouable(this.connection);
-	    
+
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectAll.requete());
 				ResultSet rs = prSt.executeQuery()) {
 			while (rs.next()) {
 				int idLouable = rs.getInt("Id_Louable");
                 Louable louable = daoLouable.findById(String.valueOf(idLouable));
-                
+
 				contrats.add(new ContratDeLocation(rs.getInt("Id_Contrat_de_location"), rs.getDate("DateDebut"),
 						rs.getDate("DateFin"), rs.getDouble("MontantLoyer"), rs.getInt("ProvisionsCharges"),
 						rs.getString("TypeContrat"), rs.getDate("DateAnniversaire"), rs.getDouble("IndiceICC"),

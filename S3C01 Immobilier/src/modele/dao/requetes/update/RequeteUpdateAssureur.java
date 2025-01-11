@@ -29,7 +29,7 @@ public class RequeteUpdateAssureur implements Requete<Assureur> {
 	        prSt.setNull(2, java.sql.Types.DATE);
 	    }
 	    prSt.setString(3, data.getNom());
-	    prSt.setInt(4, data.getIdAssurance()); 
+	    prSt.setInt(4, data.getIdAssurance());
 	}
 
 }

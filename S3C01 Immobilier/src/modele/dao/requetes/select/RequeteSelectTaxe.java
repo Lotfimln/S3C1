@@ -20,6 +20,6 @@ public class RequeteSelectTaxe implements Requete<Taxe> {
 
 		@Override
 		public void parametres(PreparedStatement prSt, Taxe data) throws SQLException {
-			
+
 		}
 	}

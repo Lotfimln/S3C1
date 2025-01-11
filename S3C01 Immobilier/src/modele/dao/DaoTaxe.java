@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import modele.Immeuble;
-import modele.Louable;
 import modele.Taxe;
 import modele.dao.requetes.delete.RequeteDeleteTaxe;
 import modele.dao.requetes.select.RequeteSelectTaxe;
@@ -30,7 +29,7 @@ public class DaoTaxe implements Dao<Taxe> {
 			prSt.setInt(1, donnees.getIdTaxe());
 			prSt.setDouble(2, donnees.getMontantTaxeFoncieres());
 			java.util.Date utilDate = donnees.getDateTaxe();
-            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());  
+            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
             prSt.setDate(3, sqlDate);
 			prSt.setInt(4, donnees.getImmeuble().getIdImmeuble());
 			prSt.executeUpdate();
@@ -59,14 +58,14 @@ public class DaoTaxe implements Dao<Taxe> {
 	public Taxe findById(String... id) throws SQLException {
 		RequeteSelectTaxeByID requeteSelectById = new RequeteSelectTaxeByID();
 	    DaoImmeuble daoImmeuble = new DaoImmeuble(this.connection);
-	    
+
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectById.requete())) {
 			requeteSelectById.parametres(prSt, id);
 			try (ResultSet rs = prSt.executeQuery()) {
 				if (rs.next()) {
 					int idImmeuble = rs.getInt("Id_Immeuble");
 	                Immeuble immeuble= daoImmeuble.findById(String.valueOf(idImmeuble));
-	                
+
 					return new Taxe(rs.getInt("Id_Taxe"), rs.getDouble("MontantTaxeFoncieres"),
 							rs.getDate("DateTaxe"), immeuble);
 				}
@@ -80,13 +79,13 @@ public class DaoTaxe implements Dao<Taxe> {
 		RequeteSelectTaxe requeteSelectAll = new RequeteSelectTaxe();
 		List<Taxe> taxes = new ArrayList<>();
 	    DaoImmeuble daoImmeuble = new DaoImmeuble(this.connection);
-	    
+
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectAll.requete());
 				ResultSet rs = prSt.executeQuery()) {
 			while (rs.next()) {
 				int idImmeuble = rs.getInt("Id_Immeuble");
                 Immeuble immeuble= daoImmeuble.findById(String.valueOf(idImmeuble));
-                
+
 				taxes.add(new Taxe(rs.getInt("Id_Taxe"), rs.getDouble("MontantTaxeFoncieres"),
 						rs.getDate("DateTaxe"), immeuble));
 			}

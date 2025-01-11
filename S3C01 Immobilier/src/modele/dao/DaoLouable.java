@@ -2,15 +2,11 @@ package modele.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import modele.Louable;
 import modele.dao.requetes.delete.RequeteDeleteLouable;
-import modele.dao.requetes.select.RequeteSelectLouable;
-import modele.dao.requetes.select.RequeteSelectLouableByID;
 import modele.dao.requetes.update.RequeteUpdateLouable;
 
 public class DaoLouable implements Dao<Louable> {

@@ -2,8 +2,12 @@ package controleur;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.JOptionPane;
-import vue.*;
+
+import vue.Connexion;
+import vue.FenetrePrincipale;
+import vue.Parametres;
 
 public class GestionFenetrePrincipale implements ActionListener {
 	private FenetrePrincipale fenetrePrincipale;

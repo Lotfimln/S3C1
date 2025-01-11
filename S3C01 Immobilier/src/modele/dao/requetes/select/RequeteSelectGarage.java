@@ -20,6 +20,6 @@ public class RequeteSelectGarage implements Requete<Garage> {
 
 		@Override
 		public void parametres(PreparedStatement prSt, Garage data) throws SQLException {
-			
+
 		}
 	}

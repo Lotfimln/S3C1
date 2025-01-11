@@ -22,6 +22,6 @@ public class RequeteUpdateColocataire implements Requete<Colocataire> {
 	@Override
 	public void parametres(PreparedStatement prSt, String... id) throws SQLException {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

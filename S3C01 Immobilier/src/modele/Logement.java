@@ -8,11 +8,11 @@ public class Logement extends Louable {
         super(idLouable, adresse, superficie, numeroFiscal, statut, dateAnniversaire, assurance);
         this.nbPieces = nbPieces;
     }
-    
+
     public void setIdLogement(int idLouable) {
         this.idLouable = idLouable;
     }
-    
+
     public int getIdLogement() {
     	return idLouable;
     }
@@ -24,7 +24,7 @@ public class Logement extends Louable {
     public void setNbPieces(int nbPieces) {
         this.nbPieces = nbPieces;
     }
-    
+
     @Override
     public String toString() {
         return "Logement{" +

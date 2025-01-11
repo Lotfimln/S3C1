@@ -9,8 +9,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import modele.Immeuble;
-import modele.dao.DaoImmeuble;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
@@ -19,9 +17,12 @@ import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 
+import modele.Immeuble;
+import modele.dao.DaoImmeuble;
+
 public class CreerAnnexe {
-    
-	
+
+
     private static void ajouterResultatFoncier(XWPFDocument document, int resultatFoncier) {
         CreerAnnexe.ajouterUnSousTitre(document, "Résultat Foncier");
         CreerAnnexe.ajouterLigne(document, "RÉSULTAT", resultatFoncier);
@@ -43,7 +44,7 @@ public class CreerAnnexe {
             List<Proprietes> proprietes = new ArrayList<>();
             List<InfosRecettes> recettes = new ArrayList<>();
             List<FraisCharges> fraisEtCharges = new ArrayList<>();
-            
+
             // Utilisez le DAO pour récupérer les immeubles
             DaoImmeuble daoImmeuble = new DaoImmeuble();
 
@@ -55,9 +56,9 @@ public class CreerAnnexe {
                     int nombreLocaux = daoImmeuble.getNombreLogementsDansImmeuble(immeuble.getImmeuble());
                     // Calcule du total des loyers dans l'immeuble
                     int sommeLoyers = daoImmeuble.getSommeLoyersDansImmeublePourPeriode(immeuble.getImmeuble(), (LocalDate.now().getYear()-1)+"-05-01", LocalDate.now().getYear()+"-05-31");
-                    
+
                     List<FraisCharges> fraisEtChargesImmeuble = daoImmeuble.getFraisEtChargesParImmeuble(immeuble.getImmeuble(), (LocalDate.now().getYear()-1)+"-05-01", LocalDate.now().getYear()+"-05-31");
-                    
+
                     Proprietes propriete = new Proprietes(
                             immeuble.getImmeuble(),
                             immeuble.getType_immeuble(),
@@ -69,24 +70,24 @@ public class CreerAnnexe {
                     proprietes.add(propriete);
                     recettes.add(new InfosRecettes(immeuble.getImmeuble(), "Loyers bruts encaissés", sommeLoyers));
                     fraisEtCharges.addAll(fraisEtChargesImmeuble);
-                    
+
                 }
-                
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            
+
             ajouterUnSousTitre(document, "Caractéristiques des propriétés");
             ajouterInfosProprietes(document, proprietes);
 
-          
+
             ajouterUnSousTitre(document, "Recettes");
             ajouterTableRecettes(document, recettes);
 
-            
+
             ajouterUnSousTitre(document, "Frais et charges");
             ajouterTableFraisCharge(document, fraisEtCharges);
-            
+
             int resultatFoncier = calculerResultatFoncier(recettes, fraisEtCharges);
             ajouterResultatFoncier(document, resultatFoncier);
 
@@ -103,7 +104,7 @@ public class CreerAnnexe {
         }
     }
 
-    
+
     private static void ajouterUnSousTitre(XWPFDocument document, String txt) {
         XWPFParagraph paragraph = document.createParagraph();
         XWPFRun run = paragraph.createRun();
@@ -115,14 +116,14 @@ public class CreerAnnexe {
         paragraph.setAlignment(ParagraphAlignment.CENTER);
     }
 
-    
+
     private static void ajouterLigne(XWPFDocument document, String txt, int val) {
         XWPFParagraph paragraph = document.createParagraph();
         XWPFRun run = paragraph.createRun();
         run.setText(txt + "\t" + val);
     }
 
-   
+
     private static void ajouterUnTitre(XWPFDocument document, String txt) {
         XWPFParagraph paragraph = document.createParagraph();
         XWPFRun run = paragraph.createRun();
@@ -134,7 +135,7 @@ public class CreerAnnexe {
         paragraph.setSpacingAfter(12);
     }
 
-    
+
     private static void ajouterFooter(XWPFDocument document, String txt) {
         XWPFParagraph paragraph = document.createParagraph();
         XWPFRun run = paragraph.createRun();
@@ -145,7 +146,7 @@ public class CreerAnnexe {
         paragraph.setSpacingAfter(12);
     }
 
-    
+
     private static void addTable(XWPFDocument document, List<String> entête, List<List<String>> données) {
         XWPFTable table = document.createTable();
 
@@ -169,7 +170,7 @@ public class CreerAnnexe {
         }
     }
 
-   
+
     private static void ajouterInfosProprietes(XWPFDocument document, List<Proprietes> propriétés) {
         List<String> headers = List.of("Nom de la Propriété", "Type", "Période de Construction", "Adresse", "Nombre de Locaux");
         List<List<String>> données = new ArrayList<>();
@@ -183,7 +184,7 @@ public class CreerAnnexe {
         addTable(document, headers, données);
     }
 
-   
+
     private static void ajouterTableRecettes(XWPFDocument document, List<InfosRecettes> recettes) {
         List<String> headers = List.of("Nom de la Propriété", "Description", "Montant");
         List<List<String>> données = new ArrayList<>();
@@ -196,20 +197,20 @@ public class CreerAnnexe {
         addTable(document, headers, données);
     }
 
-   
+
     private static void ajouterTableFraisCharge(XWPFDocument document, List<FraisCharges> fraisCharges) {
         List<String> headers = List.of("Nom de la Propriété", "Description", "Montant");
         List<List<String>> données = new ArrayList<>();
 
         for (FraisCharges fg : fraisCharges) {
-            List<String> rowData = List.of(fg.getNom(), fg.getDescription(), String.valueOf(fg.getMontant())); 
+            List<String> rowData = List.of(fg.getNom(), fg.getDescription(), String.valueOf(fg.getMontant()));
             données.add(rowData);
         }
 
         addTable(document, headers, données);
     }
-    
-    
+
+
     private static int calculerResultatFoncier(List<InfosRecettes> recettes, List<FraisCharges> fraisEtCharges) {
         int totalRecettes = recettes.stream().mapToInt(InfosRecettes::getMontant).sum();
         int totalCharges = fraisEtCharges.stream().mapToInt(FraisCharges::getMontant).sum();

@@ -31,6 +31,6 @@ public class RequeteUpdateIndexCompteur implements Requete<IndexCompteur> {
 	@Override
 	public void parametres(PreparedStatement prSt, String... id) throws SQLException {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

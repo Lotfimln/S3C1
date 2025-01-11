@@ -61,7 +61,7 @@ public class DaoDiagnostic implements Dao<Diagnostic> {
 				if (rs.next()) {
 	                int idLouable = rs.getInt("Id_Louable");
 	                Louable louable = daoLouable.findById(String.valueOf(idLouable));
-	                
+
 					return new Diagnostic(rs.getInt("Id_Diagnostic"), rs.getString("Type_Diag"),
 							rs.getDate("DateDiagnostic"), louable);
 				}
@@ -75,13 +75,13 @@ public class DaoDiagnostic implements Dao<Diagnostic> {
 		RequeteSelectDiagnostic requeteSelectAll = new RequeteSelectDiagnostic();
 		List<Diagnostic> diagnostics = new ArrayList<>();
 	    DaoLouable daoLouable = new DaoLouable(this.connection);
-	    
+
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectAll.requete());
 				ResultSet rs = prSt.executeQuery()) {
 			while (rs.next()) {
 				int idLouable = rs.getInt("Id_Louable");
                 Louable louable = daoLouable.findById(String.valueOf(idLouable));
-                
+
 				diagnostics.add(new Diagnostic(rs.getInt("Id_Diagnostic"), rs.getString("Type_Diag"),
 						rs.getDate("DateDiagnostic"), louable));
 			}

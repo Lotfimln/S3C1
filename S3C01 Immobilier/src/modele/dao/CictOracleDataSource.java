@@ -1,7 +1,6 @@
 package modele.dao;
 
 import java.sql.Connection;
-
 import java.sql.SQLException;
 
 import oracle.jdbc.pool.OracleDataSource;
@@ -10,7 +9,7 @@ import oracle.jdbc.pool.OracleDataSource;
 public class CictOracleDataSource extends OracleDataSource {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	private static Connection connection;
@@ -44,7 +43,7 @@ public class CictOracleDataSource extends OracleDataSource {
 
 	// Méthode pour récupérer la connexion
 	/**
-	 * @return la connexion actuelle à la base de donnée 
+	 * @return la connexion actuelle à la base de donnée
 	 */
 	public static Connection getConnectionBD() {
 		return connection;

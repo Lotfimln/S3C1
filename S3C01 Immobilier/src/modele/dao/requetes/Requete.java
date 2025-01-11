@@ -4,7 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
- * Interface définissant les méthodes requête(), parametres(PreparedStatement, String...) 
+ * Interface définissant les méthodes requête(), parametres(PreparedStatement, String...)
  * et parametres(PreparedStatement, T) pour les objets de requête utilisés dans les DAO.
  * @param <T> Type de données associé à la requête.
  */

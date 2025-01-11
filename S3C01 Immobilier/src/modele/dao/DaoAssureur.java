@@ -1,6 +1,9 @@
 package modele.dao;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,7 +62,7 @@ public class DaoAssureur implements Dao<Assureur> {
                 if (rs.next()) {
                     return new Assureur(
                         rs.getInt("Id_Assurance"),
-                        rs.getString("Nom"), 
+                        rs.getString("Nom"),
                         rs.getDate("DateAssurance"),
                         rs.getInt("Prime")
                     );
@@ -78,7 +81,7 @@ public class DaoAssureur implements Dao<Assureur> {
             while (rs.next()) {
                 assureur.add(new Assureur(
                     rs.getInt("Id_Assurance"),
-                    rs.getString("Nom"), 
+                    rs.getString("Nom"),
                     rs.getDate("DateAssurance"),
                     rs.getInt("Prime")
                 ));

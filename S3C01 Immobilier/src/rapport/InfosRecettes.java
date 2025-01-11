@@ -20,7 +20,7 @@ public class InfosRecettes{
 		this.nom = nom;
 	}
 
-	
+
 	public String getDescription() {
 		return description;
 	}
@@ -29,7 +29,7 @@ public class InfosRecettes{
 		this.description = description;
 	}
 
-	
+
 	public int getMontant() {
 		return montant;
 	}
@@ -37,6 +37,6 @@ public class InfosRecettes{
 	public void setMontant(int m) {
 		this.montant = m;
 	}
-    
-    
+
+
 }

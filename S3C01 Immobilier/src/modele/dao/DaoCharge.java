@@ -108,7 +108,7 @@ public class DaoCharge implements Dao<Charge> {
 
 	            Facture facture = daoFacture.findById(String.valueOf(idFacture));
 	            Louable louable = daoLouable.findById(String.valueOf(idLouable));
-	            
+
 	            charges.add(new Charge(
 	                rs.getInt("Id_Charge"),
 	                rs.getString("Type_Charge"),

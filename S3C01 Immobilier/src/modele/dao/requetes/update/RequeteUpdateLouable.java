@@ -16,10 +16,10 @@ public class RequeteUpdateLouable implements Requete<Louable> {
 	@Override
 	public void parametres(PreparedStatement prSt, Louable data) throws SQLException {
 
-		prSt.setDouble(1, data.getSuperficie());    
-		prSt.setString(2, data.getAdresse());     
+		prSt.setDouble(1, data.getSuperficie());
+		prSt.setString(2, data.getAdresse());
 		prSt.setInt(3, data.getNumeroFiscal());
-		prSt.setString(4, data.getStatut());  
+		prSt.setString(4, data.getStatut());
 		java.util.Date utilDate = data.getDateAnniversaire();
 	    if (utilDate != null) {
 	        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
@@ -27,9 +27,9 @@ public class RequeteUpdateLouable implements Requete<Louable> {
 	    } else {
 	        prSt.setNull(5, java.sql.Types.DATE);
 	    }
-	    prSt.setInt(6, data.getIdLouable());  
-	    prSt.setInt(7, data.getIdLouable());  
-	    prSt.setInt(8, data.getIdLouable());  
+	    prSt.setInt(6, data.getIdLouable());
+	    prSt.setInt(7, data.getIdLouable());
+	    prSt.setInt(8, data.getIdLouable());
 	}
 
 	@Override

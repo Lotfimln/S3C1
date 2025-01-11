@@ -31,7 +31,7 @@ public class GestionConnexion implements ActionListener {
                     // Utiliser CictOracleDataSource pour établir la connexion
                     String username = fenetreConnexion.getUsername();
                     String password = fenetreConnexion.getPassword();
-                    
+
                     Connection connection = CictOracleDataSource.creerAcces(username, password);
 
                     // Vérifier si la connexion est réussie
@@ -47,9 +47,9 @@ public class GestionConnexion implements ActionListener {
                         affichageDonnees.moveToFront();
                     }
                 } catch (SQLException e) {
-                    JOptionPane.showMessageDialog(fenetreConnexion, 
-                        "Erreur de connexion : " + e.getMessage(), 
-                        "Erreur", 
+                    JOptionPane.showMessageDialog(fenetreConnexion,
+                        "Erreur de connexion : " + e.getMessage(),
+                        "Erreur",
                         JOptionPane.ERROR_MESSAGE);
                 }
                 break;

@@ -7,14 +7,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import modele.Apparaitre;
 import modele.Correspondre;
-import modele.Immeuble;
 import modele.dao.requetes.delete.RequeteDeleteCorrespondre;
-import modele.dao.requetes.select.RequeteSelectApparaitreByID;
 import modele.dao.requetes.select.RequeteSelectCorrespondre;
 import modele.dao.requetes.select.RequeteSelectCorrespondreByID;
-import modele.dao.requetes.select.RequeteSelectImmeubleByID;
 import modele.dao.requetes.update.RequeteUpdateCorrespondre;
 
 public class DaoCorrespondre implements Dao<Correspondre> {
@@ -52,7 +48,7 @@ public class DaoCorrespondre implements Dao<Correspondre> {
 			prSt.executeUpdate();
 		}
 	}
-	
+
 	@Override
     public Correspondre findById(String... id) throws SQLException {
         RequeteSelectCorrespondreByID requeteSelectById = new RequeteSelectCorrespondreByID();

@@ -20,6 +20,6 @@ public class RequeteSelectLogement implements Requete<Logement> {
 
 		@Override
 		public void parametres(PreparedStatement prSt, Logement data) throws SQLException {
-			
+
 		}
 	}

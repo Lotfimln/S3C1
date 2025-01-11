@@ -1,7 +1,7 @@
 package rapport;
 
 public class FraisCharges {
-	
+
     private String nom;
     private String description;
     private int montant;
@@ -36,6 +36,6 @@ public class FraisCharges {
 	public void setMontant(int montant) {
 		this.montant = montant;
 	}
-    
-    
+
+
 }

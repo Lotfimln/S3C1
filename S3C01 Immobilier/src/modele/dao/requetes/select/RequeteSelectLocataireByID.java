@@ -22,6 +22,6 @@ public class RequeteSelectLocataireByID implements Requete<Locataire> {
 		@Override
 		public void parametres(PreparedStatement prSt, Locataire data) throws SQLException {
 			prSt.setString(1, data.getIdLocataire());
-			
+
 		}
 	}

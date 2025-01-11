@@ -12,8 +12,6 @@ import modele.Logement;
 import modele.Louable;
 import modele.dao.requetes.delete.RequeteDeleteLogement;
 import modele.dao.requetes.delete.RequeteDeleteLouable;
-import modele.dao.requetes.select.RequeteSelectLogement;
-import modele.dao.requetes.select.RequeteSelectLogementByID;
 import modele.dao.requetes.select.RequeteSelectLogementLouable;
 import modele.dao.requetes.select.RequeteSelectLogementLouableByID;
 import modele.dao.requetes.update.RequeteUpdateLogement;
@@ -42,7 +40,7 @@ public class DaoLogement implements Dao<Logement> {
 				prStLouable.setInt(4, donnees.getNumeroFiscal());
 				prStLouable.setString(5, donnees.getStatut());
 				java.util.Date utilDate = donnees.getDateAnniversaire();
-	            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());  
+	            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
 	            prStLouable.setDate(6, sqlDate);
 				prStLouable.setInt(7, donnees.getImmeuble().getIdImmeuble());
 				prStLouable.setInt(8, donnees.getAssurance().getIdAssurance());
@@ -78,7 +76,7 @@ public class DaoLogement implements Dao<Logement> {
 		RequeteSelectLogementLouableByID requeteSelectById = new RequeteSelectLogementLouableByID();
 	    DaoLouable daoLouable = new DaoLouable(this.connection);
 	    DaoAssureur daoAssureur = new DaoAssureur(this.connection);
-	    
+
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectById.requete())) {
 			requeteSelectById.parametres(prSt, id);
 			try (ResultSet rs = prSt.executeQuery()) {
@@ -87,9 +85,9 @@ public class DaoLogement implements Dao<Logement> {
 	                int idAssureur = rs.getInt("Is_Assureur");
 	                Louable louable = daoLouable.findById(String.valueOf(idLouable));
 	                Assureur assureur = daoAssureur.findById(String.valueOf(idAssureur));
-	                
-					return new Logement(rs.getInt("Id_Louable"), rs.getString("Adresse"), rs.getDouble("Superficie"), 
-							   rs.getInt("Numero Fiscal"), rs.getString("Statut"), rs.getDate("DateAnniversaire"), 
+
+					return new Logement(rs.getInt("Id_Louable"), rs.getString("Adresse"), rs.getDouble("Superficie"),
+							   rs.getInt("Numero Fiscal"), rs.getString("Statut"), rs.getDate("DateAnniversaire"),
 							   assureur, rs.getInt("NbPiece"), louable);
 				}
 			}
@@ -103,7 +101,7 @@ public class DaoLogement implements Dao<Logement> {
 		List<Logement> logements = new ArrayList<>();
 	    DaoLouable daoLouable = new DaoLouable(this.connection);
 	    DaoAssureur daoAssureur = new DaoAssureur(this.connection);
-	    
+
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectAll.requete());
 				ResultSet rs = prSt.executeQuery()) {
 			while (rs.next()) {
@@ -111,9 +109,9 @@ public class DaoLogement implements Dao<Logement> {
                 int idAssureur = rs.getInt("Is_Assureur");
                 Louable louable = daoLouable.findById(String.valueOf(idLouable));
                 Assureur assureur = daoAssureur.findById(String.valueOf(idAssureur));
-                
-				logements.add(new Logement(rs.getInt("Id_Louable"), rs.getString("Adresse"), rs.getDouble("Superficie"), 
-										   rs.getInt("Numero Fiscal"), rs.getString("Statut"), rs.getDate("DateAnniversaire"), 
+
+				logements.add(new Logement(rs.getInt("Id_Louable"), rs.getString("Adresse"), rs.getDouble("Superficie"),
+										   rs.getInt("Numero Fiscal"), rs.getString("Statut"), rs.getDate("DateAnniversaire"),
 										   assureur, rs.getInt("NbPiece"), louable));
 			}
 		}

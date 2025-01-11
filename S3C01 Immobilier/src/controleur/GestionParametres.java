@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
 
-import vue.*;
+import vue.Parametres;
 
 public class GestionParametres implements ActionListener{
 
@@ -24,7 +24,7 @@ public class GestionParametres implements ActionListener{
 			String[] tabParametres = fenetreParametres.getParametres();
 			fenetreParametres.enregistrerDansFichier(tabParametres);
 		    JOptionPane.showMessageDialog(fenetreParametres, "Données enregistrées avec succès !");
-		    
+
 		    // Optionnel : Afficher les données enregistrées dans la console pour vérification
 		    System.out.println("Données enregistrées : ");
 		    for (String parametre : tabParametres) {

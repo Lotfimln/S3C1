@@ -20,6 +20,6 @@ public class RequeteSelectQuittances implements Requete<Quittances> {
 
 		@Override
 		public void parametres(PreparedStatement prSt, Quittances data) throws SQLException {
-			
+
 		}
 	}

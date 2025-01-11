@@ -1,7 +1,19 @@
 package vue;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.WindowConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.table.DefaultTableModel;
 
@@ -16,7 +28,7 @@ public class AffichageDonnees extends JInternalFrame {
     public AffichageDonnees(FenetrePrincipale fenetrePrincipale) {
         this.setTitle("Gestion Immobilière");
         this.setBounds(100, 100, 1200, 700);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.getContentPane().setLayout(new BorderLayout());
 
         // Panneau gauche pour la sélection des tables et des entités
@@ -41,7 +53,7 @@ public class AffichageDonnees extends JInternalFrame {
         // Initialisation du tableau
         tableListeElements = new JTable();
         tableListeElements.setModel(new DefaultTableModel(
-            new Object[][]{}, 
+            new Object[][]{},
             new String[]{"ID", "Attribut"}
         ));
         tableListeElements.setFillsViewportHeight(true);

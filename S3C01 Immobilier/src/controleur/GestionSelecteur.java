@@ -10,8 +10,34 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import modele.*;
-import modele.dao.*;
+import modele.Assureur;
+import modele.Charge;
+import modele.ContratDeLocation;
+import modele.Diagnostic;
+import modele.Entreprise;
+import modele.Facture;
+import modele.Garage;
+import modele.Immeuble;
+import modele.IndexCompteur;
+import modele.Locataire;
+import modele.Logement;
+import modele.Quittances;
+import modele.Taxe;
+import modele.dao.CictOracleDataSource;
+import modele.dao.Dao;
+import modele.dao.DaoAssureur;
+import modele.dao.DaoCharge;
+import modele.dao.DaoContratDeLocation;
+import modele.dao.DaoDiagnostic;
+import modele.dao.DaoEntreprise;
+import modele.dao.DaoFacture;
+import modele.dao.DaoGarage;
+import modele.dao.DaoImmeuble;
+import modele.dao.DaoIndexCompteur;
+import modele.dao.DaoLocataire;
+import modele.dao.DaoLogement;
+import modele.dao.DaoQuittances;
+import modele.dao.DaoTaxe;
 import vue.AffichageDonnees;
 import vue.ElementsSelectionnables;
 
@@ -76,16 +102,16 @@ public class GestionSelecteur implements ActionListener {
                     afficherDonnees(new DaoGarage(CictOracleDataSource.getConnectionBD()), Garage.class);
                     break;
                     default:
-                        JOptionPane.showMessageDialog(fenetreAffichageDonnees, 
-                            "Option non prise en charge : " + selection, 
-                            "Erreur", 
+                        JOptionPane.showMessageDialog(fenetreAffichageDonnees,
+                            "Option non prise en charge : " + selection,
+                            "Erreur",
                             JOptionPane.ERROR_MESSAGE);
                         break;
                 }
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(fenetreAffichageDonnees, 
-                    "Erreur lors de l'accès à la base de données : " + ex.getMessage(), 
-                    "Erreur", 
+                JOptionPane.showMessageDialog(fenetreAffichageDonnees,
+                    "Erreur lors de l'accès à la base de données : " + ex.getMessage(),
+                    "Erreur",
                     JOptionPane.ERROR_MESSAGE);
             }
         }

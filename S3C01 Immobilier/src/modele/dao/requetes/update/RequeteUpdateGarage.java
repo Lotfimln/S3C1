@@ -4,7 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import modele.Garage;
-import modele.Logement;
 import modele.dao.requetes.Requete;
 
 public class RequeteUpdateGarage implements Requete<Garage> {
@@ -41,6 +40,6 @@ public class RequeteUpdateGarage implements Requete<Garage> {
 	@Override
 	public void parametres(PreparedStatement prSt, String... id) throws SQLException {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

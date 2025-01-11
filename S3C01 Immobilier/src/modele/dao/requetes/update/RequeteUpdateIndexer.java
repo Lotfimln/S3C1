@@ -22,6 +22,6 @@ public class RequeteUpdateIndexer implements Requete<Indexer> {
 	@Override
 	public void parametres(PreparedStatement prSt, String... id) throws SQLException {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

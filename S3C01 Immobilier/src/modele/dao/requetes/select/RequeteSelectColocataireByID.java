@@ -24,6 +24,6 @@ public class RequeteSelectColocataireByID implements Requete<Colocataire> {
 		public void parametres(PreparedStatement prSt, Colocataire data) throws SQLException {
 			prSt.setString(1, data.getIdLocataire());
 			prSt.setString(2, data.getIdLocataire1());
-			
+
 		}
 	}

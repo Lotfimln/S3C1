@@ -30,6 +30,6 @@ public class RequeteUpdateDiagnostic implements Requete<Diagnostic> {
 	@Override
 	public void parametres(PreparedStatement prSt, String... id) throws SQLException {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
