@@ -11,7 +11,7 @@ public class RequeteSelectGarageByID implements Requete<Garage> {
 
 		@Override
 		public String requete() {
-			return "SELECT * FROM Garage where Id_Louable = ?";
+			return "SELECT GARAGE.*, LOUABLE.* FROM GARAGE JOIN LOUABLE ON LOUABLE.Id_Louable = GARAGE.Id_Louable WHERE GARAGE.Id_Louable = ?";
 		}
 
 		@Override

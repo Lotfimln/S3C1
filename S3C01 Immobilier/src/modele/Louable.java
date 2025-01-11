@@ -3,7 +3,7 @@ package modele;
 import java.util.Objects;
 
 public abstract class Louable {
-    private int idLouable;
+    protected int idLouable;
     private String adresse;
     private double superficie;
     private int numeroFiscal;

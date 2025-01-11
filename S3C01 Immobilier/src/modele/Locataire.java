@@ -8,10 +8,10 @@ public class Locataire {
     private String prenom;
     private String mail;
     private String telephone;
-    private java.util.Date dateNaissance;
+    private java.util.Date dateNais;
     private java.util.Date dateDepart;
 
-    public Locataire(String idLocataire, String nom, String prenom, String mail, String telephone, java.util.Date dateDepart) {
+    public Locataire(String idLocataire, String nom, String prenom, String mail, String telephone, java.util.Date dateNais, java.util.Date dateDepart) {
         this.idLocataire = idLocataire;
         this.nom = nom;
         this.prenom = prenom;
@@ -60,14 +60,10 @@ public class Locataire {
 		this.telephone = telephone;
 	}
 	
-	public java.util.Date getDateNaissance() {
-		return dateNaissance;
+	public java.util.Date getDateNais() {
+		return dateNais;
 	}
-
-	public void setDateNaissance(java.util.Date dateDepart) {
-		this.dateNaissance = dateDepart;
-	}
-
+	
 	public java.util.Date getDateDepart() {
 		return dateDepart;
 	}

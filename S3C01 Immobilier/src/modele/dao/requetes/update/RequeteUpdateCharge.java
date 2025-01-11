@@ -17,7 +17,7 @@ public class RequeteUpdateCharge implements Requete<Charge> {
 	public void parametres(PreparedStatement prSt, Charge data) throws SQLException {
 		prSt.setString(1, data.getType());
 		prSt.setDouble(2, data.getMontant());
-		prSt.setBoolean(3, data.isRecuperable());
+		prSt.setString(3, data.isRecuperable());
 		java.util.Date utilDate = data.getPeriodeDebut();
 	    if (utilDate != null) {
 	        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());

@@ -6,14 +6,14 @@ public class Charge {
     private int idCharge;
     private String type;
     private double montant;
-    private boolean recuperable;
+    private String recuperable;
     private java.util.Date periodeDebut;
     private java.util.Date periodeFin;
 
     private Facture facture; // Relation avec Facture
     private Louable louable; // Relation avec Louable
 
-    public Charge(int idCharge, String type, double montant, boolean recuperable, java.util.Date periodeDebut,
+    public Charge(int idCharge, String type, double montant, String recuperable, java.util.Date periodeDebut,
                   java.util.Date periodeFin, Facture facture, Louable louable) {
         this.idCharge = idCharge;
         this.type = type;
@@ -49,11 +49,11 @@ public class Charge {
 		this.montant = montant;
 	}
 
-	public boolean isRecuperable() {
+	public String isRecuperable() {
 		return recuperable;
 	}
 
-	public void setRecuperable(boolean recuperable) {
+	public void setRecuperable(String recuperable) {
 		this.recuperable = recuperable;
 	}
 

@@ -8,7 +8,7 @@ public class ContratDeLocation {
     private java.util.Date dateDebut;
     private java.util.Date dateFin;
     private double montantLoyer;
-    private String provisionsCharges;
+    private double provisionsCharges;
     private String typeContrat;
     private java.util.Date dateAnniversaire;
     private double indiceICC;
@@ -17,7 +17,7 @@ public class ContratDeLocation {
     private Louable louable; // Relation avec Louable
 
     public ContratDeLocation(int idContratDeLocation, java.util.Date dateDebut, java.util.Date dateFin, double montantLoyer,
-                              String provisionsCharges, String typeContrat, java.util.Date dateAnniversaire, double indiceICC,
+                              double provisionsCharges, String typeContrat, java.util.Date dateAnniversaire, double indiceICC,
                               double montantCaution, Louable louable) {
         this.idContratDeLocation = idContratDeLocation;
         this.dateDebut = dateDebut;
@@ -63,11 +63,11 @@ public class ContratDeLocation {
 		this.montantLoyer = montantLoyer;
 	}
 
-	public String getProvisionsCharges() {
+	public double getProvisionsCharges() {
 		return provisionsCharges;
 	}
 
-	public void setProvisionsCharges(String provisionsCharges) {
+	public void setProvisionsCharges(double provisionsCharges) {
 		this.provisionsCharges = provisionsCharges;
 	}
 
