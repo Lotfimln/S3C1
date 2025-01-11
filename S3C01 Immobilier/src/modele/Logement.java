@@ -3,7 +3,7 @@ package modele;
 public class Logement extends Louable {
     private int nbPieces;
 
-    public Logement(int idLouable, String adresse, double superficie, int numeroFiscal, String statut,
+    public Logement(int idLouable, String adresse, double superficie, long numeroFiscal, String statut,
             java.util.Date dateAnniversaire, Immeuble immeuble, Assureur assurance, int nbPieces, Louable louable) {
         super(idLouable, adresse, superficie, numeroFiscal, statut, dateAnniversaire, immeuble, assurance);
         this.nbPieces = nbPieces;

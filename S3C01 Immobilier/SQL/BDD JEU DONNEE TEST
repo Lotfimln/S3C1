@@ -1,0 +1,345 @@
+drop table Correspondre;
+drop table Apparaitre;
+drop table Associer;
+drop table Indexer;
+drop table Quittances;
+drop table Diagnostic;
+drop table Colocataire;
+drop table Logement;
+drop table Garage;
+drop table Charge;
+drop table Contrat_de_location;
+drop table Facture;
+drop table Taxe;
+drop table Louable;
+drop table Index_compteur;
+drop table Entreprise;
+drop table Assureur;
+drop table Immeuble;
+drop table Locataire;
+
+---------------------- Table Locataire ----------------------
+create table Locataire(
+    Id_Locataire VARCHAR2(4),
+    Nom VARCHAR2(50),
+    Prenom VARCHAR2(50),
+    Mail VARCHAR2(50),
+    Telephone VARCHAR2(50),
+    DateNais DATE,
+    DateDepart DATE,
+    constraint pk_loca primary key (Id_Locataire),
+    constraint un_loca_nom_prenom_d_n unique (Nom, Prenom, DateNais)
+);
+
+---------------------- Table Immeuble ----------------------
+create table Immeuble(
+    Id_Immeuble INT,
+    Adresse VARCHAR2(50),
+    constraint pk_imme primary key (Id_Immeuble),
+    constraint ck_adre check (Adresse is not null)
+);
+
+---------------------- Table Assureur ----------------------
+create table Assureur(
+    Id_Assurance INT,
+    Nom VARCHAR2(50),
+    DateAssurance DATE,
+    Prime NUMBER,
+    constraint pk_assu primary key(Id_Assurance)
+);
+
+---------------------- Table Entreprise ----------------------
+create table Entreprise(
+    Id_Entreprise INT,
+    Nom VARCHAR2(50),
+    SIREN NUMBER(9),
+    Adresse VARCHAR2(50),
+    constraint pk_entr primary key (Id_Entreprise)
+);
+
+---------------------- Table IndexCompteur ----------------------
+create table Index_Compteur(
+    Id_Index_Compteur INT,
+    TypeCompteur VARCHAR2(50),
+    ValeurCourante NUMBER(10,3),
+    AncienneValeur NUMBER(10,3),
+    DateReleve DATE,
+    constraint pk_indecomp primary key (Id_Index_Compteur),
+    constraint ck_valactu_valavan check (ValeurCourante >= AncienneValeur) -- Cohérence des valeurs
+);
+
+---------------------- Table Louable ----------------------
+create table Louable(
+    Id_Louable INT,
+    Adresse VARCHAR2(50),
+    Superficie NUMBER(10, 3),
+    NumeroFiscal NUMBER(12),
+    Statut VARCHAR2(1), -- Utiliser 'Y' pour vrai et 'N' pour faux
+    DateAnniversaire DATE,
+    DateAcqui DATE,
+    Id_Immeuble INT,
+    Id_Assurance INT,
+    constraint pk_louable primary key (Id_Louable),
+    constraint fk_loua_imme foreign key (Id_Immeuble) references Immeuble(Id_Immeuble) on delete cascade,
+    constraint fk_loua_assu foreign key (Id_Assurance) REFERENCES Assureur(Id_Assurance) on delete cascade
+);
+
+---------------------- Table Taxe ----------------------
+create table Taxe(
+    Id_Taxe INT,
+    MontantTaxeFoncieres NUMBER(10,3),
+    DateTaxe DATE,
+    Id_Immeuble INT,
+    constraint pk_taxe primary key(Id_Taxe),
+    constraint fk_taxe_imme foreign key(Id_Immeuble) references Immeuble(Id_Immeuble) on delete cascade,
+    constraint ck_monttaxefonc check (MontantTaxeFoncieres > 0) -- Montant de taxe non négatif
+);
+
+---------------------- Table Facture ----------------------
+create table Facture(
+    Id_Facture INT,
+    Montant NUMBER(10,3),
+    DateFacture DATE,
+    ReferenceDevis VARCHAR2(50),
+    Entreprise VARCHAR2(50),
+    DatePaiement DATE,
+    Id_Entreprise INT,
+    Id_Louable INT,
+    constraint pk_fact primary key(Id_Facture),
+    constraint fk_fact_entre foreign key(Id_Entreprise) references Entreprise(Id_Entreprise) on delete cascade,
+    constraint fk_fact_loua foreign key(Id_Louable) references Louable(Id_Louable) on delete cascade
+);
+
+---------------------- Table Contrat_de_location ----------------------
+create table Contrat_de_location(
+    Id_Contrat_de_location INT,
+    DateDebut DATE,
+    DateFin DATE,
+    MontantLoyer NUMBER(10,3),
+    ProvisionsCharges NUMBER(10, 3),
+    TypeContrat VARCHAR2(50),
+    DateAnniversaire DATE,
+    IndiceICC NUMBER(10,3),
+    MontantCaution NUMBER(10,3),
+    NomCaution VARCHAR2(50),
+    AdresseCaution VARCHAR2(50),
+    Id_Louable INT,
+    constraint pk_contloca primary key(Id_Contrat_de_location),
+    constraint fk_contloca_loua foreign key(Id_Louable) references Louable(Id_Louable) on delete cascade,
+    constraint ck_contloca check (MontantLoyer > 0 AND MontantCaution >= 0 and (DateFin is null or DateFin > DateDebut)) -- Validité contrat
+);
+
+---------------------- Table Charge ----------------------
+create table Charge(
+    Id_Charge INT,
+    Type_Charge VARCHAR2(50),
+    Montant NUMBER(10,3),
+    Recuperable VARCHAR2(1), -- Utiliser 'Y' pour vrai et 'N' pour faux
+    PeriodeDebut DATE,
+    PeriodeFin DATE,
+    Id_Facture INT,
+    Id_Louable INT,
+    constraint pk_char primary key (Id_Charge),
+    constraint fk_char_fact foreign key (Id_Facture) references Facture(Id_Facture) on delete cascade,
+    constraint fk_char_loua foreign key (Id_Louable) references Louable(Id_Louable) on delete cascade,
+    constraint ck_mont check (Montant > 0), -- Montant valide
+    constraint ck_peri check (PeriodeDebut < PeriodeFin) -- Cohérence des périodes
+);
+
+---------------------- Table Garage ----------------------
+create table Garage(
+   Id_Louable INT,
+   constraint pk_gara primary key (Id_Louable),
+   constraint fk_gara_loua foreign key (Id_Louable) references Louable(Id_Louable)
+);
+
+---------------------- Table Logement ----------------------
+create table Logement(
+    Id_Louable INT,
+    NbPieces INT,
+    constraint pk_loge primary key(Id_Louable),
+    constraint fk_loge_loua foreign key (Id_Louable) references Louable(Id_Louable) on delete cascade,
+    constraint ck_loge_nbP check (NbPieces > 0) -- Nombre de pièces valide
+);
+
+---------------------- Table Colocataire ----------------------
+create table Colocataire(
+    Id_Locataire VARCHAR2(4),
+    Id_Locataire_1 VARCHAR2(4),
+    constraint pk_colo primary key (Id_Locataire, Id_Locataire_1),
+    constraint fk_loca_loca1 foreign key(Id_Locataire) references Locataire(Id_Locataire) on delete cascade,
+    constraint fk_loca1_loca foreign key(Id_Locataire_1) references Locataire(Id_Locataire) on delete cascade,
+    constraint ck_loca_diff check (Id_Locataire <> Id_Locataire_1) -- Un colocataire ne peut pas être lui-même
+);
+
+---------------------- Table Diagnostic ----------------------
+create table Diagnostic(
+    Id_Diagnostic INT,
+    Type_Diag VARCHAR2(50),
+    DateDiagnostic DATE,
+    Id_Louable INT,
+    constraint pk_diag primary key (Id_Diagnostic),
+    constraint fk_diag_loua foreign key (Id_Louable) references Louable(Id_Louable) on delete cascade
+);
+
+---------------------- Table Quittances ----------------------
+create table Quittances(
+    Id_Quittances INT,
+    DateDerPaiement DATE,
+    MontantLoyer NUMBER(10,3),
+    MontantProvision NUMBER(10,3),
+    Id_Locataire VARCHAR2(4),
+    Id_Contrat_de_location INT,
+    constraint pk_quit primary key (Id_Quittances),
+    constraint fk_quit_loca foreign key(Id_Locataire) references Locataire(Id_Locataire) on delete cascade,
+    constraint fk_quit_contloca FOREIGN KEY(Id_Contrat_de_location) REFERENCES Contrat_de_location(Id_Contrat_de_location) ON DELETE CASCADE,
+    constraint ck_montloye check (MontantLoyer > 0), -- Montant du loyer positif
+    constraint ck_montprov check  (MontantProvision >= 0) -- Provision non négative
+);
+
+---------------------- Table Indexer ----------------------
+create table Indexer(
+    Id_Index_Compteur INT,
+    Id_Immeuble INT,
+    constraint pk_index primary key(Id_Index_Compteur, Id_Immeuble),
+    constraint fk_index_indecomp foreign key(Id_Index_Compteur) references Index_Compteur(Id_Index_Compteur) on delete cascade,
+    constraint fk_index_imme foreign key(Id_Immeuble) references Immeuble(Id_Immeuble) on delete cascade
+);
+
+---------------------- Table Associer ----------------------
+CREATE TABLE Associer(
+   Id_Louable INT,
+   Id_Index_Compteur INT,
+   PRIMARY KEY(Id_Louable, Id_Index_Compteur),
+   FOREIGN KEY(Id_Louable) REFERENCES Louable(Id_Louable),
+   FOREIGN KEY(Id_Index_Compteur) REFERENCES Index_Compteur(Id_Index_Compteur)
+);
+
+---------------------- Table Apparaitre ----------------------
+
+CREATE TABLE Apparaitre(
+   Id_Charge INT,
+   Id_Index_Compteur INT,
+   PRIMARY KEY(Id_Charge, Id_Index_Compteur),
+   FOREIGN KEY(Id_Charge) REFERENCES Charge(Id_Charge),
+   FOREIGN KEY(Id_Index_Compteur) REFERENCES Index_Compteur(Id_Index_Compteur)
+);
+
+---------------------- Table Correspondre ----------------------
+CREATE TABLE Correspondre(
+   Id_Locataire VARCHAR2(4),
+   Id_Contrat_de_location INT,
+   PRIMARY KEY(Id_Locataire, Id_Contrat_de_location),
+   FOREIGN KEY(Id_Locataire) REFERENCES Locataire(Id_Locataire),
+   FOREIGN KEY(Id_Contrat_de_location) REFERENCES Contrat_de_location(Id_Contrat_de_location)
+);
+
+-- Table Locataire
+INSERT INTO Locataire (Id_Locataire, Nom, Prenom, Mail, Telephone, DateNais, DateDepart)
+VALUES ('L001', 'Dupont', 'Jean', 'jean.dupont@example.com', '+33612345678', TO_DATE('1990-05-15', 'YYYY-MM-DD'), NULL);
+INSERT INTO Locataire (Id_Locataire, Nom, Prenom, Mail, Telephone, DateNais, DateDepart)
+VALUES ('L002', 'Martin', 'Sophie', 'sophie.martin@example.com', '+33687654321', TO_DATE('1985-10-20', 'YYYY-MM-DD'), NULL);
+
+-- Table Immeuble
+INSERT INTO Immeuble (Id_Immeuble, Adresse)
+VALUES (1, '10 Rue des Fleurs');
+INSERT INTO Immeuble (Id_Immeuble, Adresse)
+VALUES (2, '5 Avenue des Champs');
+
+-- Table Assureur
+INSERT INTO Assureur (Id_Assurance, Nom, DateAssurance, Prime)
+VALUES (1, 'Assureur Plus', TO_DATE('2023-01-01', 'YYYY-MM-DD'), 1000);
+INSERT INTO Assureur (Id_Assurance, Nom, DateAssurance, Prime)
+VALUES (2, 'Sécurimmo', TO_DATE('2023-06-15', 'YYYY-MM-DD'), 1500);
+
+-- Table Entreprise
+INSERT INTO Entreprise (Id_Entreprise, Nom, SIREN, Adresse)
+VALUES (1, 'TravauxRapides', 123456789, '12 Rue des Artisans');
+INSERT INTO Entreprise (Id_Entreprise, Nom, SIREN, Adresse)
+VALUES (2, 'PlomberiePro', 987654321, '8 Rue des Métiers');
+
+-- Table Index_Compteur
+INSERT INTO Index_Compteur (Id_Index_Compteur, TypeCompteur, ValeurCourante, AncienneValeur, DateReleve)
+VALUES (1, 'Electricité', 1200.500, 1100.000, TO_DATE('2024-01-01', 'YYYY-MM-DD'));
+INSERT INTO Index_Compteur (Id_Index_Compteur, TypeCompteur, ValeurCourante, AncienneValeur, DateReleve)
+VALUES (2, 'Eau', 800.300, 700.200, TO_DATE('2024-01-01', 'YYYY-MM-DD'));
+
+-- Table Louable
+INSERT INTO Louable (Id_Louable, Adresse, Superficie, NumeroFiscal, Statut, DateAnniversaire, DateAcqui, Id_Immeuble, Id_Assurance)
+VALUES (1, '15 Rue des Lilas', 75.5, 123456789012, 'Y', TO_DATE('2023-01-01', 'YYYY-MM-DD'), TO_DATE('2022-01-01', 'YYYY-MM-DD'), 1, 1);
+INSERT INTO Louable (Id_Louable, Adresse, Superficie, NumeroFiscal, Statut, DateAnniversaire, DateAcqui, Id_Immeuble, Id_Assurance)
+VALUES (2, '20 Rue des Roses', 120.0, 987654321012, 'N', TO_DATE('2023-06-01', 'YYYY-MM-DD'), TO_DATE('2022-06-01', 'YYYY-MM-DD'), 2, 2);
+
+-- Table Garage
+INSERT INTO Garage (Id_Louable)
+VALUES (1);
+
+-- Table Logement
+INSERT INTO Logement (Id_Louable, NbPieces)
+VALUES (2, 5);
+
+-- Table Taxe
+INSERT INTO Taxe (Id_Taxe, MontantTaxeFoncieres, DateTaxe, Id_Immeuble)
+VALUES (1, 1500.000, TO_DATE('2023-01-01', 'YYYY-MM-DD'), 1);
+INSERT INTO Taxe (Id_Taxe, MontantTaxeFoncieres, DateTaxe, Id_Immeuble)
+VALUES (2, 2500.000, TO_DATE('2023-01-01', 'YYYY-MM-DD'), 2);
+
+-- Table Facture
+INSERT INTO Facture (Id_Facture, Montant, DateFacture, ReferenceDevis, Entreprise, DatePaiement, Id_Entreprise, Id_Louable)
+VALUES (1, 500.0, TO_DATE('2023-02-01', 'YYYY-MM-DD'), 'DEV001', 'TravauxRapides', TO_DATE('2023-02-10', 'YYYY-MM-DD'), 1, 1);
+INSERT INTO Facture (Id_Facture, Montant, DateFacture, ReferenceDevis, Entreprise, DatePaiement, Id_Entreprise, Id_Louable)
+VALUES (2, 300.0, TO_DATE('2023-03-01', 'YYYY-MM-DD'), 'DEV002', 'PlomberiePro', TO_DATE('2023-03-10', 'YYYY-MM-DD'), 2, 2);
+
+-- Table Contrat_de_location
+INSERT INTO Contrat_de_location (Id_Contrat_de_location, DateDebut, DateFin, MontantLoyer, ProvisionsCharges, TypeContrat, DateAnniversaire, IndiceICC, MontantCaution, NomCaution, AdresseCaution, Id_Louable)
+VALUES (1, TO_DATE('2023-01-01', 'YYYY-MM-DD'), NULL, 700.0, 50.0, 'Bail logement', TO_DATE('2023-01-01', 'YYYY-MM-DD'), 1.5, 1400.0, 'Jean Dupont', '15 Rue des Lilas', 1);
+INSERT INTO Contrat_de_location (Id_Contrat_de_location, DateDebut, DateFin, MontantLoyer, ProvisionsCharges, TypeContrat, DateAnniversaire, IndiceICC, MontantCaution, NomCaution, AdresseCaution, Id_Louable)
+VALUES (2, TO_DATE('2023-06-01', 'YYYY-MM-DD'), NULL, 1200.0, 100.0, 'Bail professionnel', TO_DATE('2023-06-01', 'YYYY-MM-DD'), 2.0, 2400.0, 'Sophie Martin', '20 Rue des Roses', 2);
+
+-- Table Charge
+INSERT INTO Charge (Id_Charge, Type_Charge, Montant, Recuperable, PeriodeDebut, PeriodeFin, Id_Facture, Id_Louable)
+VALUES (1, 'Eau', 100.0, 'Y', TO_DATE('2023-01-01', 'YYYY-MM-DD'), TO_DATE('2023-12-31', 'YYYY-MM-DD'), 1, 1);
+INSERT INTO Charge (Id_Charge, Type_Charge, Montant, Recuperable, PeriodeDebut, PeriodeFin, Id_Facture, Id_Louable)
+VALUES (2, 'Électricité', 200.0, 'N', TO_DATE('2023-01-01', 'YYYY-MM-DD'), TO_DATE('2023-12-31', 'YYYY-MM-DD'), 2, 2);
+
+-- Table Colocataire
+INSERT INTO Colocataire (Id_Locataire, Id_Locataire_1)
+VALUES ('L001', 'L002');
+INSERT INTO Colocataire (Id_Locataire, Id_Locataire_1)
+VALUES ('L002', 'L001');
+
+-- Table Diagnostic
+INSERT INTO Diagnostic (Id_Diagnostic, Type_Diag, DateDiagnostic, Id_Louable)
+VALUES (1, 'Énergie', TO_DATE('2023-01-01', 'YYYY-MM-DD'), 1);
+INSERT INTO Diagnostic (Id_Diagnostic, Type_Diag, DateDiagnostic, Id_Louable)
+VALUES (2, 'Gaz', TO_DATE('2023-06-01', 'YYYY-MM-DD'), 2);
+
+-- Table Quittances
+INSERT INTO Quittances (Id_Quittances, DateDerPaiement, MontantLoyer, MontantProvision, Id_Locataire, Id_Contrat_de_location)
+VALUES (1, TO_DATE('2023-01-31', 'YYYY-MM-DD'), 700.0, 50.0, 'L001', 1);
+INSERT INTO Quittances (Id_Quittances, DateDerPaiement, MontantLoyer, MontantProvision, Id_Locataire, Id_Contrat_de_location)
+VALUES (2, TO_DATE('2023-06-30', 'YYYY-MM-DD'), 1200.0, 100.0, 'L002', 2);
+
+-- Table Indexer
+INSERT INTO Indexer (Id_Index_Compteur, Id_Immeuble)
+VALUES (1, 1);
+INSERT INTO Indexer (Id_Index_Compteur, Id_Immeuble)
+VALUES (2, 2);
+
+-- Table Associer
+INSERT INTO Associer (Id_Louable, Id_Index_Compteur)
+VALUES (1, 1);
+INSERT INTO Associer (Id_Louable, Id_Index_Compteur)
+VALUES (2, 2);
+
+-- Table Apparaitre
+INSERT INTO Apparaitre (Id_Charge, Id_Index_Compteur)
+VALUES (1, 1);
+INSERT INTO Apparaitre (Id_Charge, Id_Index_Compteur)
+VALUES (2, 2);
+
+-- Table Correspondre
+INSERT INTO Correspondre (Id_Locataire, Id_Contrat_de_location)
+VALUES ('L001', 1);
+INSERT INTO Correspondre (Id_Locataire, Id_Contrat_de_location)
+VALUES ('L002', 2);

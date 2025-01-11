@@ -37,7 +37,7 @@ public class DaoGarage implements Dao<Garage> {
 			prStLouable.setInt(1, donnees.getIdLouable());
 			prStLouable.setString(2, donnees.getAdresse());
 			prStLouable.setDouble(3, donnees.getSuperficie());
-			prStLouable.setInt(4, donnees.getNumeroFiscal());
+			prStLouable.setLong(4, donnees.getNumeroFiscal());
 			prStLouable.setString(5, donnees.getStatut());
 			java.util.Date utilDate = donnees.getDateAnniversaire();
             java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());

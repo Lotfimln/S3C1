@@ -38,7 +38,7 @@ public class DaoLogement implements Dao<Logement> {
 				prStLouable.setInt(1, donnees.getIdLouable());
 				prStLouable.setString(2, donnees.getAdresse());
 				prStLouable.setDouble(3, donnees.getSuperficie());
-				prStLouable.setInt(4, donnees.getNumeroFiscal());
+				prStLouable.setLong(4, donnees.getNumeroFiscal());
 				prStLouable.setString(5, donnees.getStatut());
 				java.util.Date utilDate = donnees.getDateAnniversaire();
 	            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
@@ -84,8 +84,8 @@ public class DaoLogement implements Dao<Logement> {
 			try (ResultSet rs = prSt.executeQuery()) {
 				if (rs.next()) {
 	                int idLouable = rs.getInt("Id_Louable");
-	                int idAssureur = rs.getInt("Is_Assureur");
-	                int idImmeuble = rs.getInt("Is_Assureur");
+	                int idAssureur = rs.getInt("Id_Assureur");
+	                int idImmeuble = rs.getInt("Id_Assureur");
 	                Louable louable = daoLouable.findById(String.valueOf(idLouable));
 	                Assureur assureur = daoAssureur.findById(String.valueOf(idAssureur));
 	                Immeuble immeuble = daoImmeuble.findById(String.valueOf(idImmeuble));
@@ -111,11 +111,11 @@ public class DaoLogement implements Dao<Logement> {
 				ResultSet rs = prSt.executeQuery()) {
 			while (rs.next()) {
 				int idLouable = rs.getInt("Id_Louable");
-                int idAssureur = rs.getInt("Is_Assureur");
-                int idImmeuble = rs.getInt("Is_Assureur");
+                int idImmeuble = rs.getInt("Id_Immeuble");
+                int idAssureur = rs.getInt("Id_Assurance");
                 Louable louable = daoLouable.findById(String.valueOf(idLouable));
-                Assureur assureur = daoAssureur.findById(String.valueOf(idAssureur));
                 Immeuble immeuble = daoImmeuble.findById(String.valueOf(idImmeuble));
+                Assureur assureur = daoAssureur.findById(String.valueOf(idAssureur));
 
 				logements.add(new Logement(rs.getInt("Id_Louable"), rs.getString("Adresse"), rs.getDouble("Superficie"),
 										   rs.getInt("Numero Fiscal"), rs.getString("Statut"), rs.getDate("DateAnniversaire"),

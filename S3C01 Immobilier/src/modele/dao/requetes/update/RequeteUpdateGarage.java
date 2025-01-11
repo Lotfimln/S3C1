@@ -20,7 +20,7 @@ public class RequeteUpdateGarage implements Requete<Garage> {
     	prSt.setInt(1, data.getIdLouable());
         prSt.setString(2, data.getAdresse());
         prSt.setDouble(3, data.getSuperficie());
-        prSt.setInt(4, data.getNumeroFiscal());
+        prSt.setLong(4, data.getNumeroFiscal());
         prSt.setString(5, data.getStatut());
         java.util.Date utilDate = data.getDateAnniversaire();
         if (utilDate != null) {

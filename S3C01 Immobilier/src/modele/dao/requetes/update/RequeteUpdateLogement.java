@@ -20,7 +20,7 @@ public class RequeteUpdateLogement implements Requete<Logement> {
     	prSt.setInt(1, data.getIdLogement());
         prSt.setString(1, data.getAdresse());
         prSt.setDouble(2, data.getSuperficie());
-        prSt.setInt(3, data.getNumeroFiscal());
+        prSt.setLong(3, data.getNumeroFiscal());
         prSt.setString(4, data.getStatut());
         java.util.Date utilDate = data.getDateAnniversaire();
         if (utilDate != null) {

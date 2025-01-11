@@ -2,7 +2,7 @@ package modele;
 
 public class Garage extends Louable {
 
-    public Garage(int idLouable, String adresse, double superficie, int numeroFiscal, String statut,
+    public Garage(int idLouable, String adresse, double superficie, long numeroFiscal, String statut,
             java.util.Date dateAnniversaire, java.util.Date dateAcquisition, Immeuble immeuble, Assureur assurance, Louable louable) {
         super(idLouable, adresse, superficie, numeroFiscal, statut, dateAnniversaire, immeuble, assurance);
     }
