@@ -13,12 +13,14 @@ public class ContratDeLocation {
     private java.util.Date dateAnniversaire;
     private double indiceICC;
     private double montantCaution;
+    private String NomCaution;
+    private String AdresseCaution;
 
     private Louable louable; // Relation avec Louable
 
     public ContratDeLocation(int idContratDeLocation, java.util.Date dateDebut, java.util.Date dateFin, double montantLoyer,
                               double provisionsCharges, String typeContrat, java.util.Date dateAnniversaire, double indiceICC,
-                              double montantCaution, Louable louable) {
+                              double montantCaution, String NomCaution, String AdresseCaution, Louable louable) {
         this.idContratDeLocation = idContratDeLocation;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
@@ -29,6 +31,8 @@ public class ContratDeLocation {
         this.indiceICC = indiceICC;
         this.montantCaution = montantCaution;
         this.louable = louable;
+        this.NomCaution = NomCaution;
+        this.AdresseCaution = AdresseCaution;
     }
 
 	public int getIdContratDeLocation() {
@@ -109,6 +113,22 @@ public class ContratDeLocation {
 
 	public void setLouable(Louable louable) {
 		this.louable = louable;
+	}
+
+	public String getNomCaution() {
+		return NomCaution;
+	}
+
+	public void setNomCaution(String nomCaution) {
+		NomCaution = nomCaution;
+	}
+
+	public String getAdresseCaution() {
+		return AdresseCaution;
+	}
+
+	public void setAdresseCaution(String adresseCaution) {
+		AdresseCaution = adresseCaution;
 	}
 
 	@Override

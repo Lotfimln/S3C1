@@ -79,7 +79,7 @@ public class DaoCharge implements Dao<Charge> {
 
 	                return new Charge(
 	                    rs.getInt("Id_Charge"),
-	                    rs.getString("Type"),
+	                    rs.getString("Type_Charge"),
 	                    rs.getDouble("Montant"),
 	                    rs.getString("Recuperable"),
 	                    rs.getDate("PeriodeDebut"),
@@ -111,7 +111,7 @@ public class DaoCharge implements Dao<Charge> {
 	            
 	            charges.add(new Charge(
 	                rs.getInt("Id_Charge"),
-	                rs.getString("Type"),
+	                rs.getString("Type_Charge"),
 	                rs.getDouble("Montant"),
 	                rs.getString("Recuperable"),
 	                rs.getDate("PeriodeDebut"),

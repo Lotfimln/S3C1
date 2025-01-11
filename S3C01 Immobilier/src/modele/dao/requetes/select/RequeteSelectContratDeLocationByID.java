@@ -11,7 +11,7 @@ public class RequeteSelectContratDeLocationByID implements Requete<ContratDeLoca
 
 		@Override
 		public String requete() {
-			return "SELECT * FROM Locataire where Id_Contrat_De_Location = ?";
+			return "SELECT * FROM Contrat_de_location where Id_Contrat_De_Location = ?";
 		}
 
 		@Override

@@ -9,17 +9,20 @@ public abstract class Louable {
     private int numeroFiscal;
     private String statut;
     private java.util.Date dateAnniversaire;
-    private Assureur assurance; // Relation avec Assureur
+    private java.util.Date dateAcquisition;
     private Immeuble immeuble; // Relation avec Immeuble
+    private Assureur assurance; // Relation avec Assureur
 
     public Louable(int idLouable, String adresse, double superficie, int numeroFiscal, String statut,
-                   java.util.Date dateAnniversaire, Assureur assurance) {
+                   java.util.Date dateAnniversaire, java.util.Date dateAcquisition, Immeuble immeuble, Assureur assurance) {
         this.idLouable = idLouable;
         this.adresse = adresse;
         this.superficie = superficie;
         this.numeroFiscal = numeroFiscal;
         this.statut = statut;
         this.dateAnniversaire = dateAnniversaire;
+        this.dateAcquisition = dateAcquisition;
+        this.immeuble = immeuble;
         this.assurance = assurance;
     }
 
@@ -87,6 +90,13 @@ public abstract class Louable {
 		this.immeuble = immeuble;
 	}
 
+	public java.util.Date getDateAcquisition() {
+		return dateAcquisition;
+	}
+
+	public void setDateAcquisition(java.util.Date dateAcquisition) {
+		this.dateAcquisition = dateAcquisition;
+	}
 
 	@Override
 	public String toString() {

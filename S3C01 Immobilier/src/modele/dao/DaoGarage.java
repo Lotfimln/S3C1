@@ -9,6 +9,7 @@ import java.util.List;
 
 import modele.Assureur;
 import modele.Garage;
+import modele.Immeuble;
 import modele.Louable;
 import modele.dao.requetes.delete.RequeteDeleteGarage;
 import modele.dao.requetes.delete.RequeteDeleteLouable;
@@ -73,22 +74,22 @@ public class DaoGarage implements Dao<Garage> {
 	@Override
 	public Garage findById(String... id) throws SQLException {
 		RequeteSelectGarageByID requeteSelectById = new RequeteSelectGarageByID();
-	    DaoLouable daoLouable = new DaoLouable(this.connection);
+	    DaoImmeuble daoImmeuble = new DaoImmeuble(this.connection);
 	    DaoAssureur daoAssureur = new DaoAssureur(this.connection);
 	    
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectById.requete())) {
 			requeteSelectById.parametres(prSt, id);
 			try (ResultSet rs = prSt.executeQuery()) {
 				if (rs.next()) {
-	                int idLouable = rs.getInt("Id_Louable");
-	                int idAssureur = rs.getInt("Is_Assureur");
-	                Louable louable = daoLouable.findById(String.valueOf(idLouable));
+					String idImmeuble = rs.getString("Id_Immeuble");
+	                int idAssureur = rs.getInt("Id_Assurance");
+	                Immeuble immeuble = daoImmeuble.findById(String.valueOf(idImmeuble));
 	                Assureur assureur = daoAssureur.findById(String.valueOf(idAssureur));
 	                
 					return new Garage(rs.getInt("Id_Louable"), rs.getString("Adresse"), 
-									  rs.getDouble("Superficie"), rs.getInt("Numero_Fiscal"), 
-									  rs.getString("Statut"), rs.getDate("DateAnniversaire"), 
-									  assureur, louable);
+							  rs.getDouble("Superficie"), rs.getInt("NumeroFiscal"), 
+							  rs.getString("Statut"), rs.getDate("DateAnniversaire"), 
+							  rs.getDate("DateAcqui"), immeuble, assureur);
 				}
 			}
 		}
@@ -98,21 +99,21 @@ public class DaoGarage implements Dao<Garage> {
 	public List<Garage> findAll() throws SQLException {
 		RequeteSelectGarage requeteSelectAll = new RequeteSelectGarage();
 		List<Garage> garages = new ArrayList<>();
-	    DaoLouable daoLouable = new DaoLouable(this.connection);
+	    DaoImmeuble daoImmeuble = new DaoImmeuble(this.connection);
 	    DaoAssureur daoAssureur = new DaoAssureur(this.connection);
 	    
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectAll.requete());
 				ResultSet rs = prSt.executeQuery()) {
 			while (rs.next()) {
-				int idLouable = rs.getInt("Id_Louable");
-                int idAssureur = rs.getInt("Is_Assureur");
-                Louable louable = daoLouable.findById(String.valueOf(idLouable));
+				String idImmeuble = rs.getString("Id_Immeuble");
+                int idAssureur = rs.getInt("Id_Assurance");
+                Immeuble immeuble = daoImmeuble.findById(String.valueOf(idImmeuble));
                 Assureur assureur = daoAssureur.findById(String.valueOf(idAssureur));
                 
 				garages.add(new Garage(rs.getInt("Id_Louable"), rs.getString("Adresse"), 
-						  rs.getDouble("Superficie"), rs.getInt("Numero_Fiscal"), 
+						  rs.getDouble("Superficie"), rs.getInt("NumeroFiscal"), 
 						  rs.getString("Statut"), rs.getDate("DateAnniversaire"), 
-						  assureur, louable));
+						  rs.getDate("DateAcqui"), immeuble, assureur));
 			}
 		return garages;
 		}

@@ -64,8 +64,8 @@ public class DaoTaxe implements Dao<Taxe> {
 			requeteSelectById.parametres(prSt, id);
 			try (ResultSet rs = prSt.executeQuery()) {
 				if (rs.next()) {
-					int idLouable = rs.getInt("Id_Louable");
-	                Immeuble immeuble= daoImmeuble.findById(String.valueOf(idLouable));
+					int idImmeuble = rs.getInt("Id_Immeuble");
+	                Immeuble immeuble= daoImmeuble.findById(String.valueOf(idImmeuble));
 	                
 					return new Taxe(rs.getInt("Id_Taxe"), rs.getDouble("MontantTaxeFoncieres"),
 							rs.getDate("DateTaxe"), immeuble);
@@ -84,8 +84,8 @@ public class DaoTaxe implements Dao<Taxe> {
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectAll.requete());
 				ResultSet rs = prSt.executeQuery()) {
 			while (rs.next()) {
-				int idLouable = rs.getInt("Id_Louable");
-                Immeuble immeuble= daoImmeuble.findById(String.valueOf(idLouable));
+				int idImmeuble = rs.getInt("Id_Immeuble");
+                Immeuble immeuble= daoImmeuble.findById(String.valueOf(idImmeuble));
                 
 				taxes.add(new Taxe(rs.getInt("Id_Taxe"), rs.getDouble("MontantTaxeFoncieres"),
 						rs.getDate("DateTaxe"), immeuble));

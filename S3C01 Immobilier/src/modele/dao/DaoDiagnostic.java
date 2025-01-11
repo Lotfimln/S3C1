@@ -62,7 +62,7 @@ public class DaoDiagnostic implements Dao<Diagnostic> {
 	                int idLouable = rs.getInt("Id_Louable");
 	                Louable louable = daoLouable.findById(String.valueOf(idLouable));
 	                
-					return new Diagnostic(rs.getInt("Id_Diagnostic"), rs.getString("Type"),
+					return new Diagnostic(rs.getInt("Id_Diagnostic"), rs.getString("Type_Diag"),
 							rs.getDate("DateDiagnostic"), louable);
 				}
 			}
@@ -82,7 +82,7 @@ public class DaoDiagnostic implements Dao<Diagnostic> {
 				int idLouable = rs.getInt("Id_Louable");
                 Louable louable = daoLouable.findById(String.valueOf(idLouable));
                 
-				diagnostics.add(new Diagnostic(rs.getInt("Id_Diagnostic"), rs.getString("Type"),
+				diagnostics.add(new Diagnostic(rs.getInt("Id_Diagnostic"), rs.getString("Type_Diag"),
 						rs.getDate("DateDiagnostic"), louable));
 			}
 		}

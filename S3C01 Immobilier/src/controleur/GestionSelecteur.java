@@ -54,14 +54,11 @@ public class GestionSelecteur implements ActionListener {
                 case TAXE:
                     afficherDonnees(new DaoTaxe(CictOracleDataSource.getConnectionBD()), Taxe.class);
                     break;
-                case LOUABLE:
-                    afficherDonnees(new DaoLouable(CictOracleDataSource.getConnectionBD()), Louable.class);
-                    break;
                 case FACTURE:
                     afficherDonnees(new DaoFacture(CictOracleDataSource.getConnectionBD()), Facture.class);
                     break;
                 case DIAGNOSTIC:
-                    // afficherDonnees(new DaoDiagnostic(CictOracleDataSource.getConnectionBD()), Diagnostic.class);
+                    afficherDonnees(new DaoDiagnostic(CictOracleDataSource.getConnectionBD()), Diagnostic.class);
                     break;
                 case CONTRAT_DE_LOCATION:
                     afficherDonnees(new DaoContratDeLocation(CictOracleDataSource.getConnectionBD()), ContratDeLocation.class);
@@ -192,7 +189,7 @@ public class GestionSelecteur implements ActionListener {
                 .toArray(Object[][]::new);
             break;
 
-        case "CONTRAT_DE_LOCATION":
+        case "CONTRATDELOCATION":
             colonnes = new String[]{"ID Contrat", "Montant Loyer"};
             data = donnees.stream()
                 .map(obj -> (ContratDeLocation) obj)

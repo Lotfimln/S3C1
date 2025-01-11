@@ -11,7 +11,7 @@ public class RequeteSelectIndexCompteur implements Requete<IndexCompteur> {
 
 		@Override
 		public String requete() {
-			return "SELECT * FROM Charge";
+			return "SELECT * FROM Index_Compteur";
 		}
 
 		@Override

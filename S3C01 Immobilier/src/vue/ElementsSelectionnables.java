@@ -7,7 +7,6 @@ public enum ElementsSelectionnables {
     ENTREPRISE,
     IMMEUBLE,
     TAXE,
-    LOUABLE,
     FACTURE,
     DIAGNOSTIC,
     CONTRAT_DE_LOCATION,

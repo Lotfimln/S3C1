@@ -70,9 +70,7 @@ public class DaoImmeuble implements Dao<Immeuble> {
         try (PreparedStatement prSt = connection.prepareStatement(requeteSelectAll.requete());
              ResultSet rs = prSt.executeQuery()) {
         	System.out.println(prSt);
-        	System.out.println("1");
             while (rs.next()) {
-            	System.out.println("2");
                 immeubles.add(new Immeuble(
                     rs.getInt("Id_Immeuble"),
                     rs.getString("Adresse")

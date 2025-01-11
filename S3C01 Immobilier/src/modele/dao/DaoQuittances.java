@@ -69,12 +69,12 @@ public class DaoQuittances implements Dao<Quittances> {
 			requeteSelectById.parametres(prSt, id);
 			try (ResultSet rs = prSt.executeQuery()) {
 				if (rs.next()) {
-					int idLocataire = rs.getInt("Id_Louable");
-	                int idContratDeLocation = rs.getInt("Is_Assureur");
-	                Locataire locataire= daoLocataire.findById(String.valueOf(idLocataire));
+					String idLocataire = rs.getString("Id_Locataire");
+	                int idContratDeLocation = rs.getInt("Id_Contrat_de_location");
+	                Locataire locataire = daoLocataire.findById(String.valueOf(idLocataire));
 	                ContratDeLocation contratDeLocation = daoContratDeLocation.findById(String.valueOf(idContratDeLocation));
 	                
-					return new Quittances(rs.getInt("Id_Quittances"), rs.getDate("DatePaiement"),
+					return new Quittances(rs.getInt("Id_Quittances"), rs.getDate("DateDerPaiement"),
 							rs.getDouble("MontantLoyer"), rs.getDouble("MontantProvision"), locataire,
 							contratDeLocation);
 				}
@@ -93,9 +93,9 @@ public class DaoQuittances implements Dao<Quittances> {
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectAll.requete());
 				ResultSet rs = prSt.executeQuery()) {
 			while (rs.next()) {
-				int idLocataire = rs.getInt("Id_Louable");
-                int idContratDeLocation = rs.getInt("Is_Assureur");
-                Locataire locataire= daoLocataire.findById(String.valueOf(idLocataire));
+				String idLocataire = rs.getString("Id_Locataire");
+                int idContratDeLocation = rs.getInt("Id_Contrat_de_location");
+                Locataire locataire = daoLocataire.findById(String.valueOf(idLocataire));
                 ContratDeLocation contratDeLocation = daoContratDeLocation.findById(String.valueOf(idContratDeLocation));
                 
 				quittances.add(new Quittances(rs.getInt("Id_Quittances"), rs.getDate("DatePaiement"),

@@ -11,7 +11,7 @@ public class RequeteSelectIndexCompteurByID implements Requete<IndexCompteur> {
 
 		@Override
 		public String requete() {
-			return "SELECT * FROM IndexCompteur where Id_Index_Compteur = ?";
+			return "SELECT * FROM Index_Compteur where Id_Index_Compteur = ?";
 		}
 
 		@Override

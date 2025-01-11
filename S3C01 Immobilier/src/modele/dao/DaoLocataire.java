@@ -65,8 +65,8 @@ public class DaoLocataire implements Dao<Locataire> {
 			requeteSelectById.parametres(prSt, id);
 			try (ResultSet rs = prSt.executeQuery()) {
 				if (rs.next()) {
-					return new Locataire(rs.getString("Id_Locataire"), rs.getString("Nom"), rs.getString("Prénom"),
-							rs.getString("Mail"), rs.getString("Téléphone"), rs.getDate("DateNais"), rs.getDate("DateDépart"));
+					return new Locataire(rs.getString("Id_Locataire"), rs.getString("Nom"), rs.getString("Prenom"),
+							rs.getString("Mail"), rs.getString("Telephone"), rs.getDate("DateNais"), rs.getDate("DateDépart"));
 				}
 			}
 		}
@@ -80,8 +80,8 @@ public class DaoLocataire implements Dao<Locataire> {
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectAll.requete());
 				ResultSet rs = prSt.executeQuery()) {
 			while (rs.next()) {
-				locataires.add(new Locataire(rs.getString("Id_Locataire"), rs.getString("Nom"), rs.getString("Prénom"),
-						rs.getString("Mail"), rs.getString("Téléphone"), rs.getDate("DateNais"), rs.getDate("DateDépart")));
+				locataires.add(new Locataire(rs.getString("Id_Locataire"), rs.getString("Nom"), rs.getString("Prenom"),
+						rs.getString("Mail"), rs.getString("Telephone"), rs.getDate("DateNais"), rs.getDate("DateDépart")));
 			}
 		}
 		return locataires;

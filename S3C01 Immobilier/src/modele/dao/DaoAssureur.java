@@ -58,8 +58,8 @@ public class DaoAssureur implements Dao<Assureur> {
             try (ResultSet rs = prSt.executeQuery()) {
                 if (rs.next()) {
                     return new Assureur(
-                        rs.getInt("Id_Assureur"),
-                        rs.getString("Nom "), 
+                        rs.getInt("Id_Assurance"),
+                        rs.getString("Nom"), 
                         rs.getDate("DateAssurance"),
                         rs.getInt("Prime")
                     );
@@ -77,8 +77,8 @@ public class DaoAssureur implements Dao<Assureur> {
              ResultSet rs = prSt.executeQuery()) {
             while (rs.next()) {
                 assureur.add(new Assureur(
-                    rs.getInt("Id_Assureur"),
-                    rs.getString("Nom "), 
+                    rs.getInt("Id_Assurance"),
+                    rs.getString("Nom"), 
                     rs.getDate("DateAssurance"),
                     rs.getInt("Prime")
                 ));

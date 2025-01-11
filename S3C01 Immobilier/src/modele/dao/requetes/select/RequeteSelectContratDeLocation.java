@@ -11,7 +11,7 @@ public class RequeteSelectContratDeLocation implements Requete<ContratDeLocation
 
 		@Override
 		public String requete() {
-			return "SELECT * FROM Locataire";
+			return "SELECT * FROM Contrat_de_location";
 		}
 
 		@Override
