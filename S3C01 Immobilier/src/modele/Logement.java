@@ -4,8 +4,8 @@ public class Logement extends Louable {
     private int nbPieces;
 
     public Logement(int idLouable, String adresse, double superficie, String numeroFiscal, String statut,
-            java.util.Date dateAnniversaire, Immeuble immeuble, Assureur assurance, int nbPieces, Louable louable) {
-        super(idLouable, adresse, superficie, numeroFiscal, statut, dateAnniversaire, immeuble, assurance);
+            java.util.Date dateAnniversaire, java.util.Date dateAcquisition, Immeuble immeuble, Assureur assurance, Louable louable, int nbPieces) {
+        super(idLouable, adresse, superficie, numeroFiscal, statut, dateAnniversaire, dateAcquisition, immeuble, assurance);
         this.nbPieces = nbPieces;
     }
 
@@ -16,7 +16,7 @@ public class Logement extends Louable {
     public int getIdLogement() {
     	return idLouable;
     }
-    // Getter et Setter pour nbPieces
+    
     public int getNbPieces() {
         return nbPieces;
     }

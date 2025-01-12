@@ -73,7 +73,9 @@ public class DaoCorrespondre implements Dao<Correspondre> {
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectAll.requete());
 				ResultSet rs = prSt.executeQuery()) {
 			while (rs.next()) {
-				correspondances.add(new Correspondre(rs.getInt("Id_Locataire"), rs.getInt("Id_Contrat_de_location")));
+				correspondances.add(new Correspondre(
+						rs.getInt("Id_Locataire"), 
+						rs.getInt("Id_Contrat_de_location")));
 			}
 		}
 		return correspondances;

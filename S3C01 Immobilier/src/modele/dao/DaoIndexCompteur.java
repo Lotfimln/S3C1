@@ -58,8 +58,12 @@ public class DaoIndexCompteur implements Dao<IndexCompteur> {
 			requeteSelectById.parametres(prSt, id);
 			try (ResultSet rs = prSt.executeQuery()) {
 				if (rs.next()) {
-					return new IndexCompteur(rs.getInt("Id_Index_Compteur"), rs.getString("TypeCompteur"),
-							rs.getDouble("ValeurCourante"), rs.getDouble("AncienneValeur"), rs.getDate("DateReleve"));
+					return new IndexCompteur(
+							rs.getInt("Id_Index_Compteur"), 
+							rs.getString("TypeCompteur"),
+							rs.getDouble("ValeurCourante"), 
+							rs.getDouble("AncienneValeur"), 
+							rs.getDate("DateReleve"));
 				}
 			}
 		}
@@ -73,8 +77,12 @@ public class DaoIndexCompteur implements Dao<IndexCompteur> {
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectAll.requete());
 				ResultSet rs = prSt.executeQuery()) {
 			while (rs.next()) {
-				compteurs.add(new IndexCompteur(rs.getInt("Id_Index_Compteur"), rs.getString("TypeCompteur"),
-						rs.getDouble("ValeurCourante"), rs.getDouble("AncienneValeur"), rs.getDate("DateReleve")));
+				compteurs.add(new IndexCompteur(
+						rs.getInt("Id_Index_Compteur"), 
+						rs.getString("TypeCompteur"),
+						rs.getDouble("ValeurCourante"), 
+						rs.getDouble("AncienneValeur"), 
+						rs.getDate("DateReleve")));
 			}
 		}
 		return compteurs;

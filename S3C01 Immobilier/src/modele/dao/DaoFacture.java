@@ -75,9 +75,15 @@ public class DaoFacture implements Dao<Facture> {
 	                Entreprise entreprise = daoFacture.findById(String.valueOf(idEntreprise));
 	                Louable louable = daoEntreprise.findById(String.valueOf(idLouable));
 
-					return new Facture(rs.getInt("Id_Facture"), rs.getDouble("Montant"), rs.getDate("DateFacture"),
-							rs.getString("ReferenceDevis"), rs.getString("Entreprise"), rs.getDate("DatePaiement"),
-							entreprise, louable);
+					return new Facture(
+							rs.getInt("Id_Facture"), 
+							rs.getDouble("Montant"), 
+							rs.getDate("DateFacture"),
+							rs.getString("ReferenceDevis"), 
+							rs.getString("Entreprise"), 
+							rs.getDate("DatePaiement"),
+							entreprise, 
+							louable);
 				}
 			}
 		}
@@ -99,9 +105,15 @@ public class DaoFacture implements Dao<Facture> {
                 Entreprise entreprise = daoFacture.findById(String.valueOf(idEntreprise));
                 Louable louable = daoEntreprise.findById(String.valueOf(idLouable));
 
-				factures.add(new Facture(rs.getInt("Id_Facture"), rs.getDouble("Montant"), rs.getDate("DateFacture"),
-						rs.getString("ReferenceDevis"), rs.getString("Entreprise"), rs.getDate("DatePaiement"),
-						entreprise, louable));
+				factures.add(new Facture(
+						rs.getInt("Id_Facture"), 
+						rs.getDouble("Montant"), 
+						rs.getDate("DateFacture"),
+						rs.getString("ReferenceDevis"), 
+						rs.getString("Entreprise"), 
+						rs.getDate("DatePaiement"),
+						entreprise, 
+						louable));
 			}
 		}
 		return factures;

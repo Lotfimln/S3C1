@@ -210,7 +210,7 @@ public class GestionSelecteur implements ActionListener {
                 .map(obj -> (Diagnostic) obj)
                 .map(diagnostic -> new Object[]{
                     diagnostic.getIdDiagnostic(),
-                    diagnostic.getType()
+                    diagnostic.getTypeDiagnostic()
                 })
                 .toArray(Object[][]::new);
             break;
@@ -232,7 +232,7 @@ public class GestionSelecteur implements ActionListener {
                 .map(obj -> (Charge) obj)
                 .map(charge -> new Object[]{
                     charge.getIdCharge(),
-                    charge.getType()
+                    charge.getTypeCharge()
                 })
                 .toArray(Object[][]::new);
             break;

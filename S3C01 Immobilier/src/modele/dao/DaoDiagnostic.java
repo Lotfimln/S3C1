@@ -26,7 +26,7 @@ public class DaoDiagnostic implements Dao<Diagnostic> {
 	public void create(Diagnostic donnees) throws SQLException {
 		String sql = "INSERT INTO Diagnostic (Type, DateDiagnostic, Id_Louable) VALUES (?, ?, ?)";
 		try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
-			prSt.setString(1, donnees.getType());
+			prSt.setString(1, donnees.getTypeDiagnostic());
 			prSt.setDate(2, new java.sql.Date(donnees.getDateDiagnostic().getTime()));
 			prSt.setInt(3, donnees.getLouable().getIdLouable());
 			prSt.executeUpdate();
@@ -62,8 +62,11 @@ public class DaoDiagnostic implements Dao<Diagnostic> {
 	                int idLouable = rs.getInt("Id_Louable");
 	                Louable louable = daoLouable.findById(String.valueOf(idLouable));
 
-					return new Diagnostic(rs.getInt("Id_Diagnostic"), rs.getString("Type_Diag"),
-							rs.getDate("DateDiagnostic"), louable);
+					return new Diagnostic(
+							rs.getInt("Id_Diagnostic"), 
+							rs.getString("TypeDiagnostic"),
+							rs.getDate("DateDiagnostic"), 
+							louable);
 				}
 			}
 		}
@@ -82,8 +85,11 @@ public class DaoDiagnostic implements Dao<Diagnostic> {
 				int idLouable = rs.getInt("Id_Louable");
                 Louable louable = daoLouable.findById(String.valueOf(idLouable));
 
-				diagnostics.add(new Diagnostic(rs.getInt("Id_Diagnostic"), rs.getString("Type_Diag"),
-						rs.getDate("DateDiagnostic"), louable));
+				diagnostics.add(new Diagnostic(
+						rs.getInt("Id_Diagnostic"), 
+						rs.getString("TypeDiagnostic"),
+						rs.getDate("DateDiagnostic"), 
+						louable));
 			}
 		}
 		return diagnostics;

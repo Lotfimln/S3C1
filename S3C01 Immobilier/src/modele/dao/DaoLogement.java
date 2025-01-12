@@ -8,11 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import modele.Assureur;
+import modele.Garage;
 import modele.Immeuble;
 import modele.Logement;
 import modele.Louable;
 import modele.dao.requetes.delete.RequeteDeleteLogement;
 import modele.dao.requetes.delete.RequeteDeleteLouable;
+import modele.dao.requetes.select.RequeteSelectGarageLouable;
 import modele.dao.requetes.select.RequeteSelectLogementLouable;
 import modele.dao.requetes.select.RequeteSelectLogementLouableByID;
 import modele.dao.requetes.update.RequeteUpdateLogement;
@@ -108,9 +110,18 @@ public class DaoLogement implements Dao<Logement> {
 	                Assureur assureur = daoAssureur.findById(String.valueOf(idAssureur));
 	                Immeuble immeuble = daoImmeuble.findById(String.valueOf(idImmeuble));
 	                
-					return new Logement(rs.getInt("Id_Louable"), rs.getString("Adresse"), rs.getDouble("Superficie"),
-							   rs.getString("Numero Fiscal"), rs.getString("Statut"), rs.getDate("DateAnniversaire"),
-							   immeuble, assureur, rs.getInt("NbPiece"), louable);
+					return new Logement(
+							rs.getInt("Id_Louable"), 
+							rs.getString("Adresse"), 
+							rs.getDouble("Superficie"), 
+							rs.getString("NumeroFiscal"), 
+							rs.getString("Statut"), 
+							rs.getDate("DateAnniversaire"),
+							rs.getDate("DateAcquisition"), 
+							immeuble, 
+							assureur, 
+							louable, 
+							rs.getInt("NbPieces"));
 				} else {
                     throw new SQLException("Aucun logement trouvé avec Id_Louable = " + id[0]);
                 }
@@ -128,22 +139,31 @@ public class DaoLogement implements Dao<Logement> {
 		RequeteSelectLogementLouable requeteSelectAll = new RequeteSelectLogementLouable();
 		List<Logement> logements = new ArrayList<>();
 	    DaoLouable daoLouable = new DaoLouable(this.connection);
-	    DaoAssureur daoAssureur = new DaoAssureur(this.connection);
 	    DaoImmeuble daoImmeuble = new DaoImmeuble(this.connection);
+	    DaoAssureur daoAssureur = new DaoAssureur(this.connection);
 
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectAll.requete());
 				ResultSet rs = prSt.executeQuery()) {
 			while (rs.next()) {
 				int idLouable = rs.getInt("Id_Louable");
-                int idImmeuble = rs.getInt("Id_Immeuble");
+				int idImmeuble = rs.getInt("Id_Immeuble");
                 int idAssureur = rs.getInt("Id_Assurance");
                 Louable louable = daoLouable.findById(String.valueOf(idLouable));
                 Immeuble immeuble = daoImmeuble.findById(String.valueOf(idImmeuble));
                 Assureur assureur = daoAssureur.findById(String.valueOf(idAssureur));
 
-				logements.add(new Logement(rs.getInt("Id_Louable"), rs.getString("Adresse"), rs.getDouble("Superficie"),
-										   rs.getString("Numero Fiscal"), rs.getString("Statut"), rs.getDate("DateAnniversaire"),
-										   immeuble, assureur, rs.getInt("NbPiece"), louable));
+				logements.add(new Logement(
+						rs.getInt("Id_Louable"), 
+						rs.getString("Adresse"), 
+						rs.getDouble("Superficie"), 
+						rs.getString("NumeroFiscal"), 
+						rs.getString("Statut"), 
+						rs.getDate("DateAnniversaire"),
+						rs.getDate("DateAcquisition"), 
+						immeuble, 
+						assureur, 
+						louable, 
+						rs.getInt("NbPieces")));
 			}
         } catch (SQLException e) {
             String messageErreur = "Erreur lors de la récupération de la liste des logements. Détails : " + e.getMessage();

@@ -57,7 +57,10 @@ public class DaoEntreprise implements Dao<Entreprise> {
 			requeteSelectById.parametres(prSt, id);
 			try (ResultSet rs = prSt.executeQuery()) {
 				if (rs.next()) {
-					return new Entreprise(rs.getInt("Id_Entreprise"), rs.getString("Nom"), rs.getString("SIREN"),
+					return new Entreprise(
+							rs.getInt("Id_Entreprise"), 
+							rs.getString("Nom"), 
+							rs.getString("SIREN"),
 							rs.getString("Adresse"));
 				}
 			}
@@ -72,7 +75,10 @@ public class DaoEntreprise implements Dao<Entreprise> {
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectAll.requete());
 				ResultSet rs = prSt.executeQuery()) {
 			while (rs.next()) {
-				entreprises.add(new Entreprise(rs.getInt("Id_Entreprise"), rs.getString("Nom"), rs.getString("SIREN"),
+				entreprises.add(new Entreprise(
+						rs.getInt("Id_Entreprise"), 
+						rs.getString("Nom"), 
+						rs.getString("SIREN"),
 						rs.getString("Adresse")));
 			}
 		}

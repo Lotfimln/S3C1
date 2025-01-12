@@ -4,13 +4,13 @@ import java.util.Objects;
 
 public class Diagnostic {
     private int idDiagnostic;
-    private String type;
+    private String typeDiagnostic;
     private java.util.Date dateDiagnostic;
     private Louable louable; // Relation avec Louable
 
-    public Diagnostic(int idDiagnostic, String type, java.util.Date dateDiagnostic, Louable louable) {
+    public Diagnostic(int idDiagnostic, String typeDiagnostic, java.util.Date dateDiagnostic, Louable louable) {
         this.idDiagnostic = idDiagnostic;
-        this.type = type;
+        this.typeDiagnostic = typeDiagnostic;
         this.dateDiagnostic = dateDiagnostic;
         this.louable = louable;
     }
@@ -23,12 +23,12 @@ public class Diagnostic {
 		this.idDiagnostic = idDiagnostic;
 	}
 
-	public String getType() {
-		return type;
+	public String getTypeDiagnostic() {
+		return typeDiagnostic;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setTypeDiagnostic(String typeDiagnostic) {
+		this.typeDiagnostic = typeDiagnostic;
 	}
 
 	public java.util.Date getDateDiagnostic() {
@@ -49,13 +49,13 @@ public class Diagnostic {
 
 	@Override
 	public String toString() {
-		return "Diagnostic [idDiagnostic=" + idDiagnostic + ", type=" + type + ", dateDiagnostic=" + dateDiagnostic
+		return "Diagnostic [idDiagnostic=" + idDiagnostic + ", type=" + typeDiagnostic + ", dateDiagnostic=" + dateDiagnostic
 				+ ", louable=" + louable + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(dateDiagnostic, idDiagnostic, louable, type);
+		return Objects.hash(dateDiagnostic, idDiagnostic, louable, typeDiagnostic);
 	}
 
 	@Override
@@ -68,6 +68,6 @@ public class Diagnostic {
 		}
 		Diagnostic other = (Diagnostic) obj;
 		return Objects.equals(dateDiagnostic, other.dateDiagnostic) && idDiagnostic == other.idDiagnostic
-				&& Objects.equals(louable, other.louable) && Objects.equals(type, other.type);
+				&& Objects.equals(louable, other.louable) && Objects.equals(typeDiagnostic, other.typeDiagnostic);
 	}
 }

@@ -25,10 +25,10 @@ create table Locataire(
     Prenom VARCHAR2(50),
     Mail VARCHAR2(50),
     Telephone VARCHAR2(50),
-    DateNais DATE,
+    DateNaissance DATE,
     DateDepart DATE,
     constraint pk_loca primary key (Id_Locataire),
-    constraint un_loca_nom_prenom_d_n unique (Nom, Prenom, DateNais)
+    constraint un_loca_nom_prenom_d_n unique (Nom, Prenom, DateNaissance)
 );
 
 ---------------------- Table Immeuble ----------------------
@@ -73,9 +73,10 @@ create table Louable(
     Id_Louable INT,
     Adresse VARCHAR2(50),
     Superficie NUMBER(10, 3),
-    NumeroFiscal VARCHAR2(12),
+    NumeroFiscal VARCHAR2(50),
     Statut VARCHAR2(1), -- Utiliser 'Y' pour vrai et 'N' pour faux
     DateAnniversaire DATE,
+    DateAcquisition DATE,
     Id_Immeuble INT,
     Id_Assurance INT,
     constraint pk_louable primary key (Id_Louable),
@@ -131,7 +132,7 @@ create table Contrat_de_location(
 ---------------------- Table Charge ----------------------
 create table Charge(
     Id_Charge INT,
-    Type_Charge VARCHAR2(50),
+    TypeCharge VARCHAR2(50),
     Montant NUMBER(10,3),
     Recuperable VARCHAR2(1), -- Utiliser 'Y' pour vrai et 'N' pour faux
     PeriodeDebut DATE,
@@ -174,7 +175,7 @@ create table Colocataire(
 ---------------------- Table Diagnostic ----------------------
 create table Diagnostic(
     Id_Diagnostic INT,
-    Type_Diag VARCHAR2(50),
+    TypeDiagnostic VARCHAR2(50),
     DateDiagnostic DATE,
     Id_Louable INT,
     constraint pk_diag primary key (Id_Diagnostic),
@@ -184,7 +185,7 @@ create table Diagnostic(
 ---------------------- Table Quittances ----------------------
 create table Quittances(
     Id_Quittances INT,
-    DateDerPaiement DATE,
+    DatePaiement DATE,
     MontantLoyer NUMBER(10,3),
     MontantProvision NUMBER(10,3),
     Id_Locataire VARCHAR2(4),
@@ -234,9 +235,9 @@ CREATE TABLE Correspondre(
 );
 
 -- Table Locataire
-INSERT INTO Locataire (Id_Locataire, Nom, Prenom, Mail, Telephone, DateNais, DateDepart)
+INSERT INTO Locataire (Id_Locataire, Nom, Prenom, Mail, Telephone, DateNaissance, DateDepart)
 VALUES ('L001', 'Dupont', 'Jean', 'jean.dupont@example.com', '+33612345678', TO_DATE('1990-05-15', 'YYYY-MM-DD'), NULL);
-INSERT INTO Locataire (Id_Locataire, Nom, Prenom, Mail, Telephone, DateNais, DateDepart)
+INSERT INTO Locataire (Id_Locataire, Nom, Prenom, Mail, Telephone, DateNaissance, DateDepart)
 VALUES ('L002', 'Martin', 'Sophie', 'sophie.martin@example.com', '+33687654321', TO_DATE('1985-10-20', 'YYYY-MM-DD'), NULL);
 
 -- Table Immeuble
@@ -264,10 +265,10 @@ INSERT INTO Index_Compteur (Id_Index_Compteur, TypeCompteur, ValeurCourante, Anc
 VALUES (2, 'Eau', 800.300, 700.200, TO_DATE('2024-01-01', 'YYYY-MM-DD'));
 
 -- Table Louable
-INSERT INTO Louable (Id_Louable, Adresse, Superficie, NumeroFiscal, Statut, DateAnniversaire, Id_Immeuble, Id_Assurance)
-VALUES (1, '15 Rue des Lilas', 75.5, 123456789012, 'Y', TO_DATE('2023-01-01', 'YYYY-MM-DD'), 1, 1);
-INSERT INTO Louable (Id_Louable, Adresse, Superficie, NumeroFiscal, Statut, DateAnniversaire, Id_Immeuble, Id_Assurance)
-VALUES (2, '20 Rue des Roses', 120.0, 987654321012, 'N', TO_DATE('2023-06-01', 'YYYY-MM-DD'), 2, 2);
+INSERT INTO Louable (Id_Louable, Adresse, Superficie, NumeroFiscal, Statut, DateAnniversaire, DateAcquisition, Id_Immeuble, Id_Assurance)
+VALUES (1, '15 Rue des Lilas', 75.5, '123456789012', 'Y', TO_DATE('2023-01-01', 'YYYY-MM-DD'), TO_DATE('2022-01-01', 'YYYY-MM-DD'), 1, 1);
+INSERT INTO Louable (Id_Louable, Adresse, Superficie, NumeroFiscal, Statut, DateAnniversaire, DateAcquisition, Id_Immeuble, Id_Assurance)
+VALUES (2, '20 Rue des Roses', 120.0, '987654321012', 'N', TO_DATE('2023-06-01', 'YYYY-MM-DD'), TO_DATE('2022-06-01', 'YYYY-MM-DD'), 2, 2);
 
 -- Table Garage
 INSERT INTO Garage (Id_Louable)
@@ -296,9 +297,9 @@ INSERT INTO Contrat_de_location (Id_Contrat_de_location, DateDebut, DateFin, Mon
 VALUES (2, TO_DATE('2023-06-01', 'YYYY-MM-DD'), NULL, 1200.0, 100.0, 'Bail professionnel', TO_DATE('2023-06-01', 'YYYY-MM-DD'), 2.0, 2400.0, 'Sophie Martin', '20 Rue des Roses', 2);
 
 -- Table Charge
-INSERT INTO Charge (Id_Charge, Type_Charge, Montant, Recuperable, PeriodeDebut, PeriodeFin, Id_Facture, Id_Louable)
+INSERT INTO Charge (Id_Charge, TypeCharge, Montant, Recuperable, PeriodeDebut, PeriodeFin, Id_Facture, Id_Louable)
 VALUES (1, 'Eau', 100.0, 'Y', TO_DATE('2023-01-01', 'YYYY-MM-DD'), TO_DATE('2023-12-31', 'YYYY-MM-DD'), 1, 1);
-INSERT INTO Charge (Id_Charge, Type_Charge, Montant, Recuperable, PeriodeDebut, PeriodeFin, Id_Facture, Id_Louable)
+INSERT INTO Charge (Id_Charge, TypeCharge, Montant, Recuperable, PeriodeDebut, PeriodeFin, Id_Facture, Id_Louable)
 VALUES (2, 'Électricité', 200.0, 'N', TO_DATE('2023-01-01', 'YYYY-MM-DD'), TO_DATE('2023-12-31', 'YYYY-MM-DD'), 2, 2);
 
 -- Table Colocataire
@@ -308,15 +309,15 @@ INSERT INTO Colocataire (Id_Locataire, Id_Locataire_1)
 VALUES ('L002', 'L001');
 
 -- Table Diagnostic
-INSERT INTO Diagnostic (Id_Diagnostic, Type_Diag, DateDiagnostic, Id_Louable)
+INSERT INTO Diagnostic (Id_Diagnostic, TypeDiagnostic, DateDiagnostic, Id_Louable)
 VALUES (1, 'Énergie', TO_DATE('2023-01-01', 'YYYY-MM-DD'), 1);
-INSERT INTO Diagnostic (Id_Diagnostic, Type_Diag, DateDiagnostic, Id_Louable)
+INSERT INTO Diagnostic (Id_Diagnostic, TypeDiagnostic, DateDiagnostic, Id_Louable)
 VALUES (2, 'Gaz', TO_DATE('2023-06-01', 'YYYY-MM-DD'), 2);
 
 -- Table Quittances
-INSERT INTO Quittances (Id_Quittances, DateDerPaiement, MontantLoyer, MontantProvision, Id_Locataire, Id_Contrat_de_location)
+INSERT INTO Quittances (Id_Quittances, DatePaiement, MontantLoyer, MontantProvision, Id_Locataire, Id_Contrat_de_location)
 VALUES (1, TO_DATE('2023-01-31', 'YYYY-MM-DD'), 700.0, 50.0, 'L001', 1);
-INSERT INTO Quittances (Id_Quittances, DateDerPaiement, MontantLoyer, MontantProvision, Id_Locataire, Id_Contrat_de_location)
+INSERT INTO Quittances (Id_Quittances, DatePaiement, MontantLoyer, MontantProvision, Id_Locataire, Id_Contrat_de_location)
 VALUES (2, TO_DATE('2023-06-30', 'YYYY-MM-DD'), 1200.0, 100.0, 'L002', 2);
 
 -- Table Indexer

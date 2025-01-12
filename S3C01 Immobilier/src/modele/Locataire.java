@@ -8,15 +8,16 @@ public class Locataire {
     private String prenom;
     private String mail;
     private String telephone;
-    private java.util.Date dateNais;
+    private java.util.Date dateNaissance;
     private java.util.Date dateDepart;
 
-    public Locataire(String idLocataire, String nom, String prenom, String mail, String telephone, java.util.Date dateNais, java.util.Date dateDepart) {
+    public Locataire(String idLocataire, String nom, String prenom, String mail, String telephone, java.util.Date dateNaissance, java.util.Date dateDepart) {
         this.idLocataire = idLocataire;
         this.nom = nom;
         this.prenom = prenom;
         this.mail = mail;
         this.telephone = telephone;
+        this.dateNaissance = dateNaissance;
         this.dateDepart = dateDepart;
     }
 
@@ -60,8 +61,12 @@ public class Locataire {
 		this.telephone = telephone;
 	}
 
-	public java.util.Date getDateNais() {
-		return dateNais;
+	public java.util.Date getDateNaissance() {
+		return dateNaissance;
+	}
+	
+	public void setDateNaissance(java.util.Date dateNaissance) {
+		this.dateNaissance = dateNaissance;
 	}
 
 	public java.util.Date getDateDepart() {
@@ -75,12 +80,12 @@ public class Locataire {
 	@Override
 	public String toString() {
 		return "Locataire [idLocataire=" + idLocataire + ", nom=" + nom + ", prenom=" + prenom + ", mail=" + mail
-				+ ", telephone=" + telephone + ", dateDepart=" + dateDepart + "]";
+				+ ", telephone=" + telephone + ", dateNaissance=" + dateNaissance + ", dateDepart=" + dateDepart + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(dateDepart, idLocataire, mail, nom, prenom, telephone);
+		return Objects.hash(dateDepart, dateNaissance, idLocataire, mail, nom, prenom, telephone);
 	}
 
 	@Override
@@ -92,10 +97,12 @@ public class Locataire {
 			return false;
 		}
 		Locataire other = (Locataire) obj;
-		return Objects.equals(dateDepart, other.dateDepart) && idLocataire == other.idLocataire
-				&& Objects.equals(mail, other.mail) && Objects.equals(nom, other.nom)
-				&& Objects.equals(prenom, other.prenom) && Objects.equals(telephone, other.telephone);
+		return Objects.equals(dateDepart, other.dateDepart) && Objects.equals(dateNaissance, other.dateNaissance)
+				&& Objects.equals(idLocataire, other.idLocataire) && Objects.equals(mail, other.mail)
+				&& Objects.equals(nom, other.nom) && Objects.equals(prenom, other.prenom)
+				&& Objects.equals(telephone, other.telephone);
 	}
+
 
 
 }

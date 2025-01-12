@@ -56,7 +56,9 @@ public class DaoIndexer implements Dao<Indexer> {
 			prSt.setInt(2, Integer.parseInt(id[1]));
 			try (ResultSet rs = prSt.executeQuery()) {
 				if (rs.next()) {
-					return new Indexer(rs.getInt("Id_Index_Compteur"), rs.getInt("Id_Immeuble"));
+					return new Indexer(
+							rs.getInt("Id_Index_Compteur"), 
+							rs.getInt("Id_Immeuble"));
 				}
 			}
 		}
@@ -70,7 +72,9 @@ public class DaoIndexer implements Dao<Indexer> {
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectAll.requete());
 				ResultSet rs = prSt.executeQuery()) {
 			while (rs.next()) {
-				indexers.add(new Indexer(rs.getInt("Id_Index_Compteur"), rs.getInt("Id_Immeuble")));
+				indexers.add(new Indexer(
+						rs.getInt("Id_Index_Compteur"), 
+						rs.getInt("Id_Immeuble")));
 			}
 		}
 		return indexers;

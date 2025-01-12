@@ -73,10 +73,19 @@ public class DaoContratDeLocation implements Dao<ContratDeLocation> {
 	                int idLouable = rs.getInt("Id_Louable");
 	                Louable louable = daoLouable.findById(String.valueOf(idLouable));
 
-					return new ContratDeLocation(rs.getInt("Id_Contrat_de_location"), rs.getDate("DateDebut"),
-							rs.getDate("DateFin"), rs.getDouble("MontantLoyer"), rs.getDouble("ProvisionsCharges"),
-							rs.getString("TypeContrat"), rs.getDate("DateAnniversaire"), rs.getDouble("IndiceICC"),
-							rs.getDouble("MontantCaution"), rs.getString("NomCaution"),rs.getString("AdresseCaution"), louable);
+					return new ContratDeLocation(
+							rs.getInt("Id_Contrat_de_location"), 
+							rs.getDate("DateDebut"),
+							rs.getDate("DateFin"), 
+							rs.getDouble("MontantLoyer"), 
+							rs.getDouble("ProvisionsCharges"),
+							rs.getString("TypeContrat"), 
+							rs.getDate("DateAnniversaire"), 
+							rs.getDouble("IndiceICC"),
+							rs.getDouble("MontantCaution"), 
+							rs.getString("NomCaution"),
+							rs.getString("AdresseCaution"), 
+							louable);
 				}
 			}
 		}
@@ -95,10 +104,19 @@ public class DaoContratDeLocation implements Dao<ContratDeLocation> {
 				int idLouable = rs.getInt("Id_Louable");
                 Louable louable = daoLouable.findById(String.valueOf(idLouable));
 
-				contrats.add(new ContratDeLocation(rs.getInt("Id_Contrat_de_location"), rs.getDate("DateDebut"),
-						rs.getDate("DateFin"), rs.getDouble("MontantLoyer"), rs.getInt("ProvisionsCharges"),
-						rs.getString("TypeContrat"), rs.getDate("DateAnniversaire"), rs.getDouble("IndiceICC"),
-						rs.getDouble("MontantCaution"), rs.getString("NomCaution"),rs.getString("AdresseCaution"), louable));
+				contrats.add(new ContratDeLocation(
+						rs.getInt("Id_Contrat_de_location"), 
+						rs.getDate("DateDebut"),
+						rs.getDate("DateFin"), 
+						rs.getDouble("MontantLoyer"), 
+						rs.getInt("ProvisionsCharges"),
+						rs.getString("TypeContrat"), 
+						rs.getDate("DateAnniversaire"), 
+						rs.getDouble("IndiceICC"),
+						rs.getDouble("MontantCaution"), 
+						rs.getString("NomCaution"),
+						rs.getString("AdresseCaution"), 
+						louable));
 			}
 		}
 		return contrats;

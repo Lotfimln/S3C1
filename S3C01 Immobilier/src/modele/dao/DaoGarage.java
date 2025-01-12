@@ -10,6 +10,7 @@ import java.util.List;
 import modele.Assureur;
 import modele.Garage;
 import modele.Immeuble;
+import modele.Logement;
 import modele.Louable;
 import modele.dao.requetes.delete.RequeteDeleteGarage;
 import modele.dao.requetes.delete.RequeteDeleteLouable;
@@ -107,10 +108,17 @@ public class DaoGarage implements Dao<Garage> {
 	                Immeuble immeuble = daoImmeuble.findById(String.valueOf(idImmeuble));
 	                Assureur assureur = daoAssureur.findById(String.valueOf(idAssureur));
 
-					return new Garage(rs.getInt("Id_Louable"), rs.getString("Adresse"),
-							  rs.getDouble("Superficie"), rs.getString("NumeroFiscal"),
-							  rs.getString("Statut"), rs.getDate("DateAnniversaire"), 
-							  immeuble, assureur, louable);
+					return new Garage(
+							rs.getInt("Id_Louable"), 
+							rs.getString("Adresse"), 
+							rs.getDouble("Superficie"), 
+							rs.getString("NumeroFiscal"), 
+							rs.getString("Statut"), 
+							rs.getDate("DateAnniversaire"),
+							rs.getDate("DateAcquisition"), 
+							immeuble, 
+							assureur, 
+							louable);
 				} else {
                     throw new SQLException("Aucun garage trouvé avec Id_Garage = " + id[0]);
                 }
@@ -141,9 +149,17 @@ public class DaoGarage implements Dao<Garage> {
                 Immeuble immeuble = daoImmeuble.findById(String.valueOf(idImmeuble));
                 Assureur assureur = daoAssureur.findById(String.valueOf(idAssureur));
 
-				garages.add(new Garage(rs.getInt("Id_Louable"), rs.getString("Adresse"), rs.getDouble("Superficie"), 
-									   rs.getString("NumeroFiscal"), rs.getString("Statut"), rs.getDate("DateAnniversaire"), 
-									   immeuble, assureur, louable));
+				garages.add(new Garage(
+						rs.getInt("Id_Louable"), 
+						rs.getString("Adresse"), 
+						rs.getDouble("Superficie"), 
+						rs.getString("NumeroFiscal"), 
+						rs.getString("Statut"), 
+						rs.getDate("DateAnniversaire"),
+						rs.getDate("DateAcquisition"), 
+						immeuble, 
+						assureur, 
+						louable));
 			}
         } catch (SQLException e) {
             String messageErreur = "Erreur lors de la récupération de la liste des logements. Détails : " + e.getMessage();

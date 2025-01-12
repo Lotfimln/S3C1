@@ -9,17 +9,19 @@ public abstract class Louable {
     private String numeroFiscal;
     private String statut;
     private java.util.Date dateAnniversaire;
+    private java.util.Date dateAcquisition;
     private Immeuble immeuble; // Relation avec Immeuble
     private Assureur assurance; // Relation avec Assureur
 
     public Louable(int idLouable, String adresse, double superficie, String numeroFiscal, String statut,
-                   java.util.Date dateAnniversaire, Immeuble immeuble, Assureur assurance) {
+                   java.util.Date dateAnniversaire, java.util.Date dateAcquisition, Immeuble immeuble, Assureur assurance) {
         this.idLouable = idLouable;
         this.adresse = adresse;
         this.superficie = superficie;
         this.numeroFiscal = numeroFiscal;
         this.statut = statut;
         this.dateAnniversaire = dateAnniversaire;
+        this.dateAcquisition = dateAcquisition;
         this.immeuble = immeuble;
         this.assurance = assurance;
     }
@@ -94,16 +96,25 @@ public abstract class Louable {
 		this.immeuble = immeuble;
 	}
 
+	public java.util.Date getDateAcquisition() {
+		return dateAcquisition;
+	}
+
+	public void setDateAcquisition(java.util.Date dateAcquisition) {
+		this.dateAcquisition = dateAcquisition;
+	}
+
 	@Override
 	public String toString() {
 		return "Louable [idLouable=" + idLouable + ", adresse=" + adresse + ", superficie=" + superficie
 				+ ", numeroFiscal=" + numeroFiscal + ", statut=" + statut + ", dateAnniversaire=" + dateAnniversaire
-				+ ", assurance=" + assurance + ", immeuble=" + immeuble + "]";
+				+ ", dateAcquisition=" + dateAcquisition + ", immeuble=" + immeuble + ", assurance=" + assurance + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(idLouable);
+		return Objects.hash(adresse, assurance, dateAcquisition, dateAnniversaire, idLouable, immeuble, numeroFiscal,
+				statut, superficie);
 	}
 
 	@Override
@@ -115,7 +126,12 @@ public abstract class Louable {
 			return false;
 		}
 		Louable other = (Louable) obj;
-		return idLouable == other.idLouable;
+		return Objects.equals(adresse, other.adresse) && Objects.equals(assurance, other.assurance)
+				&& Objects.equals(dateAcquisition, other.dateAcquisition)
+				&& Objects.equals(dateAnniversaire, other.dateAnniversaire) && idLouable == other.idLouable
+				&& Objects.equals(immeuble, other.immeuble) && Objects.equals(numeroFiscal, other.numeroFiscal)
+				&& Objects.equals(statut, other.statut)
+				&& Double.doubleToLongBits(superficie) == Double.doubleToLongBits(other.superficie);
 	}
 
 }

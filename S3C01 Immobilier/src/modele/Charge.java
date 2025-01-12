@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Charge {
     private int idCharge;
-    private String type;
+    private String typeCharge;
     private double montant;
     private String recuperable;
     private java.util.Date periodeDebut;
@@ -13,10 +13,10 @@ public class Charge {
     private Facture facture; // Relation avec Facture
     private Louable louable; // Relation avec Louable
 
-    public Charge(int idCharge, String type, double montant, String recuperable, java.util.Date periodeDebut,
+    public Charge(int idCharge, String typeCharge, double montant, String recuperable, java.util.Date periodeDebut,
                   java.util.Date periodeFin, Facture facture, Louable louable) {
         this.idCharge = idCharge;
-        this.type = type;
+        this.typeCharge = typeCharge;
         this.montant = montant;
         this.recuperable = recuperable;
         this.periodeDebut = periodeDebut;
@@ -33,12 +33,12 @@ public class Charge {
 		this.idCharge = idCharge;
 	}
 
-	public String getType() {
-		return type;
+	public String getTypeCharge() {
+		return typeCharge;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setTypeCharge(String typeCharge) {
+		this.typeCharge = typeCharge;
 	}
 
 	public double getMontant() {
@@ -91,14 +91,14 @@ public class Charge {
 
 	@Override
 	public String toString() {
-		return "Charge [idCharge=" + idCharge + ", type=" + type + ", montant=" + montant + ", recuperable="
+		return "Charge [idCharge=" + idCharge + ", type=" + typeCharge + ", montant=" + montant + ", recuperable="
 				+ recuperable + ", periodeDebut=" + periodeDebut + ", periodeFin=" + periodeFin + ", facture=" + facture
 				+ ", louable=" + louable + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(facture, idCharge, louable, montant, periodeDebut, periodeFin, recuperable, type);
+		return Objects.hash(facture, idCharge, louable, montant, periodeDebut, periodeFin, recuperable, typeCharge);
 	}
 
 	@Override
@@ -114,6 +114,6 @@ public class Charge {
 				&& Objects.equals(louable, other.louable)
 				&& Double.doubleToLongBits(montant) == Double.doubleToLongBits(other.montant)
 				&& Objects.equals(periodeDebut, other.periodeDebut) && Objects.equals(periodeFin, other.periodeFin)
-				&& recuperable == other.recuperable && Objects.equals(type, other.type);
+				&& recuperable == other.recuperable && Objects.equals(typeCharge, other.typeCharge);
 	}
 }

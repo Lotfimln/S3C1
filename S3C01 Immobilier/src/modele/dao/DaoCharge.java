@@ -28,7 +28,7 @@ public class DaoCharge implements Dao<Charge> {
 		String sql = "INSERT INTO Charge (Id_Charge, Type, Montant, Recuperable, PeriodeDebut, PeriodeFin, Id_Facture, Id_Louable) VALUES (?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
 			prSt.setInt(1, donnees.getIdCharge());
-			prSt.setString(2, donnees.getType());
+			prSt.setString(2, donnees.getTypeCharge());
 			prSt.setDouble(3, donnees.getMontant());
 			prSt.setString(4, donnees.isRecuperable());
 			java.util.Date utilDate = donnees.getPeriodeDebut();
@@ -79,7 +79,7 @@ public class DaoCharge implements Dao<Charge> {
 
 	                return new Charge(
 	                    rs.getInt("Id_Charge"),
-	                    rs.getString("Type_Charge"),
+	                    rs.getString("TypeCharge"),
 	                    rs.getDouble("Montant"),
 	                    rs.getString("Recuperable"),
 	                    rs.getDate("PeriodeDebut"),
@@ -111,7 +111,7 @@ public class DaoCharge implements Dao<Charge> {
 
 	            charges.add(new Charge(
 	                rs.getInt("Id_Charge"),
-	                rs.getString("Type_Charge"),
+	                rs.getString("TypeCharge"),
 	                rs.getDouble("Montant"),
 	                rs.getString("Recuperable"),
 	                rs.getDate("PeriodeDebut"),
