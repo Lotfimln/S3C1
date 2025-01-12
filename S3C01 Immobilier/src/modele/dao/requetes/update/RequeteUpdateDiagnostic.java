@@ -15,7 +15,7 @@ public class RequeteUpdateDiagnostic implements Requete<Diagnostic> {
 
 	@Override
 	public void parametres(PreparedStatement prSt, Diagnostic data) throws SQLException {
-		prSt.setString(1, data.getType());
+		prSt.setString(1, data.getTypeDiagnostic());
 		java.util.Date utilDate = data.getDateDiagnostic();
 	    if (utilDate != null) {
 	        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
