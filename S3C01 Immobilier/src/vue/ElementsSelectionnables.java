@@ -12,6 +12,5 @@ public enum ElementsSelectionnables {
     CONTRAT_DE_LOCATION,
     CHARGE,
     QUITTANCES,
-    LOGEMENT,
-    GARAGE
+    LOUABLE
 }

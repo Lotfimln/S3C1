@@ -94,16 +94,16 @@ public class DaoFacture implements Dao<Facture> {
 	public List<Facture> findAll() throws SQLException {
 		RequeteSelectFacture requeteSelectAll = new RequeteSelectFacture();
 		List<Facture> factures = new ArrayList<>();
-	    DaoEntreprise daoFacture = new DaoEntreprise(this.connection);
-	    DaoLouable daoEntreprise = new DaoLouable(this.connection);
+	    DaoEntreprise daoEntreprise = new DaoEntreprise(this.connection);
+	    DaoLouable daoLouable = new DaoLouable(this.connection);
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectAll.requete());
 				ResultSet rs = prSt.executeQuery()) {
 			while (rs.next()) {
-                int idEntreprise = rs.getInt("Id_Facture");
+                int idEntreprise = rs.getInt("Id_Entreprise");
                 int idLouable = rs.getInt("Id_Louable");
 
-                Entreprise entreprise = daoFacture.findById(String.valueOf(idEntreprise));
-                Louable louable = daoEntreprise.findById(String.valueOf(idLouable));
+                Entreprise entreprise = daoEntreprise.findById(String.valueOf(idEntreprise));
+                Louable louable = daoLouable.findById(String.valueOf(idLouable));
 
 				factures.add(new Facture(
 						rs.getInt("Id_Facture"), 

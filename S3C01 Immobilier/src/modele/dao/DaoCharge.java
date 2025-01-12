@@ -25,7 +25,7 @@ public class DaoCharge implements Dao<Charge> {
 
 	@Override
 	public void create(Charge donnees) throws SQLException {
-		String sql = "INSERT INTO Charge (Id_Charge, Type, Montant, Recuperable, PeriodeDebut, PeriodeFin, Id_Facture, Id_Louable) VALUES (?, ?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO Charge (Id_Charge, TypeCharge, Montant, Recuperable, PeriodeDebut, PeriodeFin, Id_Facture, Id_Louable) VALUES (?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
 			prSt.setInt(1, donnees.getIdCharge());
 			prSt.setString(2, donnees.getTypeCharge());

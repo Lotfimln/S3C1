@@ -2,20 +2,23 @@ package modele;
 
 import java.util.Objects;
 
-public abstract class Louable {
+public class Louable {
     protected int idLouable;
+    private String typeLouable;
     private String adresse;
     private double superficie;
     private String numeroFiscal;
     private String statut;
     private java.util.Date dateAnniversaire;
     private java.util.Date dateAcquisition;
+    private int nbPieces;
     private Immeuble immeuble; // Relation avec Immeuble
     private Assureur assurance; // Relation avec Assureur
 
-    public Louable(int idLouable, String adresse, double superficie, String numeroFiscal, String statut,
-                   java.util.Date dateAnniversaire, java.util.Date dateAcquisition, Immeuble immeuble, Assureur assurance) {
+    public Louable(int idLouable, String typeLouable, String adresse, double superficie, String numeroFiscal, String statut,
+                   java.util.Date dateAnniversaire, java.util.Date dateAcquisition, int nbPieces, Immeuble immeuble, Assureur assurance) {
         this.idLouable = idLouable;
+        this.typeLouable = typeLouable;
         this.adresse = adresse;
         this.superficie = superficie;
         this.numeroFiscal = numeroFiscal;
@@ -24,6 +27,7 @@ public abstract class Louable {
         this.dateAcquisition = dateAcquisition;
         this.immeuble = immeuble;
         this.assurance = assurance;
+        this.nbPieces = nbPieces;
     }
 
 	public int getIdLouable() {
@@ -106,15 +110,16 @@ public abstract class Louable {
 
 	@Override
 	public String toString() {
-		return "Louable [idLouable=" + idLouable + ", adresse=" + adresse + ", superficie=" + superficie
-				+ ", numeroFiscal=" + numeroFiscal + ", statut=" + statut + ", dateAnniversaire=" + dateAnniversaire
-				+ ", dateAcquisition=" + dateAcquisition + ", immeuble=" + immeuble + ", assurance=" + assurance + "]";
+		return "Louable [idLouable=" + idLouable + ", typeLouable=" + typeLouable + ", adresse=" + adresse
+				+ ", superficie=" + superficie + ", numeroFiscal=" + numeroFiscal + ", statut=" + statut
+				+ ", dateAnniversaire=" + dateAnniversaire + ", dateAcquisition=" + dateAcquisition + ", nbPieces="
+				+ nbPieces + ", immeuble=" + immeuble + ", assurance=" + assurance + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(adresse, assurance, dateAcquisition, dateAnniversaire, idLouable, immeuble, numeroFiscal,
-				statut, superficie);
+		return Objects.hash(adresse, assurance, dateAcquisition, dateAnniversaire, idLouable, immeuble, nbPieces,
+				numeroFiscal, statut, superficie, typeLouable);
 	}
 
 	@Override
@@ -129,9 +134,12 @@ public abstract class Louable {
 		return Objects.equals(adresse, other.adresse) && Objects.equals(assurance, other.assurance)
 				&& Objects.equals(dateAcquisition, other.dateAcquisition)
 				&& Objects.equals(dateAnniversaire, other.dateAnniversaire) && idLouable == other.idLouable
-				&& Objects.equals(immeuble, other.immeuble) && Objects.equals(numeroFiscal, other.numeroFiscal)
-				&& Objects.equals(statut, other.statut)
-				&& Double.doubleToLongBits(superficie) == Double.doubleToLongBits(other.superficie);
+				&& Objects.equals(immeuble, other.immeuble) && nbPieces == other.nbPieces
+				&& Objects.equals(numeroFiscal, other.numeroFiscal) && Objects.equals(statut, other.statut)
+				&& Double.doubleToLongBits(superficie) == Double.doubleToLongBits(other.superficie)
+				&& Objects.equals(typeLouable, other.typeLouable);
 	}
+
+
 
 }

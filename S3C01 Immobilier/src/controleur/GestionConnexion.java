@@ -37,7 +37,6 @@ public class GestionConnexion implements ActionListener {
                     // Vérifier si la connexion est réussie
                     if (connection != null && !connection.isClosed()) {
                         fenetrePrincipale.setConnecte(true);
-                        JOptionPane.showMessageDialog(fenetreConnexion, "Connexion établie.");
                         this.fenetreConnexion.dispose();
 
                         // Afficher la fenêtre AffichageDonnees

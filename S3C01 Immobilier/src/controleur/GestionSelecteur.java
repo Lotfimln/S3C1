@@ -10,34 +10,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import modele.Assureur;
-import modele.Charge;
-import modele.ContratDeLocation;
-import modele.Diagnostic;
-import modele.Entreprise;
-import modele.Facture;
-import modele.Garage;
-import modele.Immeuble;
-import modele.IndexCompteur;
-import modele.Locataire;
-import modele.Logement;
-import modele.Quittances;
-import modele.Taxe;
-import modele.dao.CictOracleDataSource;
-import modele.dao.Dao;
-import modele.dao.DaoAssureur;
-import modele.dao.DaoCharge;
-import modele.dao.DaoContratDeLocation;
-import modele.dao.DaoDiagnostic;
-import modele.dao.DaoEntreprise;
-import modele.dao.DaoFacture;
-import modele.dao.DaoGarage;
-import modele.dao.DaoImmeuble;
-import modele.dao.DaoIndexCompteur;
-import modele.dao.DaoLocataire;
-import modele.dao.DaoLogement;
-import modele.dao.DaoQuittances;
-import modele.dao.DaoTaxe;
+import modele.*;
+import modele.dao.*;
 import vue.AffichageDonnees;
 import vue.ElementsSelectionnables;
 
@@ -63,10 +37,14 @@ public class GestionSelecteur implements ActionListener {
             try {
                 switch (selection) {
                 case LOCATAIRE:
-                    afficherDonnees(new DaoLocataire(CictOracleDataSource.getConnectionBD()), Locataire.class);
+                	DaoLocataire daoLocataire = new DaoLocataire(CictOracleDataSource.getConnectionBD());
+                    afficherDonnees(daoLocataire, Locataire.class);
+                    fenetreAffichageDonnees.setDao(daoLocataire);
                     break;
                 case INDEX_COMPTEUR:
-                    afficherDonnees(new DaoIndexCompteur(CictOracleDataSource.getConnectionBD()), IndexCompteur.class);
+                	DaoIndexCompteur daoIndexCompteur = new DaoIndexCompteur(CictOracleDataSource.getConnectionBD());
+                    afficherDonnees(daoIndexCompteur, IndexCompteur.class);
+                    fenetreAffichageDonnees.setDao(daoIndexCompteur);
                     break;
                 case ASSUREUR:
                     afficherDonnees(new DaoAssureur(CictOracleDataSource.getConnectionBD()), Assureur.class);
@@ -95,12 +73,10 @@ public class GestionSelecteur implements ActionListener {
                 case QUITTANCES:
                     afficherDonnees(new DaoQuittances(CictOracleDataSource.getConnectionBD()), Quittances.class);
                     break;
-                case LOGEMENT:
-                    afficherDonnees(new DaoLogement(CictOracleDataSource.getConnectionBD()), Logement.class);
-                    break;
-                case GARAGE:
-                    afficherDonnees(new DaoGarage(CictOracleDataSource.getConnectionBD()), Garage.class);
-                    break;
+                case LOUABLE:
+                	DaoLouable daoLouable = new DaoLouable(CictOracleDataSource.getConnectionBD());
+                    afficherDonnees(daoLouable, Louable.class);
+                    fenetreAffichageDonnees.setDao(daoLouable);
                     default:
                         JOptionPane.showMessageDialog(fenetreAffichageDonnees,
                             "Option non prise en charge : " + selection,
@@ -248,24 +224,13 @@ public class GestionSelecteur implements ActionListener {
                 .toArray(Object[][]::new);
             break;
 
-        case "LOGEMENT":
+        case "LOUABLE":
             colonnes = new String[]{"ID Logement", "Adresse"};
             data = donnees.stream()
-                .map(obj -> (Logement) obj)
+                .map(obj -> (Louable) obj)
                 .map(logement -> new Object[]{
                     logement.getIdLouable(),
                     logement.getAdresse()
-                })
-                .toArray(Object[][]::new);
-            break;
-
-        case "GARAGE":
-            colonnes = new String[]{"ID Garage", "Adresse"};
-            data = donnees.stream()
-                .map(obj -> (Garage) obj)
-                .map(garage -> new Object[]{
-                    garage.getIdLouable(),
-                    garage.getAdresse()
                 })
                 .toArray(Object[][]::new);
             break;

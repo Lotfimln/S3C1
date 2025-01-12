@@ -17,13 +17,19 @@ import javax.swing.WindowConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.table.DefaultTableModel;
 
+import controleur.GestionAffichageDonnees;
 import controleur.GestionSelecteur;
+import modele.dao.Dao;
 
 public class AffichageDonnees extends JInternalFrame {
 
     private static final long serialVersionUID = 1L;
-    private JTable tableListeElements;
+
+    private JTable tableListeElements; // Table de gauche affichant les éléments d'une entité
+    private JPanel panelAttributs; // Panneau à droite pour afficher les attributs d'un élément
     private JScrollPane scrollPaneListeElements;
+
+    private GestionAffichageDonnees gestionAffichageDonnees;
 
     public AffichageDonnees(FenetrePrincipale fenetrePrincipale) {
         this.setTitle("Gestion Immobilière");
@@ -31,24 +37,25 @@ public class AffichageDonnees extends JInternalFrame {
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.getContentPane().setLayout(new BorderLayout());
 
-        // Panneau gauche pour la sélection des tables et des entités
+        // --- Panneau gauche pour la sélection des tables et des entités ---
         JPanel leftPanel = new JPanel(new BorderLayout());
         leftPanel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
         leftPanel.setPreferredSize(new Dimension(250, 0));
         this.getContentPane().add(leftPanel, BorderLayout.WEST);
 
-        JPanel panel = new JPanel();
-        leftPanel.add(panel, BorderLayout.NORTH);
-        panel.setLayout(new GridLayout(0, 2, 0, 0));
+        // Sélecteur pour choisir l'entité
+        JPanel panelSelecteur = new JPanel();
+        leftPanel.add(panelSelecteur, BorderLayout.NORTH);
+        panelSelecteur.setLayout(new GridLayout(0, 2, 0, 0));
 
         JComboBox<ElementsSelectionnables> tableSelector = new JComboBox<>(ElementsSelectionnables.values());
-        panel.add(tableSelector);
+        panelSelecteur.add(tableSelector);
 
-        JButton btnNewButton = new JButton("+");
-        panel.add(btnNewButton);
+        JButton btnAjouterElement = new JButton("+");
+        panelSelecteur.add(btnAjouterElement);
 
-        JCheckBox checkboxArchive = new JCheckBox("Eléments archivés");
-        panel.add(checkboxArchive);
+        JCheckBox checkboxArchive = new JCheckBox("Archivés");
+        panelSelecteur.add(checkboxArchive);
 
         // Initialisation du tableau
         tableListeElements = new JTable();
@@ -62,47 +69,67 @@ public class AffichageDonnees extends JInternalFrame {
         scrollPaneListeElements = new JScrollPane(tableListeElements);
         leftPanel.add(scrollPaneListeElements, BorderLayout.CENTER);
 
-        // Panneau principal pour l'affichage des détails
+        // --- Panneau principal pour l'affichage des détails ---
         JPanel mainPanel = new JPanel(new BorderLayout());
         this.getContentPane().add(mainPanel, BorderLayout.CENTER);
 
-        JPanel panel_1 = new JPanel();
-        panel_1.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-        mainPanel.add(panel_1, BorderLayout.NORTH);
-        panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+        // Panneau supérieur pour les boutons
+        JPanel panelBoutons = new JPanel();
+        panelBoutons.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+        mainPanel.add(panelBoutons, BorderLayout.NORTH);
+        panelBoutons.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-        JLabel lblNewLabel = new JLabel("\"Object sélectionné\" ID n°\"id\"");
-        panel_1.add(lblNewLabel);
-
-        JPanel panel_2 = new JPanel();
-        panel_1.add(panel_2);
+        JLabel lblObjectSelectionne = new JLabel("\"Objet sélectionné\" ID n°\"id\"");
+        panelBoutons.add(lblObjectSelectionne);
 
         JButton bouttonMAJ = new JButton("Mettre à jour");
-        panel_2.add(bouttonMAJ);
+        panelBoutons.add(bouttonMAJ);
 
         JButton bouttonSupprimer = new JButton("Supprimer");
-        panel_2.add(bouttonSupprimer);
+        panelBoutons.add(bouttonSupprimer);
 
         JButton bouttonArchiver = new JButton("Archiver");
-        panel_2.add(bouttonArchiver);
+        panelBoutons.add(bouttonArchiver);
 
-        JButton BouttonDocument = new JButton("Créer le document");
-        panel_2.add(BouttonDocument);
+        JButton bouttonDocument = new JButton("Créer le document");
+        panelBoutons.add(bouttonDocument);
 
-        JScrollPane panelAttributs = new JScrollPane();
-        mainPanel.add(panelAttributs, BorderLayout.CENTER);
+        // Panneau pour afficher les attributs de l'élément sélectionné
+        panelAttributs = new JPanel();
+        panelAttributs.setLayout(new GridLayout(0, 2, 10, 10)); // Affichage en grille (Label + Composant)
+        JScrollPane scrollPaneAttributs = new JScrollPane(panelAttributs);
+        mainPanel.add(scrollPaneAttributs, BorderLayout.CENTER);
 
-        // Ajout des contrôleurs
-        tableSelector.addActionListener(new GestionSelecteur(this));
+        // --- Ajout des contrôleurs ---
+        GestionSelecteur gestionSelecteur = new GestionSelecteur(this);
+        tableSelector.addActionListener(gestionSelecteur);
+
+        // Gestion dynamique de l'affichage des attributs
+        gestionAffichageDonnees = new GestionAffichageDonnees(this, null);
+
+        // Boutons liés à la gestion des données
+        bouttonMAJ.addActionListener(e -> gestionAffichageDonnees.enregistrerModifications());
+        bouttonSupprimer.addActionListener(e -> {
+            // Suppression de l'élément (à implémenter si besoin)
+        });
+        bouttonDocument.addActionListener(e -> {
+            // Génération de document (à implémenter si besoin)
+        });
     }
 
-    // Getter pour accéder à la JTable
+    // --- Getters et Setters pour interagir avec les contrôleurs ---
     public JTable getTableListeElements() {
         return tableListeElements;
     }
 
-    // Setter pour mettre à jour le tableau
-    public void setTableListeElementsModel(DefaultTableModel model) {
-        tableListeElements.setModel(model);
+    public JPanel getPanelAttributs() {
+        return panelAttributs;
     }
+    
+    public void setDao(Dao<?> dao) {
+        if (gestionAffichageDonnees != null) {
+            gestionAffichageDonnees.setDao(dao); // Définit le DAO dans GestionAffichageDonnees
+        }
+    }
+
 }

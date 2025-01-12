@@ -3,11 +3,11 @@ package modele.dao.requetes.select;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import modele.Logement;
+import modele.Louable;
 import modele.dao.requetes.Requete;
 
 
-public class RequeteSelectLouable implements Requete<Logement> {
+public class RequeteSelectLouable implements Requete<Louable> {
 
 		@Override
 		public String requete() {
@@ -19,7 +19,7 @@ public class RequeteSelectLouable implements Requete<Logement> {
 		}
 
 		@Override
-		public void parametres(PreparedStatement prSt, Logement data) throws SQLException {
+		public void parametres(PreparedStatement prSt, Louable data) throws SQLException {
 
 		}
 	}
