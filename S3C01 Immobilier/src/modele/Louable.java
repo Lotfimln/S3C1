@@ -45,6 +45,14 @@ public class Louable {
 	public void setAdresse(String adresse) {
 		this.adresse = adresse;
 	}
+	
+	public String getTypeLouable() {
+		return typeLouable;
+	}
+
+	public void settypeLouable(String typeLouable) {
+		this.typeLouable = typeLouable;
+	}
 
 	public double getSuperficie() {
 		return superficie;

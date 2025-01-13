@@ -71,6 +71,7 @@ create table Index_Compteur(
 ---------------------- Table Louable ----------------------
 create table Louable(
     Id_Louable INT,
+    TypeLouable VARCHAR2(10),
     Adresse VARCHAR2(50),
     Superficie NUMBER(10, 3),
     NumeroFiscal VARCHAR2(50),
@@ -79,9 +80,11 @@ create table Louable(
     DateAcquisition DATE,
     Id_Immeuble INT,
     Id_Assurance INT,
+    NbPieces INT,
     constraint pk_louable primary key (Id_Louable),
     constraint fk_loua_imme foreign key (Id_Immeuble) references Immeuble(Id_Immeuble) on delete cascade,
-    constraint fk_loua_assu foreign key (Id_Assurance) REFERENCES Assureur(Id_Assurance) on delete cascade
+    constraint fk_loua_assu foreign key (Id_Assurance) REFERENCES Assureur(Id_Assurance) on delete cascade,
+    constraint ck_loge_nbP check (NbPieces > 0) -- Nombre de pièces validee
 );
 
 ---------------------- Table Taxe ----------------------
@@ -144,22 +147,6 @@ create table Charge(
     constraint fk_char_loua foreign key (Id_Louable) references Louable(Id_Louable) on delete cascade,
     constraint ck_mont check (Montant > 0), -- Montant valide
     constraint ck_peri check (PeriodeDebut < PeriodeFin) -- Cohérence des périodes
-);
-
----------------------- Table Garage ----------------------
-create table Garage(
-   Id_Louable INT,
-   constraint pk_gara primary key (Id_Louable),
-   constraint fk_gara_loua foreign key (Id_Louable) references Louable(Id_Louable)
-);
-
----------------------- Table Logement ----------------------
-create table Logement(
-    Id_Louable INT,
-    NbPieces INT,
-    constraint pk_loge primary key(Id_Louable),
-    constraint fk_loge_loua foreign key (Id_Louable) references Louable(Id_Louable) on delete cascade,
-    constraint ck_loge_nbP check (NbPieces > 0) -- Nombre de pièces valide
 );
 
 ---------------------- Table Colocataire ----------------------
@@ -265,18 +252,10 @@ INSERT INTO Index_Compteur (Id_Index_Compteur, TypeCompteur, ValeurCourante, Anc
 VALUES (2, 'Eau', 800.300, 700.200, TO_DATE('2024-01-01', 'YYYY-MM-DD'));
 
 -- Table Louable
-INSERT INTO Louable (Id_Louable, Adresse, Superficie, NumeroFiscal, Statut, DateAnniversaire, DateAcquisition, Id_Immeuble, Id_Assurance)
-VALUES (1, '15 Rue des Lilas', 75.5, '123456789012', 'Y', TO_DATE('2023-01-01', 'YYYY-MM-DD'), TO_DATE('2022-01-01', 'YYYY-MM-DD'), 1, 1);
-INSERT INTO Louable (Id_Louable, Adresse, Superficie, NumeroFiscal, Statut, DateAnniversaire, DateAcquisition, Id_Immeuble, Id_Assurance)
-VALUES (2, '20 Rue des Roses', 120.0, '987654321012', 'N', TO_DATE('2023-06-01', 'YYYY-MM-DD'), TO_DATE('2022-06-01', 'YYYY-MM-DD'), 2, 2);
-
--- Table Garage
-INSERT INTO Garage (Id_Louable)
-VALUES (1);
-
--- Table Logement
-INSERT INTO Logement (Id_Louable, NbPieces)
-VALUES (2, 5);
+INSERT INTO Louable (Id_Louable, TypeLouable, Adresse, Superficie, NumeroFiscal, Statut, DateAnniversaire, DateAcquisition, Id_Immeuble, Id_Assurance, NbPieces)
+VALUES (1, 'garage', '15 Rue des Lilas', 75.5, '123456789012', 'Y', TO_DATE('2023-01-01', 'YYYY-MM-DD'), TO_DATE('2022-01-01', 'YYYY-MM-DD'), 1, 1, 1);
+INSERT INTO Louable (Id_Louable, TypeLouable, Adresse, Superficie, NumeroFiscal, Statut, DateAnniversaire, DateAcquisition, Id_Immeuble, Id_Assurance, NbPieces)
+VALUES (2, 'logement', '20 Rue des Roses', 120.0, '987654321012', 'N', TO_DATE('2023-06-01', 'YYYY-MM-DD'), TO_DATE('2022-06-01', 'YYYY-MM-DD'), 2, 2, 5);
 
 -- Table Taxe
 INSERT INTO Taxe (Id_Taxe, MontantTaxeFoncieres, DateTaxe, Id_Immeuble)
@@ -332,7 +311,7 @@ VALUES (1, 1);
 INSERT INTO Associer (Id_Louable, Id_Index_Compteur)
 VALUES (2, 2);
 
--- Table Apparaitre
+-- Table Apparaitree
 INSERT INTO Apparaitre (Id_Charge, Id_Index_Compteur)
 VALUES (1, 1);
 INSERT INTO Apparaitre (Id_Charge, Id_Index_Compteur)

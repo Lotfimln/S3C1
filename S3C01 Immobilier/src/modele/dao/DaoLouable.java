@@ -111,7 +111,7 @@ public class DaoLouable implements Dao<Louable> {
 							immeuble, 
 							assureur);
 				} else {
-                    throw new SQLException("Aucun logement trouvé avec Id_Louable = " + id[0]);
+                    throw new SQLException("Aucun louable trouvé avec Id_Louable = " + id[0]);
                 }
             }
         } catch (SQLException e) {

@@ -63,8 +63,8 @@ public class DaoFacture implements Dao<Facture> {
 	@Override
 	public Facture findById(String... id) throws SQLException {
 		RequeteSelectFactureByID requeteSelectById = new RequeteSelectFactureByID();
-	    DaoEntreprise daoFacture = new DaoEntreprise(this.connection);
-	    DaoLouable daoEntreprise = new DaoLouable(this.connection);
+	    DaoEntreprise daoEntreprise = new DaoEntreprise(this.connection);
+	    DaoLouable daoLouable = new DaoLouable(this.connection);
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectById.requete())) {
 			requeteSelectById.parametres(prSt, id);
 			try (ResultSet rs = prSt.executeQuery()) {
@@ -72,8 +72,8 @@ public class DaoFacture implements Dao<Facture> {
 	                int idEntreprise = rs.getInt("Id_Facture");
 	                int idLouable = rs.getInt("Id_Louable");
 
-	                Entreprise entreprise = daoFacture.findById(String.valueOf(idEntreprise));
-	                Louable louable = daoEntreprise.findById(String.valueOf(idLouable));
+	                Entreprise entreprise = daoEntreprise.findById(String.valueOf(idEntreprise));
+	                Louable louable = daoLouable.findById(String.valueOf(idLouable));
 
 					return new Facture(
 							rs.getInt("Id_Facture"), 

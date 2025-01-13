@@ -86,7 +86,7 @@ public class GestionSelecteur implements ActionListener {
                 }
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(fenetreAffichageDonnees,
-                    "Erreur lors de l'accès à la base de données : " + ex.getMessage(),
+                    "1. Erreur lors de l'accès à la base de données : " + ex.getMessage(),
                     "Erreur",
                     JOptionPane.ERROR_MESSAGE);
             }
@@ -170,12 +170,12 @@ public class GestionSelecteur implements ActionListener {
             break;
 
         case "FACTURE":
-            colonnes = new String[]{"ID Facture", "Montant"};
+            colonnes = new String[]{"ID Facture", "Date"};
             data = donnees.stream()
                 .map(obj -> (Facture) obj)
                 .map(facture -> new Object[]{
                     facture.getIdFacture(),
-                    facture.getMontant()
+                    facture.getDateFacture()
                 })
                 .toArray(Object[][]::new);
             break;
@@ -225,12 +225,12 @@ public class GestionSelecteur implements ActionListener {
             break;
 
         case "LOUABLE":
-            colonnes = new String[]{"ID Logement", "Adresse"};
+            colonnes = new String[]{"ID Louable", "Type"};
             data = donnees.stream()
                 .map(obj -> (Louable) obj)
-                .map(logement -> new Object[]{
-                    logement.getIdLouable(),
-                    logement.getAdresse()
+                .map(louable -> new Object[]{
+                		louable.getIdLouable(),
+                		louable.getTypeLouable()
                 })
                 .toArray(Object[][]::new);
             break;
