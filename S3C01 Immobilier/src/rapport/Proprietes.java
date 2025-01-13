@@ -1,5 +1,14 @@
 package rapport;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import modele.dao.CictOracleDataSource;
+
 public class Proprietes {
     private String nom;
     private String type;
@@ -8,8 +17,7 @@ public class Proprietes {
     private int nombreLocaux;
     private int sommeLoyers;
 
-    // Constructeur prenant en parametre le nom, le type, la période de construction
-    // l'adresse, le nombre de locaux, la somme des loyers d'une propriété
+    // Constructeur
     public Proprietes(String nom, String type, String periodeConstruction, String adresse, int nombreLocaux, int sommeLoyers) {
         this.nom = nom;
         this.type = type;
@@ -19,53 +27,56 @@ public class Proprietes {
         this.sommeLoyers = sommeLoyers;
     }
 
-	public String getNom() {
-		return nom;
-	}
+    // Getters
+    public String getNom() {
+        return nom;
+    }
 
-	public void setNom(String n) {
-		this.nom = n;
-	}
+    public String getType() {
+        return type;
+    }
 
-	public String getType() {
-		return type;
-	}
+    public String getPeriodeConstruction() {
+        return periodeConstruction;
+    }
 
-	public void setType(String t) {
-		this.type = t;
-	}
+    public String getAdresse() {
+        return adresse;
+    }
 
-	public String getPeriodeConstruction() {
-		return periodeConstruction;
-	}
+    public int getNombreLocaux() {
+        return nombreLocaux;
+    }
 
-	public void setPeriodeConstruction(String periodeConstruction) {
-		this.periodeConstruction = periodeConstruction;
-	}
+    public int getSommeLoyers() {
+        return sommeLoyers;
+    }
 
-	public String getAdresse() {
-		return adresse;
-	}
+    // Méthode pour récupérer les propriétés depuis la base de données
+    public static List<Proprietes> recupererProprietes() throws SQLException {
+        Connection connection = CictOracleDataSource.getConnectionBD();  // Connexion correcte
+        List<Proprietes> proprietes = new ArrayList<>();
 
-	public void setAdresse(String adresse) {
-		this.adresse = adresse;
-	}
+        String query = "SELECT i.nom, i.type, i.periode_construction, i.adresse, COUNT(a.id) AS nombre_locaux, " +
+                       "COALESCE(SUM(l.montant), 0) AS somme_loyers " +
+                       "FROM Immeuble i " +
+                       "LEFT JOIN Appartement a ON i.id = a.immeuble_id " +
+                       "LEFT JOIN Loyer l ON a.id = l.appartement_id " +
+                       "GROUP BY i.nom, i.type, i.periode_construction, i.adresse";
 
-	public int getNombreLocaux() {
-		return nombreLocaux;
-	}
+        PreparedStatement stmt = connection.prepareStatement(query);
+        ResultSet rs = stmt.executeQuery();
 
-	public void setNombreLocaux(int nombreLocaux) {
-		this.nombreLocaux = nombreLocaux;
-	}
-
-	public int getSommeLoyers() {
-		return sommeLoyers;
-	}
-
-	public void setSommeLoyers(int sommeLoyers) {
-		this.sommeLoyers = sommeLoyers;
-	}
-
-
+        while (rs.next()) {
+            proprietes.add(new Proprietes(
+                rs.getString("nom"),
+                rs.getString("type"),
+                rs.getString("periode_construction"),
+                rs.getString("adresse"),
+                rs.getInt("nombre_locaux"),
+                rs.getInt("somme_loyers")
+            ));
+        }
+        return proprietes;
+    }
 }
