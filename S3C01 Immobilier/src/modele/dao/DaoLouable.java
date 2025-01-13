@@ -25,21 +25,23 @@ public class DaoLouable implements Dao<Louable> {
 
 	@Override
 	public void create(Louable donnees) throws SQLException {
-		String sql = "INSERT INTO Louable (Id_Louable, TypeLouable, TypeLouable, Adresse, Superficie, NumeroFiscal, Statut, DateAnniversaire, NbPieces, Id_Immeuble, Id_Assurance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO Louable (Id_Louable, TypeLouable, Adresse, Superficie, NumeroFiscal, Statut, DateAnniversaire, Id_Immeuble, Id_Assurance, NbPieces) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
 			prSt.executeUpdate();
 				
 			// Insertion dans la table Louable
 			prSt.setInt(1, donnees.getIdLouable());
-			prSt.setString(2, donnees.getAdresse());
-			prSt.setDouble(3, donnees.getSuperficie());
-			prSt.setString(4, donnees.getNumeroFiscal());
-			prSt.setString(5, donnees.getStatut());
+			prSt.setString(2, donnees.getTypeLouable());
+			prSt.setString(3, donnees.getAdresse());
+			prSt.setDouble(4, donnees.getSuperficie());
+			prSt.setString(5, donnees.getNumeroFiscal());
+			prSt.setString(6, donnees.getStatut());
 			java.util.Date utilDate = donnees.getDateAnniversaire();	            
 			java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-			prSt.setDate(6, sqlDate);
-			prSt.setInt(7, donnees.getImmeuble().getIdImmeuble());
-			prSt.setInt(8, donnees.getAssurance().getIdAssurance());
+			prSt.setDate(7, sqlDate);
+			prSt.setInt(8, donnees.getImmeuble().getIdImmeuble());
+			prSt.setInt(9, donnees.getAssurance().getIdAssurance());
+			prSt.setInt(10, donnees.getNbPieces());
 			prSt.executeUpdate();
 			}
 		catch (SQLException e) {

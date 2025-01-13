@@ -115,6 +115,14 @@ public class Louable {
 	public void setDateAcquisition(java.util.Date dateAcquisition) {
 		this.dateAcquisition = dateAcquisition;
 	}
+	
+	public int getNbPieces() {
+		return nbPieces;
+	}
+
+	public void setNbPieces(int nbPieces) {
+		this.nbPieces = nbPieces;
+	}
 
 	@Override
 	public String toString() {

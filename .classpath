@@ -8,5 +8,6 @@
 	<classpathentry kind="src" path="S3C01 Immobilier/src"/>
 	<classpathentry kind="lib" path="S3C01 Immobilier/miglayout15-swing.jar"/>
 	<classpathentry kind="lib" path="S3C01 Immobilier/ojdbc/ojdbc11.jar"/>
+	<classpathentry kind="lib" path="/app_property_management-main/autre/poi/poi-bin-5.2.3/poi-ooxml-5.2.3.jar"/>
 	<classpathentry kind="output" path="S3C01 Immobilier/bin"/>
 </classpath>
