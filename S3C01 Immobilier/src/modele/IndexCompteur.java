@@ -62,9 +62,7 @@ public class IndexCompteur {
 
 	@Override
 	public String toString() {
-		return "IndexCompteur [idIndexCompteur=" + idIndexCompteur + ", typeCompteur=" + typeCompteur
-				+ ", valeurCourante=" + valeurCourante + ", ancienneValeur=" + ancienneValeur + ", dateReleve="
-				+ dateReleve + "]";
+		return typeCompteur;
 	}
 
 	@Override

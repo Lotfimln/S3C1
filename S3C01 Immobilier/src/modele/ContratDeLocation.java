@@ -132,10 +132,7 @@ public class ContratDeLocation {
 
 	@Override
 	public String toString() {
-		return "ContratDeLocation [idContratDeLocation=" + idContratDeLocation + ", dateDebut=" + dateDebut
-				+ ", dateFin=" + dateFin + ", montantLoyer=" + montantLoyer + ", provisionsCharges=" + provisionsCharges
-				+ ", typeContrat=" + typeContrat + ", dateAnniversaire=" + dateAnniversaire + ", indiceICC=" + indiceICC
-				+ ", montantCaution=" + montantCaution + ", louable=" + louable + "]";
+		return typeContrat;
 	}
 
 	@Override

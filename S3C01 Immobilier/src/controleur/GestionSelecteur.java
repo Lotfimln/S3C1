@@ -37,46 +37,65 @@ public class GestionSelecteur implements ActionListener {
             try {
                 switch (selection) {
                 case LOCATAIRE:
-                	DaoLocataire daoLocataire = new DaoLocataire(CictOracleDataSource.getConnectionBD());
+                    DaoLocataire daoLocataire = new DaoLocataire(CictOracleDataSource.getConnectionBD());
                     afficherDonnees(daoLocataire, Locataire.class);
                     fenetreAffichageDonnees.setDao(daoLocataire);
                     break;
                 case INDEX_COMPTEUR:
-                	DaoIndexCompteur daoIndexCompteur = new DaoIndexCompteur(CictOracleDataSource.getConnectionBD());
+                    DaoIndexCompteur daoIndexCompteur = new DaoIndexCompteur(CictOracleDataSource.getConnectionBD());
                     afficherDonnees(daoIndexCompteur, IndexCompteur.class);
                     fenetreAffichageDonnees.setDao(daoIndexCompteur);
                     break;
                 case ASSUREUR:
-                    afficherDonnees(new DaoAssureur(CictOracleDataSource.getConnectionBD()), Assureur.class);
+                    DaoAssureur daoAssureur = new DaoAssureur(CictOracleDataSource.getConnectionBD());
+                    afficherDonnees(daoAssureur, Assureur.class);
+                    fenetreAffichageDonnees.setDao(daoAssureur);
                     break;
                 case ENTREPRISE:
-                    afficherDonnees(new DaoEntreprise(CictOracleDataSource.getConnectionBD()), Entreprise.class);
+                    DaoEntreprise daoEntreprise = new DaoEntreprise(CictOracleDataSource.getConnectionBD());
+                    afficherDonnees(daoEntreprise, Entreprise.class);
+                    fenetreAffichageDonnees.setDao(daoEntreprise);
                     break;
                 case IMMEUBLE:
-                    afficherDonnees(new DaoImmeuble(CictOracleDataSource.getConnectionBD()), Immeuble.class);
+                    DaoImmeuble daoImmeuble = new DaoImmeuble(CictOracleDataSource.getConnectionBD());
+                    afficherDonnees(daoImmeuble, Immeuble.class);
+                    fenetreAffichageDonnees.setDao(daoImmeuble);
                     break;
                 case TAXE:
-                    afficherDonnees(new DaoTaxe(CictOracleDataSource.getConnectionBD()), Taxe.class);
+                    DaoTaxe daoTaxe = new DaoTaxe(CictOracleDataSource.getConnectionBD());
+                    afficherDonnees(daoTaxe, Taxe.class);
+                    fenetreAffichageDonnees.setDao(daoTaxe);
                     break;
                 case FACTURE:
-                    afficherDonnees(new DaoFacture(CictOracleDataSource.getConnectionBD()), Facture.class);
+                    DaoFacture daoFacture = new DaoFacture(CictOracleDataSource.getConnectionBD());
+                    afficherDonnees(daoFacture, Facture.class);
+                    fenetreAffichageDonnees.setDao(daoFacture);
                     break;
                 case DIAGNOSTIC:
-                    afficherDonnees(new DaoDiagnostic(CictOracleDataSource.getConnectionBD()), Diagnostic.class);
+                    DaoDiagnostic daoDiagnostic = new DaoDiagnostic(CictOracleDataSource.getConnectionBD());
+                    afficherDonnees(daoDiagnostic, Diagnostic.class);
+                    fenetreAffichageDonnees.setDao(daoDiagnostic);
                     break;
                 case CONTRAT_DE_LOCATION:
-                    afficherDonnees(new DaoContratDeLocation(CictOracleDataSource.getConnectionBD()), ContratDeLocation.class);
+                    DaoContratDeLocation daoContratDeLocation = new DaoContratDeLocation(CictOracleDataSource.getConnectionBD());
+                    afficherDonnees(daoContratDeLocation, ContratDeLocation.class);
+                    fenetreAffichageDonnees.setDao(daoContratDeLocation);
                     break;
                 case CHARGE:
-                    afficherDonnees(new DaoCharge(CictOracleDataSource.getConnectionBD()), Charge.class);
+                    DaoCharge daoCharge = new DaoCharge(CictOracleDataSource.getConnectionBD());
+                    afficherDonnees(daoCharge, Charge.class);
+                    fenetreAffichageDonnees.setDao(daoCharge);
                     break;
                 case QUITTANCES:
-                    afficherDonnees(new DaoQuittances(CictOracleDataSource.getConnectionBD()), Quittances.class);
+                    DaoQuittances daoQuittances = new DaoQuittances(CictOracleDataSource.getConnectionBD());
+                    afficherDonnees(daoQuittances, Quittances.class);
+                    fenetreAffichageDonnees.setDao(daoQuittances);
                     break;
                 case LOUABLE:
-                	DaoLouable daoLouable = new DaoLouable(CictOracleDataSource.getConnectionBD());
+                    DaoLouable daoLouable = new DaoLouable(CictOracleDataSource.getConnectionBD());
                     afficherDonnees(daoLouable, Louable.class);
                     fenetreAffichageDonnees.setDao(daoLouable);
+                    break;
                 }
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(fenetreAffichageDonnees,

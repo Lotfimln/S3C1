@@ -72,8 +72,12 @@ public class DaoQuittances implements Dao<Quittances> {
 	                Locataire locataire = daoLocataire.findById(String.valueOf(idLocataire));
 	                ContratDeLocation contratDeLocation = daoContratDeLocation.findById(String.valueOf(idContratDeLocation));
 
-					return new Quittances(rs.getInt("Id_Quittances"), rs.getDate("DateDerPaiement"),
-							rs.getDouble("MontantLoyer"), rs.getDouble("MontantProvision"), locataire,
+					return new Quittances(
+							rs.getInt("Id_Quittances"), 
+							rs.getDate("DatePaiement"),
+							rs.getDouble("MontantLoyer"), 
+							rs.getDouble("MontantProvision"), 
+							locataire,
 							contratDeLocation);
 				}
 			}

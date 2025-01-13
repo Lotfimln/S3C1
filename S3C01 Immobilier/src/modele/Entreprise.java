@@ -49,7 +49,7 @@ public class Entreprise {
 
 	@Override
 	public String toString() {
-		return "Entreprise [idEntreprise=" + idEntreprise + ", nom=" + nom + ", siren=" + siren + ", adresse=" + adresse + "]";
+		return nom;
 	}
 
 	@Override

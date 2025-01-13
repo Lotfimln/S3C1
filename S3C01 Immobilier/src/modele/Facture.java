@@ -92,9 +92,7 @@ public class Facture {
 
 	@Override
 	public String toString() {
-		return "Facture [idFacture=" + idFacture + ", montant=" + montant + ", dateFacture=" + dateFacture
-				+ ", referenceDevis=" + referenceDevis + ", entreprise=" + entreprise + ", datePaiement=" + datePaiement
-				+ ", entrepriseAssociee=" + entrepriseAssociee + ", louable=" + louable + "]";
+		return datePaiement.toString();
 	}
 
 	@Override

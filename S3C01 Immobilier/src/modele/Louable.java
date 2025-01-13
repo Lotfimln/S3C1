@@ -126,10 +126,7 @@ public class Louable {
 
 	@Override
 	public String toString() {
-		return "Louable [idLouable=" + idLouable + ", typeLouable=" + typeLouable + ", adresse=" + adresse
-				+ ", superficie=" + superficie + ", numeroFiscal=" + numeroFiscal + ", statut=" + statut
-				+ ", dateAnniversaire=" + dateAnniversaire + ", dateAcquisition=" + dateAcquisition + ", nbPieces="
-				+ nbPieces + ", immeuble=" + immeuble + ", assurance=" + assurance + "]";
+		return this.adresse;
 	}
 
 	@Override

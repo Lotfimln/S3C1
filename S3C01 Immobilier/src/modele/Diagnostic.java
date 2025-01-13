@@ -49,8 +49,7 @@ public class Diagnostic {
 
 	@Override
 	public String toString() {
-		return "Diagnostic [idDiagnostic=" + idDiagnostic + ", type=" + typeDiagnostic + ", dateDiagnostic=" + dateDiagnostic
-				+ ", louable=" + louable + "]";
+		return dateDiagnostic + typeDiagnostic;
 	}
 
 	@Override

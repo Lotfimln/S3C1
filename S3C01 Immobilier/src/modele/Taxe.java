@@ -49,8 +49,7 @@ public class Taxe {
 
 	@Override
 	public String toString() {
-		return "Taxe [idTaxe=" + idTaxe + ", montantTaxeFoncieres=" + montantTaxeFoncieres + ", dateTaxe=" + dateTaxe
-				+ ", immeuble=" + immeuble + "]";
+		return dateTaxe.toString();
 	}
 
 	@Override

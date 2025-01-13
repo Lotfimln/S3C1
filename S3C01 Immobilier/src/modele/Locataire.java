@@ -79,8 +79,7 @@ public class Locataire {
 
 	@Override
 	public String toString() {
-		return "Locataire [idLocataire=" + idLocataire + ", nom=" + nom + ", prenom=" + prenom + ", mail=" + mail
-				+ ", telephone=" + telephone + ", dateNaissance=" + dateNaissance + ", dateDepart=" + dateDepart + "]";
+		return this.nom + this.prenom;
 	}
 
 	@Override

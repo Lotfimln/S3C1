@@ -70,9 +70,7 @@ public class Quittances {
 
 	@Override
 	public String toString() {
-		return "Quittances [idQuittances=" + idQuittances + ", datePaiement=" + datePaiement + ", montantLoyer="
-				+ montantLoyer + ", montantProvision=" + montantProvision + ", locataire=" + locataire
-				+ ", contratDeLocation=" + contratDeLocation + "]";
+		return datePaiement.toString();
 	}
 
 	@Override
