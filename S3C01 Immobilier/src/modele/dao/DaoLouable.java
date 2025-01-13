@@ -87,42 +87,45 @@ public class DaoLouable implements Dao<Louable> {
 
 	@Override
 	public Louable findById(String... id) throws SQLException {
-		RequeteSelectLouableByID requeteSelectById = new RequeteSelectLouableByID();
+	    RequeteSelectLouableByID requeteSelectById = new RequeteSelectLouableByID();
 	    DaoAssureur daoAssureur = new DaoAssureur(this.connection);
 	    DaoImmeuble daoImmeuble = new DaoImmeuble(this.connection);
 
-		try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectById.requete())) {
-			requeteSelectById.parametres(prSt, id);
-			try (ResultSet rs = prSt.executeQuery()) {
-				if (rs.next()) {
-	                int idAssureur = rs.getInt("Id_Assureur");
+	    try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectById.requete())) {
+	        requeteSelectById.parametres(prSt, id);
+	        try (ResultSet rs = prSt.executeQuery()) {
+	            if (rs.next()) {
+	                // Vérifiez les noms des colonnes ici
+	                int idAssureur = rs.getInt("Id_Assurance");
 	                int idImmeuble = rs.getInt("Id_Immeuble");
 	                Assureur assureur = daoAssureur.findById(String.valueOf(idAssureur));
 	                Immeuble immeuble = daoImmeuble.findById(String.valueOf(idImmeuble));
 	                
-					return new Louable(
-							rs.getInt("Id_Louable"), 
-							rs.getString("TypeLouable"), 
-							rs.getString("Adresse"), 
-							rs.getDouble("Superficie"), 
-							rs.getString("NumeroFiscal"), 
-							rs.getString("Statut"), 
-							rs.getDate("DateAnniversaire"),
-							rs.getDate("DateAcquisition"), 
-							rs.getInt("NbPieces"),
-							immeuble, 
-							assureur);
-				} else {
-                    throw new SQLException("Aucun louable trouvé avec Id_Louable = " + id[0]);
-                }
-            }
-        } catch (SQLException e) {
-            String messageErreur = "Erreur lors de la récupération du logement avec Id_Louable = " + id[0] +
-                                    ". Détails : " + e.getMessage();
-            System.err.println(messageErreur);
-            throw new SQLException(messageErreur, e);
-        }
-    }
+	                return new Louable(
+	                    rs.getInt("Id_Louable"),
+	                    rs.getString("TypeLouable"),
+	                    rs.getString("Adresse"),
+	                    rs.getDouble("Superficie"),
+	                    rs.getString("NumeroFiscal"),
+	                    rs.getString("Statut"),
+	                    rs.getDate("DateAnniversaire"),
+	                    rs.getDate("DateAcquisition"),
+	                    rs.getInt("NbPieces"),
+	                    immeuble,
+	                    assureur
+	                );
+	            } else {
+	                throw new SQLException("Aucun louable trouvé avec Id_Louable = " + id[0]);
+	            }
+	        }
+	    } catch (SQLException e) {
+	        String messageErreur = "Erreur lors de la récupération du louable avec Id_Louable = " + id[0] +
+	                                ". Détails : " + e.getMessage();
+	        System.err.println(messageErreur);
+	        throw new SQLException(messageErreur, e);
+	    }
+	}
+
 
 	@Override
 	public List<Louable> findAll() throws SQLException {

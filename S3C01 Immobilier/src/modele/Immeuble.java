@@ -29,7 +29,7 @@ public class Immeuble {
 
 	@Override
 	public String toString() {
-		return "Immeuble [idImmeuble=" + idImmeuble + ", adresse=" + adresse + "]";
+		return this.adresse;
 	}
 
 	@Override

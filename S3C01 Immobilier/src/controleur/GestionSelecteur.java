@@ -77,12 +77,6 @@ public class GestionSelecteur implements ActionListener {
                 	DaoLouable daoLouable = new DaoLouable(CictOracleDataSource.getConnectionBD());
                     afficherDonnees(daoLouable, Louable.class);
                     fenetreAffichageDonnees.setDao(daoLouable);
-                    default:
-                        JOptionPane.showMessageDialog(fenetreAffichageDonnees,
-                            "Option non prise en charge : " + selection,
-                            "Erreur",
-                            JOptionPane.ERROR_MESSAGE);
-                        break;
                 }
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(fenetreAffichageDonnees,

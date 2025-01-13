@@ -49,8 +49,7 @@ public class Assureur {
 
 	@Override
 	public String toString() {
-		return "Assureur [idAssurance=" + idAssurance + ", nom=" + nom + ", dateAssurance=" + dateAssurance + ", prime="
-				+ prime + "]";
+		return this.nom;
 	}
 
 	@Override
