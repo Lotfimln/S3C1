@@ -6,13 +6,18 @@ import java.awt.event.MouseEvent;
 import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
-import modele.dao.Dao;
+import modele.dao.*;
+import modele.*;
 import vue.AffichageDonnees;
 
 public class GestionAffichageDonnees {
@@ -126,6 +131,86 @@ public class GestionAffichageDonnees {
             ex.printStackTrace();
         }
     }
+    
+    private void afficherAssociationsMultiples(String association, Object elementPrincipal) {
+        try {
+            JPanel panelAttributs = fenetreAffichageDonnees.getPanelAttributs();
+            
+            JTable tableAssociations = new JTable();
+            JScrollPane scrollPaneTable = new JScrollPane(tableAssociations);
+
+            switch (association.toLowerCase()) {
+                case "correspondre": // Locataire ↔ Contrat_de_location
+                    if (elementPrincipal instanceof ContratDeLocation) {
+                        int idContrat = ((ContratDeLocation) elementPrincipal).getIdContratDeLocation();
+                        DaoCorrespondre daoCorrespondre = new DaoCorrespondre(CictOracleDataSource.getConnectionBD());
+                        List<Locataire> locataires = daoCorrespondre.findLocatairesByContrat(new String[]{String.valueOf(idContrat)});
+
+                        DefaultTableModel modelLocataire = new DefaultTableModel(new String[]{"Locataire"}, 0);
+                        for (Locataire locataire : locataires) {
+                            modelLocataire.addRow(new Object[]{locataire.toString()});
+                        }
+                        tableAssociations.setModel(modelLocataire);
+                    }
+                    break;
+
+                case "apparaitre": // Charge ↔ Index_Compteur
+                    if (elementPrincipal instanceof IndexCompteur) {
+                        int idIndex = ((IndexCompteur) elementPrincipal).getIdIndexCompteur();
+                        DaoApparaitre daoApparaître = new DaoApparaitre(CictOracleDataSource.getConnectionBD());
+                        List<Charge> charges = daoApparaître.findChargesByIndexCompteur(new String[]{String.valueOf(idIndex)});
+
+                        DefaultTableModel modelCharge = new DefaultTableModel(new String[]{"Charge"}, 0);
+                        for (Charge charge : charges) {
+                            modelCharge.addRow(new Object[]{charge.toString()});
+                        }
+                        tableAssociations.setModel(modelCharge);
+                    }
+                    break;
+
+                case "associer": // Louable ↔ Index_Compteur
+                    if (elementPrincipal instanceof IndexCompteur) {
+                        int idIndex = ((IndexCompteur) elementPrincipal).getIdIndexCompteur();
+                        DaoAssocier daoAssocier = new DaoAssocier(CictOracleDataSource.getConnectionBD());
+                        List<Louable> louables = daoAssocier.findByL(new String[]{String.valueOf(idIndex)});
+
+                        DefaultTableModel modelLouable = new DefaultTableModel(new String[]{"Louable"}, 0);
+                        for (Louable louable : louables) {
+                            modelLouable.addRow(new Object[]{louable.toString()});
+                        }
+                        tableAssociations.setModel(modelLouable);
+                    }
+                    break;
+
+                case "indexer": // Immeuble ↔ Index_Compteur
+                    if (elementPrincipal instanceof IndexCompteur) {
+                        int idIndex = ((IndexCompteur) elementPrincipal).getIdIndexCompteur();
+                        DaoIndexer daoIndexer = new DaoIndexer(CictOracleDataSource.getConnectionBD());
+                        List<Immeuble> immeubles = (List<Immeuble>) daoIndexer.findByIndexCompteur(new String[]{String.valueOf(idIndex)});
+
+                        DefaultTableModel modelImmeuble = new DefaultTableModel(new String[]{"Immeuble"}, 0);
+                        for (Immeuble immeuble : immeubles) {
+                            modelImmeuble.addRow(new Object[]{immeuble.toString()});
+                        }
+                        tableAssociations.setModel(modelImmeuble);
+                    }
+                    break;
+
+                default:
+                    System.out.println("Association non reconnue : " + association);
+                    return;
+            }
+
+            panelAttributs.add(scrollPaneTable);
+            panelAttributs.revalidate();
+            panelAttributs.repaint();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
 
     private Object casterValeur(String valeur, Class<?> type) {
         if (type == int.class || type == Integer.class) {

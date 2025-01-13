@@ -64,6 +64,38 @@ public class DaoIndexer implements Dao<Indexer> {
 		}
 		return null;
 	}
+	
+	public Indexer findByImmeuble(String... id) throws SQLException {
+		String sql = "SELECT * FROM Indexer WHERE Id_Immeuble = ?";
+		try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
+			prSt.setInt(1, Integer.parseInt(id[0]));
+			prSt.setInt(2, Integer.parseInt(id[1]));
+			try (ResultSet rs = prSt.executeQuery()) {
+				if (rs.next()) {
+					return new Indexer(
+							rs.getInt("Id_Index_Compteur"), 
+							rs.getInt("Id_Immeuble"));
+				}
+			}
+		}
+		return null;
+	}
+	
+	public Indexer findByIndexCompteur(String... id) throws SQLException {
+		String sql = "SELECT * FROM Indexer WHERE Id_Index_Compteur = ?";
+		try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
+			prSt.setInt(1, Integer.parseInt(id[0]));
+			prSt.setInt(2, Integer.parseInt(id[1]));
+			try (ResultSet rs = prSt.executeQuery()) {
+				if (rs.next()) {
+					return new Indexer(
+							rs.getInt("Id_Index_Compteur"), 
+							rs.getInt("Id_Immeuble"));
+				}
+			}
+		}
+		return null;
+	}
 
 	@Override
 	public List<Indexer> findAll() throws SQLException {

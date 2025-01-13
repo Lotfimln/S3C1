@@ -49,6 +49,7 @@ public class AffichageDonnees extends JInternalFrame {
         panelSelecteur.setLayout(new GridLayout(0, 2, 0, 0));
 
         JComboBox<ElementsSelectionnables> tableSelector = new JComboBox<>(ElementsSelectionnables.values());
+        tableSelector.setSelectedIndex(-1);
         panelSelecteur.add(tableSelector);
 
         JButton btnAjouterElement = new JButton("+");
@@ -79,17 +80,11 @@ public class AffichageDonnees extends JInternalFrame {
         mainPanel.add(panelBoutons, BorderLayout.NORTH);
         panelBoutons.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-        JLabel lblObjectSelectionne = new JLabel("\"Objet sélectionné\" ID n°\"id\"");
-        panelBoutons.add(lblObjectSelectionne);
-
         JButton bouttonMAJ = new JButton("Mettre à jour");
         panelBoutons.add(bouttonMAJ);
 
         JButton bouttonSupprimer = new JButton("Supprimer");
         panelBoutons.add(bouttonSupprimer);
-
-        JButton bouttonArchiver = new JButton("Archiver");
-        panelBoutons.add(bouttonArchiver);
 
         JButton bouttonDocument = new JButton("Créer le document");
         panelBoutons.add(bouttonDocument);

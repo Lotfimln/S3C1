@@ -99,7 +99,7 @@ public class GestionSelecteur implements ActionListener {
                 }
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(fenetreAffichageDonnees,
-                    "1. Erreur lors de l'accès à la base de données : " + ex.getMessage(),
+                    "Erreur lors de l'accès à la base de données : " + ex.getMessage(),
                     "Erreur",
                     JOptionPane.ERROR_MESSAGE);
             }
