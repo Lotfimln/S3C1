@@ -20,14 +20,14 @@ import modele.dao.*;
 import modele.*;
 import vue.AffichageDonnees;
 
-public class GestionAffichageDonnees {
+public class GestionAffichageDonnees<T> {
 
     private AffichageDonnees fenetreAffichageDonnees;
-    private Dao<?> dao; // DAO générique pour récupérer les données de la table sélectionnée
+    private Dao<T> dao; // DAO générique pour récupérer les données de la table sélectionnée
     private Object elementSelectionne; // L'élément actuellement sélectionné dans la table
     private Map<String, Component> composantsAttributs; // Map pour relier les attributs à leurs composants graphiques
 
-    public GestionAffichageDonnees(AffichageDonnees fenetreAffichageDonnees, Dao<?> dao) {
+    public GestionAffichageDonnees(AffichageDonnees fenetreAffichageDonnees, Dao<T> dao) {
         this.fenetreAffichageDonnees = fenetreAffichageDonnees;
         this.dao = dao;
         this.composantsAttributs = new HashMap<>();
@@ -36,11 +36,11 @@ public class GestionAffichageDonnees {
         ajouterEcouteurTable();
     }
 
-    public void setDao(Dao<?> dao) {
+    public void setDao(Dao<T> dao) {
 		this.dao = dao;
 	}
-
-	private void ajouterEcouteurTable() {
+    
+    private void ajouterEcouteurTable() {
         fenetreAffichageDonnees.getTableListeElements().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -138,7 +138,7 @@ public class GestionAffichageDonnees {
             }
 
             // Enregistre l'objet mis à jour dans la base via le DAO
-            dao.update(elementSelectionne);
+            dao.update((T) elementSelectionne);
 
         } catch (SQLException | IllegalAccessException ex) {
             ex.printStackTrace();

@@ -83,7 +83,7 @@ public class DaoIndexer implements Dao<Indexer> {
 				}
 			}
 		}
-		return null;
+		return indexers;
 	}
 	
 	public List<Indexer> findByIndexCompteur(String[] params) throws SQLException {

@@ -8,21 +8,19 @@ public class Facture {
     private double montant;
     private java.util.Date dateFacture;
     private String referenceDevis;
-    private String entreprise;
     private Date datePaiement;
 
-    private Entreprise entrepriseAssociee; // Relation avec Entreprise
+    private Entreprise entreprise; // Relation avec Entreprise
     private Louable louable; // Relation avec Louable
 
     public Facture(int idFacture, double montant, java.util.Date dateFacture, String referenceDevis,
-                   String entreprise, Date datePaiement, Entreprise entrepriseAssociee, Louable louable) {
+                   Date datePaiement, Entreprise entreprise, Louable louable) {
         this.idFacture = idFacture;
         this.montant = montant;
         this.dateFacture = dateFacture;
         this.referenceDevis = referenceDevis;
-        this.entreprise = entreprise;
         this.datePaiement = datePaiement;
-        this.entrepriseAssociee = entrepriseAssociee;
+        this.entreprise = entreprise;
         this.louable = louable;
     }
 
@@ -58,11 +56,11 @@ public class Facture {
 		this.referenceDevis = referenceDevis;
 	}
 
-	public String getEntreprise() {
+	public Entreprise getEntreprise() {
 		return entreprise;
 	}
 
-	public void setEntreprise(String entreprise) {
+	public void setEntreprise(Entreprise entreprise) {
 		this.entreprise = entreprise;
 	}
 
@@ -72,14 +70,6 @@ public class Facture {
 
 	public void setDatePaiement(Date datePaiement) {
 		this.datePaiement = datePaiement;
-	}
-
-	public Entreprise getEntrepriseAssociee() {
-		return entrepriseAssociee;
-	}
-
-	public void setEntrepriseAssociee(Entreprise entrepriseAssociee) {
-		this.entrepriseAssociee = entrepriseAssociee;
 	}
 
 	public Louable getLouable() {
@@ -97,7 +87,7 @@ public class Facture {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(dateFacture, datePaiement, entreprise, entrepriseAssociee, idFacture, louable, montant,
+		return Objects.hash(dateFacture, datePaiement, entreprise, idFacture, louable, montant,
 				referenceDevis);
 	}
 
@@ -111,8 +101,7 @@ public class Facture {
 		}
 		Facture other = (Facture) obj;
 		return Objects.equals(dateFacture, other.dateFacture) && Objects.equals(datePaiement, other.datePaiement)
-				&& Objects.equals(entreprise, other.entreprise)
-				&& Objects.equals(entrepriseAssociee, other.entrepriseAssociee) && idFacture == other.idFacture
+				&& Objects.equals(entreprise, other.entreprise) && idFacture == other.idFacture
 				&& Objects.equals(louable, other.louable)
 				&& Double.doubleToLongBits(montant) == Double.doubleToLongBits(other.montant)
 				&& Objects.equals(referenceDevis, other.referenceDevis);
