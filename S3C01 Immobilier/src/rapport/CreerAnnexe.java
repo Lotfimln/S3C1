@@ -1,12 +1,6 @@
 package rapport;
 
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
@@ -14,206 +8,128 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
-import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
-
-import modele.Immeuble;
-import modele.dao.DaoImmeuble;
 
 public class CreerAnnexe {
 
-
-    private static void ajouterResultatFoncier(XWPFDocument document, int resultatFoncier) {
-        CreerAnnexe.ajouterUnSousTitre(document, "Résultat Foncier");
-        CreerAnnexe.ajouterLigne(document, "RÉSULTAT", resultatFoncier);
-    }
-
-
     public static void main(String[] args) {
-
         try {
-            OutputStream fileOut = new FileOutputStream("src/rapport/annexe2044.docx");
-            InputStream modele = new FileInputStream("src/rapport/vide.docx");
+            // Création du document
+            XWPFDocument document = new XWPFDocument();
 
-            XWPFDocument document = new XWPFDocument(modele);
+            // Récupération des données
+            List<Proprietes> proprietes = Proprietes.recupererProprietes();
+            List<InfosRecettes> recettes = InfosRecettes.recupererRecettes();
+            List<FraisCharges> fraisCharges = FraisCharges.recupererFraisCharges();
 
-            // Entête de la déclaration
-            CreerAnnexe.ajouterUnTitre(document, "Annexe 2044 - Déclaration des Revenus Fonciers de " + LocalDate.now().getYear());
+            // Génération du rapport
+            ajouterTitre(document, "Annexe 2044 - Déclaration des Revenus Fonciers");
+            ajouterSectionProprietes(document, proprietes);
+            ajouterSectionRecettes(document, recettes);
+            ajouterSectionFraisCharges(document, fraisCharges);
+            ajouterResultatFoncier(document, recettes, fraisCharges);
 
-            // Informations
-            List<Proprietes> proprietes = new ArrayList<>();
-            List<InfosRecettes> recettes = new ArrayList<>();
-            List<FraisCharges> fraisEtCharges = new ArrayList<>();
-
-            // Utilisez le DAO pour récupérer les immeubles
-            DaoImmeuble daoImmeuble = new DaoImmeuble();
-
-            try {
-                List<Immeuble> immeubles = daoImmeuble.findAll();
-
-                for (Immeuble immeuble : immeubles) {
-                	// Calcule du nombre de logement dans l'immeuble
-                    int nombreLocaux = daoImmeuble.getNombreLogementsDansImmeuble(immeuble.getImmeuble());
-                    // Calcule du total des loyers dans l'immeuble
-                    int sommeLoyers = daoImmeuble.getSommeLoyersDansImmeublePourPeriode(immeuble.getImmeuble(), (LocalDate.now().getYear()-1)+"-05-01", LocalDate.now().getYear()+"-05-31");
-
-                    List<FraisCharges> fraisEtChargesImmeuble = daoImmeuble.getFraisEtChargesParImmeuble(immeuble.getImmeuble(), (LocalDate.now().getYear()-1)+"-05-01", LocalDate.now().getYear()+"-05-31");
-
-                    Proprietes propriete = new Proprietes(
-                            immeuble.getImmeuble(),
-                            immeuble.getType_immeuble(),
-                            immeuble.getPeriodeConstruction(),
-                            immeuble.getAdresse(),
-                            nombreLocaux,
-                            sommeLoyers
-                    );
-                    proprietes.add(propriete);
-                    recettes.add(new InfosRecettes(immeuble.getImmeuble(), "Loyers bruts encaissés", sommeLoyers));
-                    fraisEtCharges.addAll(fraisEtChargesImmeuble);
-
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            ajouterUnSousTitre(document, "Caractéristiques des propriétés");
-            ajouterInfosProprietes(document, proprietes);
-
-
-            ajouterUnSousTitre(document, "Recettes");
-            ajouterTableRecettes(document, recettes);
-
-
-            ajouterUnSousTitre(document, "Frais et charges");
-            ajouterTableFraisCharge(document, fraisEtCharges);
-
-            int resultatFoncier = calculerResultatFoncier(recettes, fraisEtCharges);
-            ajouterResultatFoncier(document, resultatFoncier);
-
-            // Fin de la déclaration
-            ajouterFooter(document, "Fin de la Déclaration");
-
-            document.write(fileOut);
-            fileOut.close();
-            modele.close();
+            // Sauvegarde du document
+            FileOutputStream out = new FileOutputStream("Annexe_2044.docx");
+            document.write(out);
+            out.close();
             document.close();
 
-        } catch (IOException e) {
+            System.out.println("Rapport généré avec succès !");
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-
-    private static void ajouterUnSousTitre(XWPFDocument document, String txt) {
+    // Titre principal
+    private static void ajouterTitre(XWPFDocument document, String titre) {
         XWPFParagraph paragraph = document.createParagraph();
-        XWPFRun run = paragraph.createRun();
-        run.setBold(true);
-        run.setFontSize(14);
-        run.setText(txt);
-        paragraph.setSpacingBefore(12);
-        paragraph.setSpacingAfter(6);
         paragraph.setAlignment(ParagraphAlignment.CENTER);
-    }
-
-
-    private static void ajouterLigne(XWPFDocument document, String txt, int val) {
-        XWPFParagraph paragraph = document.createParagraph();
-        XWPFRun run = paragraph.createRun();
-        run.setText(txt + "\t" + val);
-    }
-
-
-    private static void ajouterUnTitre(XWPFDocument document, String txt) {
-        XWPFParagraph paragraph = document.createParagraph();
         XWPFRun run = paragraph.createRun();
         run.setBold(true);
         run.setFontSize(16);
-        run.setText(txt);
-        paragraph.setAlignment(ParagraphAlignment.CENTER);
-        paragraph.setSpacingBefore(12);
-        paragraph.setSpacingAfter(12);
+        run.setText(titre);
     }
 
+    // Section Propriétés
+    private static void ajouterSectionProprietes(XWPFDocument document, List<Proprietes> proprietes) {
+        document.createParagraph().createRun().setText("1. Caractéristiques des Propriétés");
 
-    private static void ajouterFooter(XWPFDocument document, String txt) {
-        XWPFParagraph paragraph = document.createParagraph();
-        XWPFRun run = paragraph.createRun();
-        run.setItalic(true);
-        run.setText(txt);
-        paragraph.setAlignment(ParagraphAlignment.CENTER);
-        paragraph.setSpacingBefore(12);
-        paragraph.setSpacingAfter(12);
-    }
-
-
-    private static void addTable(XWPFDocument document, List<String> entête, List<List<String>> données) {
         XWPFTable table = document.createTable();
+        XWPFTableRow header = table.getRow(0);
+        header.getCell(0).setText("Nom");
+        header.addNewTableCell().setText("Type");
+        header.addNewTableCell().setText("Période de Construction");
+        header.addNewTableCell().setText("Adresse");
+        header.addNewTableCell().setText("Nombre de Locaux");
+        header.addNewTableCell().setText("Somme des Loyers (€)");
 
-        XWPFTableRow headerRow = table.getRow(0);
-        for (int i = 0; i < entête.size(); i++) {
-            XWPFTableCell cell = headerRow.getCell(i);
-            if (cell == null) {
-                cell = headerRow.createCell();
-            }
-            cell.setText(entête.get(i));
-        }
-        for (List<String> rowData : données) {
-            XWPFTableRow dataRow = table.createRow();
-            for (int i = 0; i < entête.size(); i++) {
-                XWPFTableCell cell = dataRow.getCell(i);
-                if (cell == null) {
-                    cell = dataRow.createCell();
-                }
-                cell.setText(rowData.get(i));
-            }
+        for (Proprietes p : proprietes) {
+            XWPFTableRow row = table.createRow();
+            row.getCell(0).setText(p.getNom());
+            row.getCell(1).setText(p.getType());
+            row.getCell(2).setText(p.getPeriodeConstruction());
+            row.getCell(3).setText(p.getAdresse());
+            row.getCell(4).setText(String.valueOf(p.getNombreLocaux()));
+            row.getCell(5).setText(String.valueOf(p.getSommeLoyers()));
         }
     }
 
+    // Section Recettes
+    private static void ajouterSectionRecettes(XWPFDocument document, List<InfosRecettes> recettes) {
+        document.createParagraph().createRun().setText("2. Recettes");
 
-    private static void ajouterInfosProprietes(XWPFDocument document, List<Proprietes> propriétés) {
-        List<String> headers = List.of("Nom de la Propriété", "Type", "Période de Construction", "Adresse", "Nombre de Locaux");
-        List<List<String>> données = new ArrayList<>();
+        XWPFTable table = document.createTable();
+        XWPFTableRow header = table.getRow(0);
+        header.getCell(0).setText("Nom de la Propriété");
+        header.addNewTableCell().setText("Description");
+        header.addNewTableCell().setText("Montant (€)");
 
-        for (Proprietes propriété : propriétés) {
-            List<String> rowData = List.of(propriété.getNom(), propriété.getType(), propriété.getPeriodeConstruction(),
-            		propriété.getAdresse(), String.valueOf(propriété.getNombreLocaux()));
-            données.add(rowData);
+        for (InfosRecettes r : recettes) {
+            XWPFTableRow row = table.createRow();
+            row.getCell(0).setText(r.getNom());
+            row.getCell(1).setText(r.getDescription());
+            row.getCell(2).setText(String.valueOf(r.getMontant()));
         }
-
-        addTable(document, headers, données);
     }
 
+    // Section Frais et Charges
+    private static void ajouterSectionFraisCharges(XWPFDocument document, List<FraisCharges> fraisCharges) {
+        document.createParagraph().createRun().setText("3. Frais et Charges");
 
-    private static void ajouterTableRecettes(XWPFDocument document, List<InfosRecettes> recettes) {
-        List<String> headers = List.of("Nom de la Propriété", "Description", "Montant");
-        List<List<String>> données = new ArrayList<>();
+        XWPFTable table = document.createTable();
+        XWPFTableRow header = table.getRow(0);
+        header.getCell(0).setText("Nom de la Propriété");
+        header.addNewTableCell().setText("Description");
+        header.addNewTableCell().setText("Montant (€)");
 
-        for (InfosRecettes recette : recettes) {
-            List<String> rowData = List.of(recette.getNom(), recette.getDescription(), String.valueOf(recette.getMontant()));
-            données.add(rowData);
+        for (FraisCharges fc : fraisCharges) {
+            XWPFTableRow row = table.createRow();
+            row.getCell(0).setText(fc.getNom());
+            row.getCell(1).setText(fc.getDescription());
+            row.getCell(2).setText(String.valueOf(fc.getMontant()));
         }
-
-        addTable(document, headers, données);
     }
 
-
-    private static void ajouterTableFraisCharge(XWPFDocument document, List<FraisCharges> fraisCharges) {
-        List<String> headers = List.of("Nom de la Propriété", "Description", "Montant");
-        List<List<String>> données = new ArrayList<>();
-
-        for (FraisCharges fg : fraisCharges) {
-            List<String> rowData = List.of(fg.getNom(), fg.getDescription(), String.valueOf(fg.getMontant()));
-            données.add(rowData);
-        }
-
-        addTable(document, headers, données);
-    }
-
-
-    private static int calculerResultatFoncier(List<InfosRecettes> recettes, List<FraisCharges> fraisEtCharges) {
+    // Section Résultat Foncier
+    private static void ajouterResultatFoncier(XWPFDocument document, List<InfosRecettes> recettes, List<FraisCharges> fraisCharges) {
         int totalRecettes = recettes.stream().mapToInt(InfosRecettes::getMontant).sum();
-        int totalCharges = fraisEtCharges.stream().mapToInt(FraisCharges::getMontant).sum();
-        return totalRecettes - totalCharges;
+        int totalCharges = fraisCharges.stream().mapToInt(FraisCharges::getMontant).sum();
+        int resultatFoncier = totalRecettes - totalCharges;
+
+        document.createParagraph().createRun().setText("4. Résultat Foncier");
+
+        XWPFTable table = document.createTable();
+        XWPFTableRow row1 = table.getRow(0);
+        row1.getCell(0).setText("Total des Recettes");
+        row1.addNewTableCell().setText(String.valueOf(totalRecettes) + " €");
+
+        XWPFTableRow row2 = table.createRow();
+        row2.getCell(0).setText("Total des Charges");
+        row2.getCell(1).setText(String.valueOf(totalCharges) + " €");
+
+        XWPFTableRow row3 = table.createRow();
+        row3.getCell(0).setText("Résultat Foncier");
+        row3.getCell(1).setText(String.valueOf(resultatFoncier) + " €");
     }
 }
