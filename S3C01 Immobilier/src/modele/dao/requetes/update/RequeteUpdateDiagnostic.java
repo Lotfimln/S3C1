@@ -10,7 +10,7 @@ public class RequeteUpdateDiagnostic implements Requete<Diagnostic> {
 
 	@Override
 	public String requete() {
-		return "UPDATE Diagnostic SET Type = ?, DateDiagnostic = ?, Id_Louable = ? WHERE Id_Diagnostic = ?";
+		return "UPDATE Diagnostic SET TypeDiagnostic = ?, DateDiagnostic = ?, Id_Louable = ? WHERE Id_Diagnostic = ?";
 	}
 
 	@Override

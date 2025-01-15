@@ -32,11 +32,10 @@ public class DaoFacture implements Dao<Facture> {
             java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
             prSt.setDate(2, sqlDate);
 			prSt.setString(3, donnees.getReferenceDevis());
-			prSt.setString(4, donnees.getEntreprise());
 			java.util.Date utilDate1 = donnees.getDatePaiement();
             java.sql.Date sqlDate1 = new java.sql.Date(utilDate1.getTime());
             prSt.setDate(5, sqlDate1);
-			prSt.setInt(6, donnees.getEntrepriseAssociee().getIdEntreprise());
+			prSt.setInt(6, donnees.getEntreprise().getIdEntreprise());
 			prSt.setInt(7, donnees.getLouable().getIdLouable());
 			prSt.executeUpdate();
 		}
@@ -80,7 +79,6 @@ public class DaoFacture implements Dao<Facture> {
 							rs.getDouble("Montant"), 
 							rs.getDate("DateFacture"),
 							rs.getString("ReferenceDevis"), 
-							rs.getString("Entreprise"), 
 							rs.getDate("DatePaiement"),
 							entreprise, 
 							louable);
@@ -110,7 +108,6 @@ public class DaoFacture implements Dao<Facture> {
 						rs.getDouble("Montant"), 
 						rs.getDate("DateFacture"),
 						rs.getString("ReferenceDevis"), 
-						rs.getString("Entreprise"), 
 						rs.getDate("DatePaiement"),
 						entreprise, 
 						louable));

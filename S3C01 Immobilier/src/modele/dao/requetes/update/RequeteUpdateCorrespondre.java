@@ -15,7 +15,7 @@ public class RequeteUpdateCorrespondre implements Requete<Correspondre> {
 
 	@Override
 	public void parametres(PreparedStatement prSt, Correspondre data) throws SQLException {
-		prSt.setInt(1, data.getIdLocataire());
+		prSt.setString(1, data.getIdLocataire());
 		prSt.setInt(2, data.getIdContratDeLocation());
 	}
 

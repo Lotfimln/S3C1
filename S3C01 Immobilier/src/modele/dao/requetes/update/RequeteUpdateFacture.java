@@ -10,7 +10,7 @@ public class RequeteUpdateFacture implements Requete<Facture> {
 
 	@Override
 	public String requete() {
-		return "UPDATE Facture SET Montant = ?, DateFacture = ?, ReferenceDevis = ?, Entreprise = ?, DatePaiement = ?, Id_Entreprise = ?, Id_Louable = ? WHERE Id_Facture = ?";
+		return "UPDATE Facture SET Montant = ?, DateFacture = ?, ReferenceDevis = ?, DatePaiement = ?, Id_Entreprise = ?, Id_Louable = ? WHERE Id_Facture = ?";
 	}
 
 	@Override
@@ -24,17 +24,16 @@ public class RequeteUpdateFacture implements Requete<Facture> {
 	        prSt.setNull(2, java.sql.Types.DATE);
 	    }
 		prSt.setString(3, data.getReferenceDevis());
-		prSt.setString(4, data.getEntreprise());
 		java.util.Date utilDate1 = data.getDatePaiement();
 	    if (utilDate1 != null) {
 	        java.sql.Date sqlDate = new java.sql.Date(utilDate1.getTime());
-	        prSt.setDate(5, sqlDate);
+	        prSt.setDate(4, sqlDate);
 	    } else {
-	        prSt.setNull(5, java.sql.Types.DATE);
+	        prSt.setNull(4, java.sql.Types.DATE);
 	    }
-		prSt.setString(6, data.getEntreprise());
-		prSt.setInt(7, data.getEntrepriseAssociee().getIdEntreprise());
-		prSt.setInt(8, data.getIdFacture());
+		prSt.setInt(5, data.getEntreprise().getIdEntreprise());
+		prSt.setInt(6, data.getLouable().getIdLouable());
+		prSt.setInt(7, data.getIdFacture());
 	}
 
 	@Override

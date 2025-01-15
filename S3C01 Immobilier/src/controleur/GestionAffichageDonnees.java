@@ -132,8 +132,125 @@ public class GestionAffichageDonnees<T> {
 
                 if (composant instanceof JTextField) {
                     String nouvelleValeur = ((JTextField) composant).getText();
-                    Object valeurCast = casterValeur(nouvelleValeur, champ.getType());
-                    champ.set(elementSelectionne, valeurCast);
+
+                    switch (champ.getType().getSimpleName()) {
+                        case "Entreprise": {
+                            // Gestion spécifique pour Entreprise
+                            DaoEntreprise daoEntreprise = new DaoEntreprise(CictOracleDataSource.getConnectionBD());
+                            Entreprise entreprise = daoEntreprise.findById(nouvelleValeur);
+                            if (entreprise == null) {
+                                throw new IllegalArgumentException("L'entreprise avec l'ID " + nouvelleValeur + " n'existe pas.");
+                            }
+                            champ.set(elementSelectionne, entreprise);
+                            break;
+                        }
+                        case "Locataire": {
+                            // Gestion spécifique pour Locataire
+                            DaoLocataire daoLocataire = new DaoLocataire(CictOracleDataSource.getConnectionBD());
+                            Locataire locataire = daoLocataire.findById(nouvelleValeur);
+                            if (locataire == null) {
+                                throw new IllegalArgumentException("Le locataire avec l'ID " + nouvelleValeur + " n'existe pas.");
+                            }
+                            champ.set(elementSelectionne, locataire);
+                            break;
+                        }
+                        case "Immeuble": {
+                            // Gestion spécifique pour Immeuble
+                            DaoImmeuble daoImmeuble = new DaoImmeuble(CictOracleDataSource.getConnectionBD());
+                            Immeuble immeuble = daoImmeuble.findById(nouvelleValeur);
+                            if (immeuble == null) {
+                                throw new IllegalArgumentException("L'immeuble avec l'ID " + nouvelleValeur + " n'existe pas.");
+                            }
+                            champ.set(elementSelectionne, immeuble);
+                            break;
+                        }
+                        case "IndexCompteur": {
+                            // Gestion spécifique pour IndexCompteur
+                            DaoIndexCompteur daoIndexCompteur = new DaoIndexCompteur(CictOracleDataSource.getConnectionBD());
+                            IndexCompteur indexCompteur = daoIndexCompteur.findById(nouvelleValeur);
+                            if (indexCompteur == null) {
+                                throw new IllegalArgumentException("L'index compteur avec l'ID " + nouvelleValeur + " n'existe pas.");
+                            }
+                            champ.set(elementSelectionne, indexCompteur);
+                            break;
+                        }
+                        case "Louable": {
+                            // Gestion spécifique pour Louable
+                            DaoLouable daoLouable = new DaoLouable(CictOracleDataSource.getConnectionBD());
+                            Louable louable = daoLouable.findById(nouvelleValeur);
+                            if (louable == null) {
+                                throw new IllegalArgumentException("Le louable avec l'ID " + nouvelleValeur + " n'existe pas.");
+                            }
+                            champ.set(elementSelectionne, louable);
+                            break;
+                        }
+                        case "Taxe": {
+                            // Gestion spécifique pour Taxe
+                            DaoTaxe daoTaxe = new DaoTaxe(CictOracleDataSource.getConnectionBD());
+                            Taxe taxe = daoTaxe.findById(nouvelleValeur);
+                            if (taxe == null) {
+                                throw new IllegalArgumentException("La taxe avec l'ID " + nouvelleValeur + " n'existe pas.");
+                            }
+                            champ.set(elementSelectionne, taxe);
+                            break;
+                        }
+                        case "Facture": {
+                            // Gestion spécifique pour Facture
+                            DaoFacture daoFacture = new DaoFacture(CictOracleDataSource.getConnectionBD());
+                            Facture facture = daoFacture.findById(nouvelleValeur);
+                            if (facture == null) {
+                                throw new IllegalArgumentException("La facture avec l'ID " + nouvelleValeur + " n'existe pas.");
+                            }
+                            champ.set(elementSelectionne, facture);
+                            break;
+                        }
+                        case "Diagnostic": {
+                            // Gestion spécifique pour Diagnostic
+                            DaoDiagnostic daoDiagnostic = new DaoDiagnostic(CictOracleDataSource.getConnectionBD());
+                            Diagnostic diagnostic = daoDiagnostic.findById(nouvelleValeur);
+                            if (diagnostic == null) {
+                                throw new IllegalArgumentException("Le diagnostic avec l'ID " + nouvelleValeur + " n'existe pas.");
+                            }
+                            champ.set(elementSelectionne, diagnostic);
+                            break;
+                        }
+                        case "ContratDeLocation": {
+                            // Gestion spécifique pour Contrat_de_location
+                            DaoContratDeLocation daoContratDeLocation = new DaoContratDeLocation(CictOracleDataSource.getConnectionBD());
+                            ContratDeLocation contratDeLocation = daoContratDeLocation.findById(nouvelleValeur);
+                            if (contratDeLocation == null) {
+                                throw new IllegalArgumentException("Le contrat de location avec l'ID " + nouvelleValeur + " n'existe pas.");
+                            }
+                            champ.set(elementSelectionne, contratDeLocation);
+                            break;
+                        }
+                        case "Charge": {
+                            // Gestion spécifique pour Charge
+                            DaoCharge daoCharge = new DaoCharge(CictOracleDataSource.getConnectionBD());
+                            Charge charge = daoCharge.findById(nouvelleValeur);
+                            if (charge == null) {
+                                throw new IllegalArgumentException("La charge avec l'ID " + nouvelleValeur + " n'existe pas.");
+                            }
+                            champ.set(elementSelectionne, charge);
+                            break;
+                        }
+                        case "Quittances": {
+                            // Gestion spécifique pour Quittances
+                            DaoQuittances daoQuittances = new DaoQuittances(CictOracleDataSource.getConnectionBD());
+                            Quittances quittances = daoQuittances.findById(nouvelleValeur);
+                            if (quittances == null) {
+                                throw new IllegalArgumentException("La quittance avec l'ID " + nouvelleValeur + " n'existe pas.");
+                            }
+                            champ.set(elementSelectionne, quittances);
+                            break;
+                        }
+                        default: {
+                            // Gestion par défaut pour les autres types (String, int, double, etc.)
+                            Object valeurCast = casterValeur(nouvelleValeur, champ.getType());
+                            champ.set(elementSelectionne, valeurCast);
+                            break;
+                        }
+                    }
                 }
             }
 
@@ -144,6 +261,8 @@ public class GestionAffichageDonnees<T> {
             ex.printStackTrace();
         }
     }
+
+
     
     private void afficherAssociationsMultiples(String association, Object elementPrincipal) {
         try {
