@@ -21,7 +21,7 @@ public class RequeteDeleteCorrespondre implements Requete<Correspondre> {
 
 	@Override
 	public void parametres(PreparedStatement prSt, Correspondre donnee) throws SQLException {
-		prSt.setInt(1, donnee.getIdLocataire());
+		prSt.setString(1, donnee.getIdLocataire());
 		prSt.setInt(2, donnee.getIdContratDeLocation());
 	}
 }

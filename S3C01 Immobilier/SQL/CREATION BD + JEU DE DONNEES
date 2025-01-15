@@ -103,7 +103,6 @@ create table Facture(
     Montant NUMBER(10,3),
     DateFacture DATE,
     ReferenceDevis VARCHAR2(50),
-    Entreprise VARCHAR2(50),
     DatePaiement DATE,
     Id_Entreprise INT,
     Id_Louable INT,
