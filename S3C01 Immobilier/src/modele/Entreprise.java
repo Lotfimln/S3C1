@@ -49,7 +49,7 @@ public class Entreprise {
 
 	@Override
 	public String toString() {
-		return nom;
+		return "" + idEntreprise;
 	}
 
 	@Override

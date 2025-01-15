@@ -29,7 +29,7 @@ public class Immeuble {
 
 	@Override
 	public String toString() {
-		return this.adresse;
+		return "" + idImmeuble;
 	}
 
 	@Override

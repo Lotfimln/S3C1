@@ -49,7 +49,7 @@ public class Diagnostic {
 
 	@Override
 	public String toString() {
-		return dateDiagnostic + typeDiagnostic;
+		return "" + idDiagnostic;
 	}
 
 	@Override

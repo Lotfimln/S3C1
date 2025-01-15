@@ -126,7 +126,7 @@ public class Louable {
 
 	@Override
 	public String toString() {
-		return this.adresse;
+		return "" + idLouable;
 	}
 
 	@Override

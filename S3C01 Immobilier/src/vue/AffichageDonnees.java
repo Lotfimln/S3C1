@@ -20,6 +20,7 @@ import javax.swing.table.DefaultTableModel;
 import controleur.GestionAffichageDonnees;
 import controleur.GestionSelecteur;
 import modele.dao.Dao;
+import java.awt.GridBagLayout;
 
 public class AffichageDonnees extends JInternalFrame {
 
@@ -91,8 +92,8 @@ public class AffichageDonnees extends JInternalFrame {
 
         // Panneau pour afficher les attributs de l'élément sélectionné
         panelAttributs = new JPanel();
-        panelAttributs.setLayout(new GridLayout(0, 2, 10, 10)); // Affichage en grille (Label + Composant)
         JScrollPane scrollPaneAttributs = new JScrollPane(panelAttributs);
+        panelAttributs.setLayout(new GridLayout(0, 2, 0, 0));
         mainPanel.add(scrollPaneAttributs, BorderLayout.CENTER);
 
         // --- Ajout des contrôleurs ---

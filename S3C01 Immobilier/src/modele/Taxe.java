@@ -49,7 +49,7 @@ public class Taxe {
 
 	@Override
 	public String toString() {
-		return dateTaxe.toString();
+		return "" + idTaxe;
 	}
 
 	@Override

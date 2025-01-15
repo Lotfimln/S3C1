@@ -10,7 +10,6 @@ import java.util.List;
 import modele.Correspondre;
 import modele.dao.requetes.delete.RequeteDeleteCorrespondre;
 import modele.dao.requetes.select.RequeteSelectCorrespondre;
-import modele.dao.requetes.select.RequeteSelectCorrespondreByID;
 import modele.dao.requetes.update.RequeteUpdateCorrespondre;
 
 public class DaoCorrespondre implements Dao<Correspondre> {
@@ -25,7 +24,7 @@ public class DaoCorrespondre implements Dao<Correspondre> {
 	public void create(Correspondre donnees) throws SQLException {
 		String sql = "INSERT INTO Correspondre (Id_Locataire, Id_Contrat_de_location) VALUES (?, ?)";
 		try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
-			prSt.setInt(1, donnees.getIdLocataire());
+			prSt.setString(1, donnees.getIdLocataire());
 			prSt.setInt(2, donnees.getIdContratDeLocation());
 			prSt.executeUpdate();
 		}
@@ -48,22 +47,11 @@ public class DaoCorrespondre implements Dao<Correspondre> {
 			prSt.executeUpdate();
 		}
 	}
-
+	
+	// Cette methode est inutile, car elle renvoie exactement les parametres de la requete
 	@Override
     public Correspondre findById(String... id) throws SQLException {
-        RequeteSelectCorrespondreByID requeteSelectById = new RequeteSelectCorrespondreByID();
-        try (PreparedStatement prSt = connection.prepareStatement(requeteSelectById.requete())) {
-            requeteSelectById.parametres(prSt, id);
-            try (ResultSet rs = prSt.executeQuery()) {
-                if (rs.next()) {
-                    return new Correspondre(
-                        rs.getInt("Id_Contrat_de_location"),
-                        rs.getInt("Id_Locataire")
-                    );
-                }
-            }
-        }
-        return null; // Retourne null si aucun immeuble trouvé
+        return null;
     }
 
 	@Override
@@ -74,10 +62,44 @@ public class DaoCorrespondre implements Dao<Correspondre> {
 				ResultSet rs = prSt.executeQuery()) {
 			while (rs.next()) {
 				correspondances.add(new Correspondre(
-						rs.getInt("Id_Locataire"), 
+						rs.getString("Id_Locataire"), 
 						rs.getInt("Id_Contrat_de_location")));
 			}
 		}
 		return correspondances;
 	}
+	
+	public List<Correspondre> findByContratDeLocation(String... id) throws SQLException {
+	    String sql = "SELECT * FROM Correspondre WHERE Id_Contrat_de_location = ?";
+	    List<Correspondre> correspondreList = new ArrayList<>();
+	    try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
+	        prSt.setInt(1, Integer.parseInt(id[0]));
+	        try (ResultSet rs = prSt.executeQuery()) {
+	            while (rs.next()) {
+	                correspondreList.add(new Correspondre(
+	                        rs.getString("Id_Locataire"),
+	                        rs.getInt("Id_Contrat_de_location")));
+	            }
+	        }
+	    }
+	    return correspondreList;
+	}
+	
+	public List<Correspondre> findByLocataire(String... id) throws SQLException {
+	    String sql = "SELECT * FROM Correspondre WHERE Id_Locataire = ?";
+	    List<Correspondre> correspondreList = new ArrayList<>();
+	    try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
+	        prSt.setString(1, id[0]);
+	        try (ResultSet rs = prSt.executeQuery()) {
+	            while (rs.next()) {
+	                correspondreList.add(new Correspondre(
+	                        rs.getString("Id_Locataire"),
+	                        rs.getInt("Id_Contrat_de_location")));
+	            }
+	        }
+	    }
+	    return correspondreList;
+	}
+
+
 }

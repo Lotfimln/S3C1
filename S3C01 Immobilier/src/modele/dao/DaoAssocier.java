@@ -10,7 +10,6 @@ import java.util.List;
 import modele.Associer;
 import modele.dao.requetes.delete.RequeteDeleteAssocier;
 import modele.dao.requetes.select.RequeteSelectAssocier;
-import modele.dao.requetes.select.RequeteSelectAssocierByID;
 import modele.dao.requetes.update.RequeteUpdateAssocier;
 
 public class DaoAssocier implements Dao<Associer> {
@@ -49,21 +48,10 @@ public class DaoAssocier implements Dao<Associer> {
         }
     }
 
+	// Cette methode est inutile, car elle renvoie exactement les parametres de la requete
     @Override
     public Associer findById(String... id) throws SQLException {
-        RequeteSelectAssocierByID requeteSelectById = new RequeteSelectAssocierByID();
-        try (PreparedStatement prSt = connection.prepareStatement(requeteSelectById.requete())) {
-            requeteSelectById.parametres(prSt, id);
-            try (ResultSet rs = prSt.executeQuery()) {
-                if (rs.next()) {
-                    return new Associer(
-                        rs.getInt("Id_Louable"),
-                        rs.getInt("Id_Index_Compteur")
-                    );
-                }
-            }
-        }
-        return null; // Retourne null si aucun immeuble trouvé
+        return null;
     }
 
 
@@ -82,4 +70,38 @@ public class DaoAssocier implements Dao<Associer> {
         }
         return associer;
     }
+    
+    public List<Associer> findByIndexCompteur(String... id) throws SQLException {
+        String sql = "SELECT * FROM Associer WHERE Id_Index_Compteur = ?";
+        List<Associer> associerList = new ArrayList<>();
+        try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
+            prSt.setInt(1, Integer.parseInt(id[0]));
+            try (ResultSet rs = prSt.executeQuery()) {
+                while (rs.next()) {
+                    associerList.add(new Associer(
+                            rs.getInt("Id_Louable"),
+                            rs.getInt("Id_Index_Compteur")));
+                }
+            }
+        }
+        return associerList;
+    }
+    
+    public List<Associer> findByLouable(String... id) throws SQLException {
+        String sql = "SELECT * FROM Associer WHERE Id_Louable = ?";
+        List<Associer> associerList = new ArrayList<>();
+        try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
+            prSt.setInt(1, Integer.parseInt(id[0]));
+            try (ResultSet rs = prSt.executeQuery()) {
+                while (rs.next()) {
+                    associerList.add(new Associer(
+                            rs.getInt("Id_Louable"),
+                            rs.getInt("Id_Index_Compteur")));
+                }
+            }
+        }
+        return associerList;
+    }
+
+
 }

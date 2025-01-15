@@ -21,6 +21,6 @@ public class RequeteSelectCorrespondreByLocataire implements Requete<Correspondr
 
 		@Override
 		public void parametres(PreparedStatement prSt, Correspondre data) throws SQLException {
-			prSt.setInt(1, data.getIdLocataire());
+			prSt.setString(1, data.getIdLocataire());
 		}
 	}

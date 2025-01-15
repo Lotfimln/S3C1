@@ -30,7 +30,7 @@ public class Associer {
 
 	@Override
 	public String toString() {
-		return "Associer [idLouable=" + idLouable + ", idIndexCompteur=" + idIndexCompteur + "]";
+		return null;
 	}
 
 	@Override

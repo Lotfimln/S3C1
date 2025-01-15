@@ -70,7 +70,7 @@ public class Quittances {
 
 	@Override
 	public String toString() {
-		return datePaiement.toString();
+		return "" + idQuittances;
 	}
 
 	@Override

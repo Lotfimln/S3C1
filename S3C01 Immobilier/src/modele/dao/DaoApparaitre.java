@@ -10,7 +10,6 @@ import java.util.List;
 import modele.Apparaitre;
 import modele.dao.requetes.delete.RequeteDeleteApparaitre;
 import modele.dao.requetes.select.RequeteSelectApparaitre;
-import modele.dao.requetes.select.RequeteSelectApparaitreByID;
 import modele.dao.requetes.update.RequeteUpdateApparaitre;
 
 public class DaoApparaitre implements Dao<Apparaitre> {
@@ -49,21 +48,10 @@ public class DaoApparaitre implements Dao<Apparaitre> {
         }
     }
 
+	// Cette methode est inutile, car elle renvoie exactement les parametres de la requete
     @Override
     public Apparaitre findById(String... id) throws SQLException {
-        RequeteSelectApparaitreByID requeteSelectById = new RequeteSelectApparaitreByID();
-        try (PreparedStatement prSt = connection.prepareStatement(requeteSelectById.requete())) {
-            requeteSelectById.parametres(prSt, id);
-            try (ResultSet rs = prSt.executeQuery()) {
-                if (rs.next()) {
-                    return new Apparaitre(
-                        rs.getInt("Id_Charge"),
-                        rs.getInt("Id_Index_Compteur")
-                    );
-                }
-            }
-        }
-        return null; // Retourne null si aucun immeuble trouvé
+        return null;
     }
 
     @Override
@@ -81,4 +69,38 @@ public class DaoApparaitre implements Dao<Apparaitre> {
         }
         return apparaitre;
     }
+    
+    public List<Apparaitre> findByCharge(String... id) throws SQLException {
+        String sql = "SELECT * FROM Apparaitre WHERE Id_Charge = ?";
+        List<Apparaitre> apparaitreList = new ArrayList<>();
+        try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
+            prSt.setInt(1, Integer.parseInt(id[0])); // Conversion de l'ID en int
+            try (ResultSet rs = prSt.executeQuery()) {
+                while (rs.next()) {
+                    apparaitreList.add(new Apparaitre(
+                            rs.getInt("Id_Charge"),
+                            rs.getInt("Id_Index_Compteur")));
+                }
+            }
+        }
+        return apparaitreList;
+    }
+    
+    public List<Apparaitre> findByIndex(String... id) throws SQLException {
+        String sql = "SELECT * FROM Apparaitre WHERE Id_Index_Compteur = ?";
+        List<Apparaitre> apparaitreList = new ArrayList<>();
+        try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
+            prSt.setInt(1, Integer.parseInt(id[0]));
+            try (ResultSet rs = prSt.executeQuery()) {
+                while (rs.next()) {
+                    apparaitreList.add(new Apparaitre(
+                            rs.getInt("Id_Charge"),
+                            rs.getInt("Id_Index_Compteur")));
+                }
+            }
+        }
+        return apparaitreList;
+    }
+
+    
 }

@@ -30,7 +30,7 @@ public class Colocataire {
 
 	@Override
 	public String toString() {
-		return "Colocataire [idLocataire=" + idLocataire + ", idLocataire1=" + idLocataire1 + "]";
+		return "" + idLocataire;
 	}
 
 	@Override

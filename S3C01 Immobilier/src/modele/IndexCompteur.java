@@ -62,7 +62,7 @@ public class IndexCompteur {
 
 	@Override
 	public String toString() {
-		return typeCompteur;
+		return "" + idIndexCompteur;
 	}
 
 	@Override

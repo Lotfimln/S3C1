@@ -92,7 +92,7 @@ public class Facture {
 
 	@Override
 	public String toString() {
-		return datePaiement.toString();
+		return "" + idFacture;
 	}
 
 	@Override

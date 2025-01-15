@@ -30,7 +30,7 @@ public class Indexer {
 
 	@Override
 	public String toString() {
-		return "Indexer [idIndexCompteur=" + idIndexCompteur + ", idImmeuble=" + idImmeuble + "]";
+		return null;
 	}
 
 	@Override

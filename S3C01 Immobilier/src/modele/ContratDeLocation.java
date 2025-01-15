@@ -132,7 +132,7 @@ public class ContratDeLocation {
 
 	@Override
 	public String toString() {
-		return typeContrat;
+		return "" + idContratDeLocation;
 	}
 
 	@Override

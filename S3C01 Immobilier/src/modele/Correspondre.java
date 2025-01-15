@@ -3,20 +3,20 @@ package modele;
 import java.util.Objects;
 
 public class Correspondre {
-    private int idLocataire;
+    private String idLocataire;
     private int idContratDeLocation;
 
-    public Correspondre(int idLocataire, int idContratDeLocation) {
+    public Correspondre(String idLocataire, int idContratDeLocation) {
         this.idLocataire = idLocataire;
         this.idContratDeLocation = idContratDeLocation;
     }
 
     // Getters et Setters
-    public int getIdLocataire() {
+    public String getIdLocataire() {
         return idLocataire;
     }
 
-    public void setIdLocataire(int idLocataire) {
+    public void setIdLocataire(String idLocataire) {
         this.idLocataire = idLocataire;
     }
 
@@ -30,7 +30,7 @@ public class Correspondre {
 
 	@Override
 	public String toString() {
-		return "Correspondre [idLocataire=" + idLocataire + ", idContratDeLocation=" + idContratDeLocation + "]";
+		return null;
 	}
 
 	@Override

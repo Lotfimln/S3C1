@@ -49,7 +49,7 @@ public class Assureur {
 
 	@Override
 	public String toString() {
-		return this.nom;
+		return "" + idAssurance;
 	}
 
 	@Override

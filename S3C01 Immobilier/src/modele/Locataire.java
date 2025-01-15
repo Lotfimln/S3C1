@@ -79,7 +79,7 @@ public class Locataire {
 
 	@Override
 	public String toString() {
-		return this.nom + this.prenom;
+		return "" + idLocataire;
 	}
 
 	@Override

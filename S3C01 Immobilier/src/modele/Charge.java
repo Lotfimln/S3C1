@@ -91,9 +91,7 @@ public class Charge {
 
 	@Override
 	public String toString() {
-		return "Charge [idCharge=" + idCharge + ", type=" + typeCharge + ", montant=" + montant + ", recuperable="
-				+ recuperable + ", periodeDebut=" + periodeDebut + ", periodeFin=" + periodeFin + ", facture=" + facture
-				+ ", louable=" + louable + "]";
+		return "" + idCharge;
 	}
 
 	@Override
