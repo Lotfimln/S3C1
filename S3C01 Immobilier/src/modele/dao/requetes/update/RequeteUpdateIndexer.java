@@ -15,8 +15,10 @@ public class RequeteUpdateIndexer implements Requete<Indexer> {
 
 	@Override
 	public void parametres(PreparedStatement prSt, Indexer data) throws SQLException {
-		prSt.setInt(1, data.getIdIndexCompteur());
-		prSt.setInt(2, data.getIdImmeuble());
+		prSt.setInt(1, data.getIdIndexCompteur());	// Id_Index_Compteur (nouvelle valeur)
+		prSt.setInt(2, data.getIdImmeuble());		// Id_Immeuble (nouvelle valeur)
+		prSt.setInt(3, data.getIdIndexCompteur());	// Id_Index_Compteur (ancienne valeur)
+		prSt.setInt(4, data.getIdImmeuble());		// Id_Immeuble (ancienne valeur)
 	}
 
 	@Override

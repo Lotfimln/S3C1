@@ -11,6 +11,8 @@ import modele.Apparaitre;
 import modele.dao.requetes.delete.RequeteDeleteApparaitre;
 import modele.dao.requetes.select.RequeteSelectApparaitre;
 import modele.dao.requetes.update.RequeteUpdateApparaitre;
+import modele.dao.requetes.update.RequeteUpdateApparaitreByCharge;
+import modele.dao.requetes.update.RequeteUpdateApparaitreByIndexCompteur;
 
 public class DaoApparaitre implements Dao<Apparaitre> {
 
@@ -33,6 +35,22 @@ public class DaoApparaitre implements Dao<Apparaitre> {
     @Override
     public void update(Apparaitre donnees) throws SQLException {
         RequeteUpdateApparaitre requeteUpdate = new RequeteUpdateApparaitre();
+        try (PreparedStatement prSt = connection.prepareStatement(requeteUpdate.requete())) {
+            requeteUpdate.parametres(prSt, donnees);
+            prSt.executeUpdate();
+        }
+    }
+    
+    public void updateByCharge(Apparaitre donnees) throws SQLException {
+        RequeteUpdateApparaitreByCharge requeteUpdate = new RequeteUpdateApparaitreByCharge();
+        try (PreparedStatement prSt = connection.prepareStatement(requeteUpdate.requete())) {
+            requeteUpdate.parametres(prSt, donnees);
+            prSt.executeUpdate();
+        }
+    }
+    
+    public void updateByIndexCompteur(Apparaitre donnees) throws SQLException {
+        RequeteUpdateApparaitreByIndexCompteur requeteUpdate = new RequeteUpdateApparaitreByIndexCompteur();
         try (PreparedStatement prSt = connection.prepareStatement(requeteUpdate.requete())) {
             requeteUpdate.parametres(prSt, donnees);
             prSt.executeUpdate();

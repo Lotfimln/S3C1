@@ -17,6 +17,8 @@ public class RequeteUpdateApparaitre implements Requete<Apparaitre> {
 	public void parametres(PreparedStatement prSt, Apparaitre data) throws SQLException {
 		prSt.setInt(1, data.getIdCharge());
 		prSt.setInt(2, data.getIdIndexCompteur());
+		prSt.setInt(3, data.getIdCharge());
+		prSt.setInt(4, data.getIdIndexCompteur());
 	}
 
 	@Override

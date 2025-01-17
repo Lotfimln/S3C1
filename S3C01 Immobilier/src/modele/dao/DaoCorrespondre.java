@@ -11,6 +11,8 @@ import modele.Correspondre;
 import modele.dao.requetes.delete.RequeteDeleteCorrespondre;
 import modele.dao.requetes.select.RequeteSelectCorrespondre;
 import modele.dao.requetes.update.RequeteUpdateCorrespondre;
+import modele.dao.requetes.update.RequeteUpdateCorrespondreByContratDeLocation;
+import modele.dao.requetes.update.RequeteUpdateCorrespondreByLocataire;
 
 public class DaoCorrespondre implements Dao<Correspondre> {
 
@@ -33,6 +35,22 @@ public class DaoCorrespondre implements Dao<Correspondre> {
 	@Override
 	public void update(Correspondre donnees) throws SQLException {
 		RequeteUpdateCorrespondre requeteUpdate = new RequeteUpdateCorrespondre();
+		try (PreparedStatement prSt = this.connection.prepareStatement(requeteUpdate.requete())) {
+			requeteUpdate.parametres(prSt, donnees);
+			prSt.executeUpdate();
+		}
+	}
+	
+	public void updateByLocataire(Correspondre donnees) throws SQLException {
+		RequeteUpdateCorrespondreByLocataire requeteUpdate = new RequeteUpdateCorrespondreByLocataire();
+		try (PreparedStatement prSt = this.connection.prepareStatement(requeteUpdate.requete())) {
+			requeteUpdate.parametres(prSt, donnees);
+			prSt.executeUpdate();
+		}
+	}
+	
+	public void updateByContratDeLocation(Correspondre donnees) throws SQLException {
+		RequeteUpdateCorrespondreByContratDeLocation requeteUpdate = new RequeteUpdateCorrespondreByContratDeLocation();
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteUpdate.requete())) {
 			requeteUpdate.parametres(prSt, donnees);
 			prSt.executeUpdate();

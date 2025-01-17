@@ -17,6 +17,8 @@ public class RequeteUpdateAssocier implements Requete<Associer> {
 	public void parametres(PreparedStatement prSt, Associer data) throws SQLException {
 		prSt.setInt(1, data.getIdLouable());
 		prSt.setInt(2, data.getIdIndexCompteur());
+		prSt.setInt(3, data.getIdLouable());
+		prSt.setInt(4, data.getIdIndexCompteur());
 	}
 
 	@Override

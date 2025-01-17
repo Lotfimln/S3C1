@@ -11,6 +11,8 @@ import modele.Indexer;
 import modele.dao.requetes.delete.RequeteDeleteIndexer;
 import modele.dao.requetes.select.RequeteSelectIndexer;
 import modele.dao.requetes.update.RequeteUpdateIndexer;
+import modele.dao.requetes.update.RequeteUpdateIndexerByImmeuble;
+import modele.dao.requetes.update.RequeteUpdateIndexerByIndexCompteur;
 
 public class DaoIndexer implements Dao<Indexer> {
 
@@ -38,6 +40,24 @@ public class DaoIndexer implements Dao<Indexer> {
 			prSt.executeUpdate();
 		}
 	}
+	
+
+	public void updateByIndexCompteur(Indexer donnees) throws SQLException {
+		RequeteUpdateIndexerByIndexCompteur requeteUpdate = new RequeteUpdateIndexerByIndexCompteur();
+		try (PreparedStatement prSt = this.connection.prepareStatement(requeteUpdate.requete())) {
+			requeteUpdate.parametres(prSt, donnees);
+			prSt.executeUpdate();
+		}
+	}
+	
+
+	public void updateByImmeuble(Indexer donnees) throws SQLException {
+		RequeteUpdateIndexerByImmeuble requeteUpdate = new RequeteUpdateIndexerByImmeuble();
+		try (PreparedStatement prSt = this.connection.prepareStatement(requeteUpdate.requete())) {
+			requeteUpdate.parametres(prSt, donnees);
+			prSt.executeUpdate();
+		}
+	}
 
 	@Override
 	public void delete(Indexer donnees) throws SQLException {
@@ -48,7 +68,6 @@ public class DaoIndexer implements Dao<Indexer> {
 		}
 	}
 
-	// Cette methode est inutile, car elle renvoie exactement les parametres de la requete
 	@Override
 	public Indexer findById(String... id) throws SQLException {
 		return null;

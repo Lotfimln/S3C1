@@ -11,6 +11,8 @@ import modele.Associer;
 import modele.dao.requetes.delete.RequeteDeleteAssocier;
 import modele.dao.requetes.select.RequeteSelectAssocier;
 import modele.dao.requetes.update.RequeteUpdateAssocier;
+import modele.dao.requetes.update.RequeteUpdateAssocierByIndexCompteur;
+import modele.dao.requetes.update.RequeteUpdateAssocierByLouable;
 
 public class DaoAssocier implements Dao<Associer> {
 
@@ -33,6 +35,22 @@ public class DaoAssocier implements Dao<Associer> {
     @Override
     public void update(Associer donnees) throws SQLException {
         RequeteUpdateAssocier requeteUpdate = new RequeteUpdateAssocier();
+        try (PreparedStatement prSt = connection.prepareStatement(requeteUpdate.requete())) {
+            requeteUpdate.parametres(prSt, donnees);
+            prSt.executeUpdate();
+        }
+    }
+    
+    public void updateByIndexCompteur(Associer donnees) throws SQLException {
+        RequeteUpdateAssocierByIndexCompteur requeteUpdate = new RequeteUpdateAssocierByIndexCompteur();
+        try (PreparedStatement prSt = connection.prepareStatement(requeteUpdate.requete())) {
+            requeteUpdate.parametres(prSt, donnees);
+            prSt.executeUpdate();
+        }
+    }
+    
+    public void updateByLouable(Associer donnees) throws SQLException {
+        RequeteUpdateAssocierByLouable requeteUpdate = new RequeteUpdateAssocierByLouable();
         try (PreparedStatement prSt = connection.prepareStatement(requeteUpdate.requete())) {
             requeteUpdate.parametres(prSt, donnees);
             prSt.executeUpdate();
