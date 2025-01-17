@@ -372,6 +372,11 @@ public class GestionAffichageDonnees<T> {
                                 throw new IllegalArgumentException("L'immeuble avec l'ID " + nouvelleValeur + " n'existe pas.");
                             }
                             champ.set(elementSelectionne, immeuble);
+                            
+                            // MAJ association
+                            DaoIndexer daoIndexer = new DaoIndexer(CictOracleDataSource.getConnectionBD());
+                            daoIndexer.update(null);
+                            
                             break;
                         }
                         case "IndexCompteur": {
@@ -482,4 +487,74 @@ public class GestionAffichageDonnees<T> {
         }
     }
     
+    ////////////////////////////////
+    // Bouton supprimer une ligne //
+    ////////////////////////////////
+    
+	public void supprimerElement() {
+		try {
+			JTable tableListeElements = fenetreAffichageDonnees.getTableListeElements();
+			int ligneSelectionnee = tableListeElements.getSelectedRow();
+			
+			if (ligneSelectionnee >= 0) {
+				// Récupérer l'ID de l'élément à partir de la première colonne
+				String idElement = tableListeElements.getValueAt(ligneSelectionnee, 0).toString();
+				
+				// Trouver l'élément correspondant via le DAO
+				T elementASupprimer = dao.findById(idElement);
+				
+				if (elementASupprimer != null) {
+				// Confirmer la suppression (optionnel)
+				int confirmation = javax.swing.JOptionPane.showConfirmDialog(
+				fenetreAffichageDonnees, 
+				"Êtes-vous sûr de vouloir supprimer cet élément ?", 
+				"Confirmation", 
+				javax.swing.JOptionPane.YES_NO_OPTION
+				);
+				
+				if (confirmation == javax.swing.JOptionPane.YES_OPTION) {
+					// Supprimer l'élément de la base via le DAO
+					dao.delete(elementASupprimer);
+					
+					// Supprimer la ligne de la table graphique
+					DefaultTableModel tableModel = (DefaultTableModel) tableListeElements.getModel();
+					tableModel.removeRow(ligneSelectionnee);
+					
+					// Réinitialiser les détails affichés à droite
+					JPanel panelAttributs = fenetreAffichageDonnees.getPanelAttributs();
+					panelAttributs.removeAll();
+					panelAttributs.revalidate();
+					panelAttributs.repaint();
+				
+				}
+			} else {
+			// L'élément n'existe pas ou a déjà été supprimé
+			javax.swing.JOptionPane.showMessageDialog(
+			fenetreAffichageDonnees, 
+			"L'élément sélectionné n'existe pas.", 
+			"Erreur", 
+			javax.swing.JOptionPane.WARNING_MESSAGE
+			);
+			}
+			} else {
+			// Aucun élément sélectionné
+			javax.swing.JOptionPane.showMessageDialog(
+			fenetreAffichageDonnees, 
+			"Veuillez sélectionner un élément à supprimer.", 
+			"Erreur", 
+			javax.swing.JOptionPane.WARNING_MESSAGE
+			);
+			}
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			javax.swing.JOptionPane.showMessageDialog(
+				fenetreAffichageDonnees, 
+				"Une erreur est survenue lors de la suppression.", 
+				"Erreur", 
+			javax.swing.JOptionPane.ERROR_MESSAGE
+			);
+		}
+	}
+	
+	
 }

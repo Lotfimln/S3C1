@@ -17,13 +17,15 @@ public class RequeteUpdateTaxe implements Requete<Taxe> {
 	public void parametres(PreparedStatement prSt, Taxe data) throws SQLException {
 		prSt.setInt(1, data.getIdTaxe());
 		prSt.setDouble(2, data.getMontantTaxeFoncieres());
+		
 		java.util.Date utilDate = data.getDateTaxe();
 	    if (utilDate != null) {
 	        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
 	        prSt.setDate(3, sqlDate);
 	    } else {
-	        prSt.setNull(4, java.sql.Types.DATE);
+	        prSt.setNull(3, java.sql.Types.DATE);
 	    }
+	    
 		prSt.setInt(4, data.getImmeuble().getIdImmeuble());
 		prSt.setInt(5, data.getIdTaxe());
 	}

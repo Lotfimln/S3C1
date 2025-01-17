@@ -10,7 +10,7 @@ public class RequeteUpdateIndexCompteur implements Requete<IndexCompteur> {
 
 	@Override
 	public String requete() {
-		return "UPDATE Index_Compteur SET Id_TypeCompteur = ?, TypeCompteur = ?, ValeurCourante = ?, AncienneValeur = ?, DateReleve = ? WHERE Id_Index_Compteur = ?";
+		return "UPDATE Index_Compteur SET Id_Index_Compteur = ?, TypeCompteur = ?, ValeurCourante = ?, AncienneValeur = ?, DateReleve = ? WHERE Id_Index_Compteur = ?";
 	}
 
 	@Override

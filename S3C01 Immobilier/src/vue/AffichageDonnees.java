@@ -86,6 +86,7 @@ public class AffichageDonnees extends JInternalFrame {
 
         JButton bouttonSupprimer = new JButton("Supprimer");
         panelBoutons.add(bouttonSupprimer);
+        bouttonSupprimer.addActionListener(e -> gestionAffichageDonnees.supprimerElement());
 
         JButton bouttonDocument = new JButton("Créer le document");
         panelBoutons.add(bouttonDocument);

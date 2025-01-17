@@ -23,20 +23,22 @@ public class RequeteUpdateCharge implements Requete<Charge> {
 		java.util.Date utilDate = data.getPeriodeDebut();
 	    if (utilDate != null) {
 	        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-	        prSt.setDate(4, sqlDate);
-	    } else {
-	        prSt.setNull(4, java.sql.Types.DATE);
-	    }
-	    java.util.Date utilDate1 = data.getPeriodeFin();
-	    if (utilDate1 != null) {
-	        java.sql.Date sqlDate = new java.sql.Date(utilDate1.getTime());
 	        prSt.setDate(5, sqlDate);
 	    } else {
 	        prSt.setNull(5, java.sql.Types.DATE);
 	    }
-		prSt.setInt(6, data.getFacture().getIdFacture());
-		prSt.setInt(7, data.getLouable().getIdLouable());
-		prSt.setInt(8, data.getIdCharge());
+	    
+	    java.util.Date utilDate1 = data.getPeriodeFin();
+	    if (utilDate1 != null) {
+	        java.sql.Date sqlDate = new java.sql.Date(utilDate1.getTime());
+	        prSt.setDate(6, sqlDate);
+	    } else {
+	        prSt.setNull(6, java.sql.Types.DATE);
+	    }
+	    
+		prSt.setInt(7, data.getFacture().getIdFacture());
+		prSt.setInt(8, data.getLouable().getIdLouable());
+		prSt.setInt(9, data.getIdCharge());
 	}
 
 	@Override
