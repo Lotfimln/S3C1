@@ -11,7 +11,7 @@ public class RequeteSelectAssureurByID implements Requete<Assureur> {
 
 		@Override
 		public String requete() {
-			return "SELECT * FROM Assureur where Id_Assurance = ?";
+			return "SELECT * FROM Assureur where Id_Assureur = ?";
 		}
 
 		@Override
@@ -21,6 +21,6 @@ public class RequeteSelectAssureurByID implements Requete<Assureur> {
 
 		@Override
 		public void parametres(PreparedStatement prSt, Assureur data) throws SQLException {
-			prSt.setInt(1, data.getIdAssurance());
+			prSt.setInt(1, data.getIdAssureur());
 		}
 	}

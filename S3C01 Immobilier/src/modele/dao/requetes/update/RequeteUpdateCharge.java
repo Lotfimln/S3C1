@@ -10,14 +10,16 @@ public class RequeteUpdateCharge implements Requete<Charge> {
 
 	@Override
 	public String requete() {
-		return "UPDATE Charge SET Type = ?, Montant = ?, Recuperable = ?, PeriodeDebut = ?, PeriodeFin = ?, Id_Facture = ?, Id_Louable = ? WHERE Id_Charge = ?";
+		return "UPDATE Charge SET Id_Charge = ?, TypeCharge = ?, Montant = ?, Recuperable = ?, PeriodeDebut = ?, PeriodeFin = ?, Id_Facture = ?, Id_Louable = ? WHERE Id_Charge = ?";
 	}
 
 	@Override
 	public void parametres(PreparedStatement prSt, Charge data) throws SQLException {
-		prSt.setString(1, data.getTypeCharge());
-		prSt.setDouble(2, data.getMontant());
-		prSt.setString(3, data.isRecuperable());
+		prSt.setInt(1, data.getIdCharge());
+		prSt.setString(2, data.getTypeCharge());
+		prSt.setDouble(3, data.getMontant());
+		prSt.setString(4, data.isRecuperable());
+		
 		java.util.Date utilDate = data.getPeriodeDebut();
 	    if (utilDate != null) {
 	        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());

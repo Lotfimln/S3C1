@@ -53,6 +53,10 @@ public class GestionAffichageDonnees<T> {
             }
         });
     }
+    
+    ///////////////////////////////////////////////////////
+    // Affichage des attributs et des liaisons multiples //
+    ///////////////////////////////////////////////////////
 
 	private void afficherDetailsElement(String idElement) {
 	    try {
@@ -78,6 +82,7 @@ public class GestionAffichageDonnees<T> {
 	        // Gérer les associations multiples dynamiquement
 	        if (elementSelectionne instanceof Locataire) {
 	            afficherAssociationsMultiples("correspondre_locataire", elementSelectionne);
+	            afficherAssociationsMultiples("colocataire", elementSelectionne);
 	        } else if (elementSelectionne instanceof ContratDeLocation) {
 	            afficherAssociationsMultiples("correspondre_contratdelocation", elementSelectionne);
 	        } else if (elementSelectionne instanceof Charge) {
@@ -123,146 +128,6 @@ public class GestionAffichageDonnees<T> {
         return textField;
     }
 
-    public void enregistrerModifications() {
-        try {
-            // Parcourt les attributs et met à jour l'objet avec les nouvelles valeurs des champs
-            for (Field champ : elementSelectionne.getClass().getDeclaredFields()) {
-                champ.setAccessible(true); // Accéder aux champs privés
-                Component composant = composantsAttributs.get(champ.getName());
-
-                if (composant instanceof JTextField) {
-                    String nouvelleValeur = ((JTextField) composant).getText();
-
-                    switch (champ.getType().getSimpleName()) {
-                        case "Entreprise": {
-                            // Gestion spécifique pour Entreprise
-                            DaoEntreprise daoEntreprise = new DaoEntreprise(CictOracleDataSource.getConnectionBD());
-                            Entreprise entreprise = daoEntreprise.findById(nouvelleValeur);
-                            if (entreprise == null) {
-                                throw new IllegalArgumentException("L'entreprise avec l'ID " + nouvelleValeur + " n'existe pas.");
-                            }
-                            champ.set(elementSelectionne, entreprise);
-                            break;
-                        }
-                        case "Locataire": {
-                            // Gestion spécifique pour Locataire
-                            DaoLocataire daoLocataire = new DaoLocataire(CictOracleDataSource.getConnectionBD());
-                            Locataire locataire = daoLocataire.findById(nouvelleValeur);
-                            if (locataire == null) {
-                                throw new IllegalArgumentException("Le locataire avec l'ID " + nouvelleValeur + " n'existe pas.");
-                            }
-                            champ.set(elementSelectionne, locataire);
-                            break;
-                        }
-                        case "Immeuble": {
-                            // Gestion spécifique pour Immeuble
-                            DaoImmeuble daoImmeuble = new DaoImmeuble(CictOracleDataSource.getConnectionBD());
-                            Immeuble immeuble = daoImmeuble.findById(nouvelleValeur);
-                            if (immeuble == null) {
-                                throw new IllegalArgumentException("L'immeuble avec l'ID " + nouvelleValeur + " n'existe pas.");
-                            }
-                            champ.set(elementSelectionne, immeuble);
-                            break;
-                        }
-                        case "IndexCompteur": {
-                            // Gestion spécifique pour IndexCompteur
-                            DaoIndexCompteur daoIndexCompteur = new DaoIndexCompteur(CictOracleDataSource.getConnectionBD());
-                            IndexCompteur indexCompteur = daoIndexCompteur.findById(nouvelleValeur);
-                            if (indexCompteur == null) {
-                                throw new IllegalArgumentException("L'index compteur avec l'ID " + nouvelleValeur + " n'existe pas.");
-                            }
-                            champ.set(elementSelectionne, indexCompteur);
-                            break;
-                        }
-                        case "Louable": {
-                            // Gestion spécifique pour Louable
-                            DaoLouable daoLouable = new DaoLouable(CictOracleDataSource.getConnectionBD());
-                            Louable louable = daoLouable.findById(nouvelleValeur);
-                            if (louable == null) {
-                                throw new IllegalArgumentException("Le louable avec l'ID " + nouvelleValeur + " n'existe pas.");
-                            }
-                            champ.set(elementSelectionne, louable);
-                            break;
-                        }
-                        case "Taxe": {
-                            // Gestion spécifique pour Taxe
-                            DaoTaxe daoTaxe = new DaoTaxe(CictOracleDataSource.getConnectionBD());
-                            Taxe taxe = daoTaxe.findById(nouvelleValeur);
-                            if (taxe == null) {
-                                throw new IllegalArgumentException("La taxe avec l'ID " + nouvelleValeur + " n'existe pas.");
-                            }
-                            champ.set(elementSelectionne, taxe);
-                            break;
-                        }
-                        case "Facture": {
-                            // Gestion spécifique pour Facture
-                            DaoFacture daoFacture = new DaoFacture(CictOracleDataSource.getConnectionBD());
-                            Facture facture = daoFacture.findById(nouvelleValeur);
-                            if (facture == null) {
-                                throw new IllegalArgumentException("La facture avec l'ID " + nouvelleValeur + " n'existe pas.");
-                            }
-                            champ.set(elementSelectionne, facture);
-                            break;
-                        }
-                        case "Diagnostic": {
-                            // Gestion spécifique pour Diagnostic
-                            DaoDiagnostic daoDiagnostic = new DaoDiagnostic(CictOracleDataSource.getConnectionBD());
-                            Diagnostic diagnostic = daoDiagnostic.findById(nouvelleValeur);
-                            if (diagnostic == null) {
-                                throw new IllegalArgumentException("Le diagnostic avec l'ID " + nouvelleValeur + " n'existe pas.");
-                            }
-                            champ.set(elementSelectionne, diagnostic);
-                            break;
-                        }
-                        case "ContratDeLocation": {
-                            // Gestion spécifique pour Contrat_de_location
-                            DaoContratDeLocation daoContratDeLocation = new DaoContratDeLocation(CictOracleDataSource.getConnectionBD());
-                            ContratDeLocation contratDeLocation = daoContratDeLocation.findById(nouvelleValeur);
-                            if (contratDeLocation == null) {
-                                throw new IllegalArgumentException("Le contrat de location avec l'ID " + nouvelleValeur + " n'existe pas.");
-                            }
-                            champ.set(elementSelectionne, contratDeLocation);
-                            break;
-                        }
-                        case "Charge": {
-                            // Gestion spécifique pour Charge
-                            DaoCharge daoCharge = new DaoCharge(CictOracleDataSource.getConnectionBD());
-                            Charge charge = daoCharge.findById(nouvelleValeur);
-                            if (charge == null) {
-                                throw new IllegalArgumentException("La charge avec l'ID " + nouvelleValeur + " n'existe pas.");
-                            }
-                            champ.set(elementSelectionne, charge);
-                            break;
-                        }
-                        case "Quittances": {
-                            // Gestion spécifique pour Quittances
-                            DaoQuittances daoQuittances = new DaoQuittances(CictOracleDataSource.getConnectionBD());
-                            Quittances quittances = daoQuittances.findById(nouvelleValeur);
-                            if (quittances == null) {
-                                throw new IllegalArgumentException("La quittance avec l'ID " + nouvelleValeur + " n'existe pas.");
-                            }
-                            champ.set(elementSelectionne, quittances);
-                            break;
-                        }
-                        default: {
-                            // Gestion par défaut pour les autres types (String, int, double, etc.)
-                            Object valeurCast = casterValeur(nouvelleValeur, champ.getType());
-                            champ.set(elementSelectionne, valeurCast);
-                            break;
-                        }
-                    }
-                }
-            }
-
-            // Enregistre l'objet mis à jour dans la base via le DAO
-            dao.update((T) elementSelectionne);
-
-        } catch (SQLException | IllegalAccessException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-
     
     private void afficherAssociationsMultiples(String association, Object elementPrincipal) {
         try {
@@ -283,6 +148,24 @@ public class GestionAffichageDonnees<T> {
                             ContratDeLocation contrat = daoContrat.findById(String.valueOf(correspondance.getIdContratDeLocation()));
                             if (contrat != null) {
                                 modelContrats.addRow(new Object[]{contrat.toString()});
+                            }
+                        }
+                        tableAssociations.setModel(modelContrats);
+                    }
+                    break;
+                    
+                case "colocataire": // Locataire ↔ Locataire
+                    if (elementPrincipal instanceof Locataire) {
+                        String idLocataire = ((Locataire) elementPrincipal).getIdLocataire();
+                        DaoColocataire daoColocataire = new DaoColocataire(CictOracleDataSource.getConnectionBD());
+                        List<Colocataire> colocataires = daoColocataire.findByLocataire(new String[]{idLocataire});
+
+                        DefaultTableModel modelContrats = new DefaultTableModel(new String[]{"Locataires associés"}, 0);
+                        for (Colocataire colocataire : colocataires) {
+                            DaoLocataire daoLocataire = new DaoLocataire(CictOracleDataSource.getConnectionBD());
+                            Locataire locataire = daoLocataire.findById(String.valueOf(colocataire.getIdLocataire1()));
+                            if (locataire != null) {
+                                modelContrats.addRow(new Object[]{locataire.toString()});
                             }
                         }
                         tableAssociations.setModel(modelContrats);
@@ -445,4 +328,158 @@ public class GestionAffichageDonnees<T> {
         }
         return valeur; // Par défaut, retourne la valeur telle qu'elle est
     }
+    
+	///////////////////////////
+	// Bouton de Mise a Jour //
+	///////////////////////////
+    
+    public void enregistrerModifications() {
+        try {
+            // Parcourt les attributs et met à jour l'objet avec les nouvelles valeurs des champs
+            for (Field champ : elementSelectionne.getClass().getDeclaredFields()) {
+                champ.setAccessible(true); // Accéder aux champs privés
+                Component composant = composantsAttributs.get(champ.getName());
+
+                if (composant instanceof JTextField) {
+                    String nouvelleValeur = ((JTextField) composant).getText();
+
+                    switch (champ.getType().getSimpleName()) {
+                        case "Entreprise": {
+                            // Gestion spécifique pour Entreprise
+                            DaoEntreprise daoEntreprise = new DaoEntreprise(CictOracleDataSource.getConnectionBD());
+                            Entreprise entreprise = daoEntreprise.findById(nouvelleValeur);
+                            if (entreprise == null) {
+                                throw new IllegalArgumentException("L'entreprise avec l'ID " + nouvelleValeur + " n'existe pas.");
+                            }
+                            champ.set(elementSelectionne, entreprise);
+                            break;
+                        }
+                        case "Locataire": {
+                            // Gestion spécifique pour Locataire
+                            DaoLocataire daoLocataire = new DaoLocataire(CictOracleDataSource.getConnectionBD());
+                            Locataire locataire = daoLocataire.findById(nouvelleValeur);
+                            if (locataire == null) {
+                                throw new IllegalArgumentException("Le locataire avec l'ID " + nouvelleValeur + " n'existe pas.");
+                            }
+                            champ.set(elementSelectionne, locataire);
+                            break;
+                        }
+                        case "Immeuble": {
+                            // Gestion spécifique pour Immeuble
+                            DaoImmeuble daoImmeuble = new DaoImmeuble(CictOracleDataSource.getConnectionBD());
+                            Immeuble immeuble = daoImmeuble.findById(nouvelleValeur);
+                            if (immeuble == null) {
+                                throw new IllegalArgumentException("L'immeuble avec l'ID " + nouvelleValeur + " n'existe pas.");
+                            }
+                            champ.set(elementSelectionne, immeuble);
+                            break;
+                        }
+                        case "IndexCompteur": {
+                            // Gestion spécifique pour IndexCompteur
+                            DaoIndexCompteur daoIndexCompteur = new DaoIndexCompteur(CictOracleDataSource.getConnectionBD());
+                            IndexCompteur indexCompteur = daoIndexCompteur.findById(nouvelleValeur);
+                            if (indexCompteur == null) {
+                                throw new IllegalArgumentException("L'index compteur avec l'ID " + nouvelleValeur + " n'existe pas.");
+                            }
+                            champ.set(elementSelectionne, indexCompteur);
+                            break;
+                        }
+                        case "Louable": {
+                            // Gestion spécifique pour Louable
+                            DaoLouable daoLouable = new DaoLouable(CictOracleDataSource.getConnectionBD());
+                            Louable louable = daoLouable.findById(nouvelleValeur);
+                            if (louable == null) {
+                                throw new IllegalArgumentException("Le louable avec l'ID " + nouvelleValeur + " n'existe pas.");
+                            }
+                            champ.set(elementSelectionne, louable);
+                            break;
+                        }
+                        case "Taxe": {
+                            // Gestion spécifique pour Taxe
+                            DaoTaxe daoTaxe = new DaoTaxe(CictOracleDataSource.getConnectionBD());
+                            Taxe taxe = daoTaxe.findById(nouvelleValeur);
+                            if (taxe == null) {
+                                throw new IllegalArgumentException("La taxe avec l'ID " + nouvelleValeur + " n'existe pas.");
+                            }
+                            champ.set(elementSelectionne, taxe);
+                            break;
+                        }
+                        case "Facture": {
+                            // Gestion spécifique pour Facture
+                            DaoFacture daoFacture = new DaoFacture(CictOracleDataSource.getConnectionBD());
+                            Facture facture = daoFacture.findById(nouvelleValeur);
+                            if (facture == null) {
+                                throw new IllegalArgumentException("La facture avec l'ID " + nouvelleValeur + " n'existe pas.");
+                            }
+                            champ.set(elementSelectionne, facture);
+                            break;
+                        }
+                        case "Diagnostic": {
+                            // Gestion spécifique pour Diagnostic
+                            DaoDiagnostic daoDiagnostic = new DaoDiagnostic(CictOracleDataSource.getConnectionBD());
+                            Diagnostic diagnostic = daoDiagnostic.findById(nouvelleValeur);
+                            if (diagnostic == null) {
+                                throw new IllegalArgumentException("Le diagnostic avec l'ID " + nouvelleValeur + " n'existe pas.");
+                            }
+                            champ.set(elementSelectionne, diagnostic);
+                            break;
+                        }
+                        case "ContratDeLocation": {
+                            // Gestion spécifique pour Contrat_de_location
+                            DaoContratDeLocation daoContratDeLocation = new DaoContratDeLocation(CictOracleDataSource.getConnectionBD());
+                            ContratDeLocation contratDeLocation = daoContratDeLocation.findById(nouvelleValeur);
+                            if (contratDeLocation == null) {
+                                throw new IllegalArgumentException("Le contrat de location avec l'ID " + nouvelleValeur + " n'existe pas.");
+                            }
+                            champ.set(elementSelectionne, contratDeLocation);
+                            break;
+                        }
+                        case "Charge": {
+                            // Gestion spécifique pour Charge
+                            DaoCharge daoCharge = new DaoCharge(CictOracleDataSource.getConnectionBD());
+                            Charge charge = daoCharge.findById(nouvelleValeur);
+                            if (charge == null) {
+                                throw new IllegalArgumentException("La charge avec l'ID " + nouvelleValeur + " n'existe pas.");
+                            }
+                            champ.set(elementSelectionne, charge);
+                            break;
+                        }
+                        case "Quittances": {
+                            // Gestion spécifique pour Quittances
+                            DaoQuittances daoQuittances = new DaoQuittances(CictOracleDataSource.getConnectionBD());
+                            Quittances quittances = daoQuittances.findById(nouvelleValeur);
+                            if (quittances == null) {
+                                throw new IllegalArgumentException("La quittance avec l'ID " + nouvelleValeur + " n'existe pas.");
+                            }
+                            champ.set(elementSelectionne, quittances);
+                            break;
+                        }
+                        case "Assureur": {
+                            // Gestion spécifique pour Assureur
+                            DaoAssureur daoAssureur = new DaoAssureur(CictOracleDataSource.getConnectionBD());
+                            Assureur assureurs = daoAssureur.findById(nouvelleValeur);
+                            if (assureurs == null) {
+                                throw new IllegalArgumentException("L'assureur avec l'ID " + nouvelleValeur + " n'existe pas.");
+                            }
+                            champ.set(elementSelectionne, assureurs);
+                            break;
+                        }
+                        default: {
+                            // Gestion par défaut pour les autres types (String, int, double, etc.)
+                            Object valeurCast = casterValeur(nouvelleValeur, champ.getType());
+                            champ.set(elementSelectionne, valeurCast);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // Enregistre l'objet mis à jour dans la base via le DAO
+            dao.update((T) elementSelectionne);
+
+        } catch (SQLException | IllegalAccessException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
 }

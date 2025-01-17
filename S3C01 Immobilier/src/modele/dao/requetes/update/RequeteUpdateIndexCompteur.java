@@ -10,22 +10,23 @@ public class RequeteUpdateIndexCompteur implements Requete<IndexCompteur> {
 
 	@Override
 	public String requete() {
-		return "UPDATE Index_Compteur SET TypeCompteur = ?, ValeurCourante = ?, AncienneValeur = ?, DateReleve = ? WHERE Id_Index_Compteur = ?";
+		return "UPDATE Index_Compteur SET Id_TypeCompteur = ?, TypeCompteur = ?, ValeurCourante = ?, AncienneValeur = ?, DateReleve = ? WHERE Id_Index_Compteur = ?";
 	}
 
 	@Override
 	public void parametres(PreparedStatement prSt, IndexCompteur data) throws SQLException {
-		prSt.setString(1, data.getTypeCompteur());
-		prSt.setDouble(2, data.getValeurCourante());
-		prSt.setDouble(3, data.getAncienneValeur());
+		prSt.setInt(1, data.getIdIndexCompteur());
+		prSt.setString(2, data.getTypeCompteur());
+		prSt.setDouble(3, data.getValeurCourante());
+		prSt.setDouble(4, data.getAncienneValeur());
 		java.util.Date utilDate = data.getDateReleve();
 	    if (utilDate != null) {
 	        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-	        prSt.setDate(4, sqlDate);
+	        prSt.setDate(5, sqlDate);
 	    } else {
-	        prSt.setNull(4, java.sql.Types.DATE);
+	        prSt.setNull(5, java.sql.Types.DATE);
 	    }
-		prSt.setInt(5, data.getIdIndexCompteur());
+		prSt.setInt(6, data.getIdIndexCompteur());
 	}
 
 	@Override

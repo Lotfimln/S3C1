@@ -23,9 +23,9 @@ public class DaoAssureur implements Dao<Assureur> {
 
     @Override
     public void create(Assureur donnees) throws SQLException {
-        String sql = "INSERT INTO Assureur (Id_Entreprise, Nom, DateAssurance, Prime) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Assureur (Id_Assureur, Nom, DateAssurance, Prime) VALUES (?, ?, ?, ?)";
         try (PreparedStatement prSt = connection.prepareStatement(sql)) {
-            prSt.setInt(1, donnees.getIdAssurance());
+            prSt.setInt(1, donnees.getIdAssureur());
             prSt.setString(2, donnees.getNom());
             java.util.Date utilDate = donnees.getDateAssurance();
             java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());  // Convertir en java.sql.Date
@@ -61,7 +61,7 @@ public class DaoAssureur implements Dao<Assureur> {
             try (ResultSet rs = prSt.executeQuery()) {
                 if (rs.next()) {
                     return new Assureur(
-                        rs.getInt("Id_Assurance"),
+                        rs.getInt("Id_Assureur"),
                         rs.getString("Nom"),
                         rs.getDate("DateAssurance"),
                         rs.getInt("Prime")
@@ -80,7 +80,7 @@ public class DaoAssureur implements Dao<Assureur> {
              ResultSet rs = prSt.executeQuery()) {
             while (rs.next()) {
                 assureur.add(new Assureur(
-                    rs.getInt("Id_Assurance"),
+                    rs.getInt("Id_Assureur"),
                     rs.getString("Nom"),
                     rs.getDate("DateAssurance"),
                     rs.getInt("Prime")

@@ -23,7 +23,7 @@ public class DaoLocataire implements Dao<Locataire> {
 
 	@Override
 	public void create(Locataire donnees) throws SQLException {
-		String sql = "INSERT INTO Locataire (Id_Locataire, Nom, Prénom, Mail, Téléphone, DateNais, DateDépart) VALUES (?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO Locataire (Id_Locataire, Nom, Prenom, Mail, Telephone, DateNaissance, DateDepart) VALUES (?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
 			prSt.setString(1, donnees.getIdLocataire());
 			prSt.setString(2, donnees.getNom());

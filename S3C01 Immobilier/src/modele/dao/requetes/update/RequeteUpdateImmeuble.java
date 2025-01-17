@@ -10,13 +10,14 @@ public class RequeteUpdateImmeuble implements Requete<Immeuble> {
 
 	@Override
 	public String requete() {
-		return "UPDATE Immeuble SET Adresse = ? WHERE Id_Immeuble = ?";
+		return "UPDATE Immeuble SET Id_Immeuble = ?, Adresse = ? WHERE Id_Immeuble = ?";
 	}
 
 	@Override
 	public void parametres(PreparedStatement prSt, Immeuble data) throws SQLException {
-		prSt.setString(1, data.getAdresse());
-		prSt.setInt(2, data.getIdImmeuble());
+		prSt.setInt(1, data.getIdImmeuble());
+		prSt.setString(2, data.getAdresse());
+		prSt.setInt(3, data.getIdImmeuble());
 	}
 
 	@Override

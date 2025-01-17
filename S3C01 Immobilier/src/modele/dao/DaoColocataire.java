@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import modele.Colocataire;
+import modele.Correspondre;
+import modele.Locataire;
 import modele.dao.requetes.delete.RequeteDeleteColocataire;
+import modele.dao.requetes.delete.RequeteDeleteLocataire;
 import modele.dao.requetes.select.RequeteSelectColocataire;
 import modele.dao.requetes.select.RequeteSelectColocataireByID;
 import modele.dao.requetes.update.RequeteUpdateColocataire;
@@ -48,21 +51,10 @@ public class DaoColocataire implements Dao<Colocataire> {
         }
     }
 
+    // fonction inutile
     @Override
     public Colocataire findById(String... id) throws SQLException {
-        RequeteSelectColocataireByID requeteSelectById = new RequeteSelectColocataireByID();
-        try (PreparedStatement prSt = connection.prepareStatement(requeteSelectById.requete())) {
-            requeteSelectById.parametres(prSt, id);
-            try (ResultSet rs = prSt.executeQuery()) {
-                if (rs.next()) {
-                    return new Colocataire(
-                        rs.getString("Id_Locataire"),
-                        rs.getString("Id_Locataire1")
-                    );
-                }
-            }
-        }
-        return null; // Retourne null si aucun immeuble trouvé
+        return null;
     }
 
     @Override
@@ -80,4 +72,28 @@ public class DaoColocataire implements Dao<Colocataire> {
         }
         return immeubles;
     }
+    
+    public List<Colocataire> findByLocataire(String... id) throws SQLException {
+	    String sql = "SELECT * FROM Colocataire WHERE Id_Locataire = ?";
+	    List<Colocataire> colocataires = new ArrayList<>();
+	    try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
+	        prSt.setString(1, id[0]);
+	        try (ResultSet rs = prSt.executeQuery()) {
+	            while (rs.next()) {
+	                colocataires.add(new Colocataire(
+	                        rs.getString("Id_Locataire"),
+	                        rs.getString("Id_Locataire_1")));
+	            }
+	        }
+	    }
+	    return colocataires;
+	}
+    
+	public void deleteByLocataire(Locataire donnees) throws SQLException {
+		RequeteDeleteLocataire requeteDelete = new RequeteDeleteLocataire();
+		try (PreparedStatement prSt = this.connection.prepareStatement(requeteDelete.requete())) {
+			requeteDelete.parametres(prSt, donnees);
+			prSt.executeUpdate();
+		}
+	}
 }

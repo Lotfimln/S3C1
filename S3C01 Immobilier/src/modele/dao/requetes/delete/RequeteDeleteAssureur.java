@@ -10,7 +10,7 @@ public class RequeteDeleteAssureur implements Requete<Assureur> {
 
 	@Override
 	public String requete() {
-		return "DELETE FROM Assureur WHERE Id_Assurance = ?";
+		return "DELETE FROM Assureur WHERE Id_Assureur = ?";
 	}
 
 	@Override
@@ -20,6 +20,6 @@ public class RequeteDeleteAssureur implements Requete<Assureur> {
 
 	@Override
 	public void parametres(PreparedStatement prSt, Assureur donnee) throws SQLException {
-		prSt.setInt(1, donnee.getIdAssurance());
+		prSt.setInt(1, donnee.getIdAssureur());
 	}
 }

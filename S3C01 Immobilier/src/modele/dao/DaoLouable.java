@@ -25,7 +25,7 @@ public class DaoLouable implements Dao<Louable> {
 
 	@Override
 	public void create(Louable donnees) throws SQLException {
-		String sql = "INSERT INTO Louable (Id_Louable, TypeLouable, Adresse, Superficie, NumeroFiscal, Statut, DateAnniversaire, Id_Immeuble, Id_Assurance, NbPieces) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO Louable (Id_Louable, TypeLouable, Adresse, Superficie, NumeroFiscal, Statut, DateAnniversaire, Id_Immeuble, Id_Assureur, NbPieces) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
 			prSt.executeUpdate();
 				
@@ -40,7 +40,7 @@ public class DaoLouable implements Dao<Louable> {
 			java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
 			prSt.setDate(7, sqlDate);
 			prSt.setInt(8, donnees.getImmeuble().getIdImmeuble());
-			prSt.setInt(9, donnees.getAssurance().getIdAssurance());
+			prSt.setInt(9, donnees.getAssureur().getIdAssureur());
 			prSt.setInt(10, donnees.getNbPieces());
 			prSt.executeUpdate();
 			}
@@ -96,7 +96,7 @@ public class DaoLouable implements Dao<Louable> {
 	        try (ResultSet rs = prSt.executeQuery()) {
 	            if (rs.next()) {
 	                // Vérifiez les noms des colonnes ici
-	                int idAssureur = rs.getInt("Id_Assurance");
+	                int idAssureur = rs.getInt("Id_Assureur");
 	                int idImmeuble = rs.getInt("Id_Immeuble");
 	                Assureur assureur = daoAssureur.findById(String.valueOf(idAssureur));
 	                Immeuble immeuble = daoImmeuble.findById(String.valueOf(idImmeuble));
@@ -138,7 +138,7 @@ public class DaoLouable implements Dao<Louable> {
 				ResultSet rs = prSt.executeQuery()) {
 			while (rs.next()) {
 				int idImmeuble = rs.getInt("Id_Immeuble");
-                int idAssureur = rs.getInt("Id_Assurance");
+                int idAssureur = rs.getInt("Id_Assureur");
                 Immeuble immeuble = daoImmeuble.findById(String.valueOf(idImmeuble));
                 Assureur assureur = daoAssureur.findById(String.valueOf(idAssureur));
 

@@ -3,24 +3,24 @@ package modele;
 import java.util.Objects;
 
 public class Assureur {
-    private int idAssurance;
+    private int idAssureur;
     private String nom;
     private java.util.Date dateAssurance;
     private int prime;
 
-    public Assureur(int idAssurance, String nom, java.util.Date dateAssurance, int prime) {
-        this.idAssurance = idAssurance;
+    public Assureur(int idAssureur, String nom, java.util.Date dateAssurance, int prime) {
+        this.idAssureur = idAssureur;
         this.nom = nom;
         this.dateAssurance = dateAssurance;
         this.prime = prime;
     }
 
-	public int getIdAssurance() {
-		return idAssurance;
+	public int getIdAssureur() {
+		return idAssureur;
 	}
 
-	public void setIdAssurance(int idAssurance) {
-		this.idAssurance = idAssurance;
+	public void setIdAssureur(int idAssureur) {
+		this.idAssureur = idAssureur;
 	}
 
 	public String getNom() {
@@ -49,12 +49,12 @@ public class Assureur {
 
 	@Override
 	public String toString() {
-		return "" + idAssurance;
+		return "" + idAssureur;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(dateAssurance, idAssurance, nom, prime);
+		return Objects.hash(dateAssurance, idAssureur, nom, prime);
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class Assureur {
 			return false;
 		}
 		Assureur other = (Assureur) obj;
-		return Objects.equals(dateAssurance, other.dateAssurance) && idAssurance == other.idAssurance
+		return Objects.equals(dateAssurance, other.dateAssurance) && idAssureur == other.idAssureur
 				&& Objects.equals(nom, other.nom) && Objects.equals(prime, other.prime);
 	}
 }

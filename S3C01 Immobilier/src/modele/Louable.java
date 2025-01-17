@@ -13,10 +13,10 @@ public class Louable {
     private java.util.Date dateAcquisition;
     private int nbPieces;
     private Immeuble immeuble; // Relation avec Immeuble
-    private Assureur assurance; // Relation avec Assureur
+    private Assureur assureur; // Relation avec Assureur
 
     public Louable(int idLouable, String typeLouable, String adresse, double superficie, String numeroFiscal, String statut,
-                   java.util.Date dateAnniversaire, java.util.Date dateAcquisition, int nbPieces, Immeuble immeuble, Assureur assurance) {
+                   java.util.Date dateAnniversaire, java.util.Date dateAcquisition, int nbPieces, Immeuble immeuble, Assureur assureur) {
         this.idLouable = idLouable;
         this.typeLouable = typeLouable;
         this.adresse = adresse;
@@ -26,7 +26,7 @@ public class Louable {
         this.dateAnniversaire = dateAnniversaire;
         this.dateAcquisition = dateAcquisition;
         this.immeuble = immeuble;
-        this.assurance = assurance;
+        this.assureur = assureur;
         this.nbPieces = nbPieces;
     }
 
@@ -92,12 +92,12 @@ public class Louable {
 		this.dateAnniversaire = dateAnniversaire;
 	}
 
-	public Assureur getAssurance() {
-		return assurance;
+	public Assureur getAssureur() {
+		return assureur;
 	}
 
-	public void setAssurance(Assureur assurance) {
-		this.assurance = assurance;
+	public void setAssureur(Assureur assureur) {
+		this.assureur = assureur;
 	}
 
 	public Immeuble getImmeuble() {
@@ -131,7 +131,7 @@ public class Louable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(adresse, assurance, dateAcquisition, dateAnniversaire, idLouable, immeuble, nbPieces,
+		return Objects.hash(adresse, assureur, dateAcquisition, dateAnniversaire, idLouable, immeuble, nbPieces,
 				numeroFiscal, statut, superficie, typeLouable);
 	}
 
@@ -144,7 +144,7 @@ public class Louable {
 			return false;
 		}
 		Louable other = (Louable) obj;
-		return Objects.equals(adresse, other.adresse) && Objects.equals(assurance, other.assurance)
+		return Objects.equals(adresse, other.adresse) && Objects.equals(assureur, other.assureur)
 				&& Objects.equals(dateAcquisition, other.dateAcquisition)
 				&& Objects.equals(dateAnniversaire, other.dateAnniversaire) && idLouable == other.idLouable
 				&& Objects.equals(immeuble, other.immeuble) && nbPieces == other.nbPieces

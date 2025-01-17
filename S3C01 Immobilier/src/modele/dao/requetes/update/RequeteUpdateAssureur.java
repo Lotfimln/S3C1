@@ -10,7 +10,7 @@ public class RequeteUpdateAssureur implements Requete<Assureur> {
 
 	@Override
 	public String requete() {
-		return "UPDATE Assureur SET Prime = ?, DateAssurance = ?, Nom = ? WHERE Id_Assurance = ?";
+		return "UPDATE Assureur SET Id_Assureur = ?, Prime = ?, DateAssurance = ?, Nom = ? WHERE Id_Assureur = ?";
 	}
 
 	@Override
@@ -20,16 +20,17 @@ public class RequeteUpdateAssureur implements Requete<Assureur> {
 
 	@Override
 	public void parametres(PreparedStatement prSt, Assureur data) throws SQLException {
-	    prSt.setInt(1, data.getPrime());
+		prSt.setInt(1, data.getIdAssureur());
+	    prSt.setInt(2, data.getPrime());
 	    java.util.Date utilDate = data.getDateAssurance();
 	    if (utilDate != null) {
 	        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-	        prSt.setDate(2, sqlDate);
+	        prSt.setDate(3, sqlDate);
 	    } else {
-	        prSt.setNull(2, java.sql.Types.DATE);
+	        prSt.setNull(3, java.sql.Types.DATE);
 	    }
-	    prSt.setString(3, data.getNom());
-	    prSt.setInt(4, data.getIdAssurance());
+	    prSt.setString(4, data.getNom());
+	    prSt.setInt(5, data.getIdAssureur());
 	}
 
 }

@@ -10,30 +10,31 @@ public class RequeteUpdateFacture implements Requete<Facture> {
 
 	@Override
 	public String requete() {
-		return "UPDATE Facture SET Montant = ?, DateFacture = ?, ReferenceDevis = ?, DatePaiement = ?, Id_Entreprise = ?, Id_Louable = ? WHERE Id_Facture = ?";
+		return "UPDATE Facture SET Id_Facture = ?, Montant = ?, DateFacture = ?, ReferenceDevis = ?, DatePaiement = ?, Id_Entreprise = ?, Id_Louable = ? WHERE Id_Facture = ?";
 	}
 
 	@Override
 	public void parametres(PreparedStatement prSt, Facture data) throws SQLException {
-		prSt.setDouble(1, data.getMontant());
+		prSt.setInt(1, data.getIdFacture());
+		prSt.setDouble(2, data.getMontant());
 		java.util.Date utilDate = data.getDateFacture();
 	    if (utilDate != null) {
 	        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-	        prSt.setDate(2, sqlDate);
+	        prSt.setDate(3, sqlDate);
 	    } else {
-	        prSt.setNull(2, java.sql.Types.DATE);
+	        prSt.setNull(3, java.sql.Types.DATE);
 	    }
-		prSt.setString(3, data.getReferenceDevis());
+		prSt.setString(4, data.getReferenceDevis());
 		java.util.Date utilDate1 = data.getDatePaiement();
 	    if (utilDate1 != null) {
 	        java.sql.Date sqlDate = new java.sql.Date(utilDate1.getTime());
-	        prSt.setDate(4, sqlDate);
+	        prSt.setDate(5, sqlDate);
 	    } else {
-	        prSt.setNull(4, java.sql.Types.DATE);
+	        prSt.setNull(5, java.sql.Types.DATE);
 	    }
-		prSt.setInt(5, data.getEntreprise().getIdEntreprise());
-		prSt.setInt(6, data.getLouable().getIdLouable());
-		prSt.setInt(7, data.getIdFacture());
+		prSt.setInt(6, data.getEntreprise().getIdEntreprise());
+		prSt.setInt(7, data.getLouable().getIdLouable());
+		prSt.setInt(8, data.getIdFacture());
 	}
 
 	@Override

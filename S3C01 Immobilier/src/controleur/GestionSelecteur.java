@@ -143,7 +143,7 @@ public class GestionSelecteur implements ActionListener {
             data = donnees.stream()
                 .map(obj -> (Assureur) obj)
                 .map(assureur -> new Object[]{
-                    assureur.getIdAssurance(),
+                    assureur.getIdAssureur(),
                     assureur.getNom()
                 })
                 .toArray(Object[][]::new);

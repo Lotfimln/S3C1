@@ -10,21 +10,22 @@ public class RequeteUpdateDiagnostic implements Requete<Diagnostic> {
 
 	@Override
 	public String requete() {
-		return "UPDATE Diagnostic SET TypeDiagnostic = ?, DateDiagnostic = ?, Id_Louable = ? WHERE Id_Diagnostic = ?";
+		return "UPDATE Diagnostic SET Id_Diagnostic = ?, TypeDiagnostic = ?, DateDiagnostic = ?, Id_Louable = ? WHERE Id_Diagnostic = ?";
 	}
 
 	@Override
 	public void parametres(PreparedStatement prSt, Diagnostic data) throws SQLException {
-		prSt.setString(1, data.getTypeDiagnostic());
+		prSt.setInt(1, data.getIdDiagnostic());
+		prSt.setString(2, data.getTypeDiagnostic());
 		java.util.Date utilDate = data.getDateDiagnostic();
 	    if (utilDate != null) {
 	        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-	        prSt.setDate(2, sqlDate);
+	        prSt.setDate(3, sqlDate);
 	    } else {
-	        prSt.setNull(2, java.sql.Types.DATE);
+	        prSt.setNull(3, java.sql.Types.DATE);
 	    }
-		prSt.setInt(3, data.getLouable().getIdLouable());
-		prSt.setInt(4, data.getIdDiagnostic());
+		prSt.setInt(4, data.getLouable().getIdLouable());
+		prSt.setInt(5, data.getIdDiagnostic());
 	}
 
 	@Override
