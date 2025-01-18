@@ -68,6 +68,14 @@ public class DaoIndexer implements Dao<Indexer> {
 			prSt.executeUpdate();
 		}
 	}
+	
+	public void deleteById(String... id) throws SQLException {
+		RequeteDeleteIndexer requeteDelete = new RequeteDeleteIndexer();
+		try (PreparedStatement prSt = this.connection.prepareStatement(requeteDelete.requete())) {
+			requeteDelete.parametres(prSt, id);
+			prSt.executeUpdate();
+		}
+	}
 
 	@Override
 	public Indexer findById(String... id) throws SQLException {
@@ -86,7 +94,7 @@ public class DaoIndexer implements Dao<Indexer> {
 						rs.getInt("Id_Index_Compteur"), 
 						rs.getInt("Id_Immeuble"),
 						rs.getDate("DateReleve"),
-                        rs.getDouble("PrixAbonement"),
+                        rs.getDouble("PrixAbonnement"),
                         rs.getDate("DateRegularisation")));
 			}
 		}
@@ -94,34 +102,36 @@ public class DaoIndexer implements Dao<Indexer> {
 	}
 	
 	public List<Indexer> findByImmeuble(String... id) throws SQLException {
-		RequeteSelectIndexerByImmeuble requeteSelectImmeuble = new RequeteSelectIndexerByImmeuble();
-		List<Indexer> indexers = new ArrayList<>();
-		try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectImmeuble.requete())) {
-			try (ResultSet rs = prSt.executeQuery()) {
-				while (rs.next()) {
-					indexers.add(new Indexer(
-							rs.getInt("Id_Index_Compteur"), 
-							rs.getInt("Id_Immeuble"),
-							rs.getDate("DateReleve"),
-	                        rs.getDouble("PrixAbonement"),
-	                        rs.getDate("DateRegularisation")));
-				}
-			}
-		}
-		return indexers;
+	    RequeteSelectIndexerByImmeuble requeteSelectImmeuble = new RequeteSelectIndexerByImmeuble();
+	    List<Indexer> indexers = new ArrayList<>();
+	    try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectImmeuble.requete())) {
+	        requeteSelectImmeuble.parametres(prSt, id);
+	        try (ResultSet rs = prSt.executeQuery()) {
+	            while (rs.next()) {
+	                indexers.add(new Indexer(
+	                    rs.getInt("Id_Index_Compteur"), 
+	                    rs.getInt("Id_Immeuble"),
+	                    rs.getDate("DateReleve"),
+	                    rs.getDouble("PrixAbonnement"),
+	                    rs.getDate("DateRegularisation")));
+	            }
+	        }
+	    }
+	    return indexers;
 	}
 	
-	public List<Indexer> findByIndexCompteur(String[] params) throws SQLException {
+	public List<Indexer> findByIndexCompteur(String... id) throws SQLException {
 	    List<Indexer> result = new ArrayList<>();
 	    RequeteSelectIndexerByImmeuble requeteSelectImmeuble = new RequeteSelectIndexerByImmeuble();
-	    try (PreparedStatement pstmt = connection.prepareStatement(requeteSelectImmeuble.requete())) {
-	        try (ResultSet rs = pstmt.executeQuery()) {
+	    try (PreparedStatement prSt = connection.prepareStatement(requeteSelectImmeuble.requete())) {
+	    	requeteSelectImmeuble.parametres(prSt, id);
+	    	try (ResultSet rs = prSt.executeQuery()) {
 	            while (rs.next()) {
 	                result.add(new Indexer(
 	                    rs.getInt("Id_Index_Compteur"),
 	                    rs.getInt("Id_Immeuble"),
 	                    rs.getDate("DateReleve"),
-                        rs.getDouble("PrixAbonement"),
+                        rs.getDouble("PrixAbonnement"),
                         rs.getDate("DateRegularisation")
 	                ));
 	            }

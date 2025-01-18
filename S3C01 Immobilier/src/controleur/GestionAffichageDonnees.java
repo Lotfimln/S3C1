@@ -240,13 +240,19 @@ public class GestionAffichageDonnees<T> {
                         DaoAssocier daoAssocier = new DaoAssocier(CictOracleDataSource.getConnectionBD());
                         List<Associer> associations = daoAssocier.findByLouable(new String[]{String.valueOf(idLouable)});
 
-                        // Création du modèle
-                        DefaultTableModel model = new DefaultTableModel(new String[]{"Index Compteurs associés"}, 0);
+                        // Création du modèle avec colonnes pour les attributs
+                        DefaultTableModel model = new DefaultTableModel(new String[]{
+                            "Index Compteur", "Date Relevé", "Prix Abonnement", "Date Régularisation"}, 0);
                         tableAssociations.setModel(model);
 
-                        // Ajouter les index compteurs associés au modèle
+                        // Ajouter les données au modèle
                         for (Associer associer : associations) {
-                            model.addRow(new Object[]{associer.getIdIndexCompteur()});
+                            model.addRow(new Object[]{
+                                associer.getIdIndexCompteur(),
+                                associer.getDateReleve(),
+                                associer.getPrixAbonnement(),
+                                associer.getDateRegularisation()
+                            });
                         }
                     }
                     break;
@@ -257,16 +263,23 @@ public class GestionAffichageDonnees<T> {
                         DaoAssocier daoAssocier = new DaoAssocier(CictOracleDataSource.getConnectionBD());
                         List<Associer> associations = daoAssocier.findByIndexCompteur(new String[]{String.valueOf(idIndex)});
 
-                        // Création du modèle
-                        DefaultTableModel model = new DefaultTableModel(new String[]{"Louables associés"}, 0);
+                        // Création du modèle avec colonnes pour les attributs
+                        DefaultTableModel model = new DefaultTableModel(new String[]{
+                            "Louable", "Date Relevé", "Prix Abonnement", "Date Régularisation"}, 0);
                         tableAssociations.setModel(model);
 
-                        // Ajouter les louables associés au modèle
+                        // Ajouter les données au modèle
                         for (Associer associer : associations) {
-                            model.addRow(new Object[]{associer.getIdLouable()});
+                            model.addRow(new Object[]{
+                                associer.getIdLouable(),
+                                associer.getDateReleve(),
+                                associer.getPrixAbonnement(),
+                                associer.getDateRegularisation()
+                            });
                         }
                     }
                     break;
+
 
                 case "indexer_immeuble": // Immeuble ↔ Index_Compteur
                     if (elementPrincipal instanceof Immeuble) {
@@ -274,13 +287,19 @@ public class GestionAffichageDonnees<T> {
                         DaoIndexer daoIndexer = new DaoIndexer(CictOracleDataSource.getConnectionBD());
                         List<Indexer> associations = daoIndexer.findByImmeuble(new String[]{String.valueOf(idImmeuble)});
 
-                        // Création du modèle
-                        DefaultTableModel model = new DefaultTableModel(new String[]{"Index Compteurs associés"}, 0);
+                        // Création du modèle avec colonnes pour les attributs
+                        DefaultTableModel model = new DefaultTableModel(new String[]{
+                            "Index Compteur", "Date Relevé", "Prix Abonnement", "Date Régularisation"}, 0);
                         tableAssociations.setModel(model);
 
-                        // Ajouter les index compteurs associés au modèle
+                        // Ajouter les données au modèle
                         for (Indexer indexer : associations) {
-                            model.addRow(new Object[]{indexer.getIdIndexCompteur()});
+                            model.addRow(new Object[]{
+                                indexer.getIdIndexCompteur(),
+                                indexer.getDateReleve(),
+                                indexer.getPrixAbonnement(),
+                                indexer.getDateRegularisation()
+                            });
                         }
                     }
                     break;
@@ -291,13 +310,19 @@ public class GestionAffichageDonnees<T> {
                         DaoIndexer daoIndexer = new DaoIndexer(CictOracleDataSource.getConnectionBD());
                         List<Indexer> associations = daoIndexer.findByIndexCompteur(new String[]{String.valueOf(idIndex)});
 
-                        // Création du modèle
-                        DefaultTableModel model = new DefaultTableModel(new String[]{"Immeubles associés"}, 0);
+                        // Création du modèle avec colonnes pour les attributs
+                        DefaultTableModel model = new DefaultTableModel(new String[]{
+                            "Immeuble", "Date Relevé", "Prix Abonnement", "Date Régularisation"}, 0);
                         tableAssociations.setModel(model);
 
-                        // Ajouter les immeubles associés au modèle
+                        // Ajouter les données au modèle
                         for (Indexer indexer : associations) {
-                            model.addRow(new Object[]{indexer.getIdImmeuble()});
+                            model.addRow(new Object[]{
+                                indexer.getIdImmeuble(),
+                                indexer.getDateReleve(),
+                                indexer.getPrixAbonnement(),
+                                indexer.getDateRegularisation()
+                            });
                         }
                     }
                     break;
@@ -351,7 +376,7 @@ public class GestionAffichageDonnees<T> {
 
                             case "correspondre_contratdelocation": // Contrat_de_location ↔ Locataire
                                 new DaoCorrespondre(CictOracleDataSource.getConnectionBD())
-                                        .delete(new Correspondre(idAssocie, Integer.parseInt(idElementPrincipal))); // Inversé
+                                        .delete(new Correspondre(idAssocie, Integer.parseInt(idElementPrincipal)));
                                 break;
 
                             case "colocataire": // Locataire ↔ Locataire
@@ -361,7 +386,7 @@ public class GestionAffichageDonnees<T> {
 
                             case "associer": // Louable ↔ Index_Compteur
                                 new DaoAssocier(CictOracleDataSource.getConnectionBD())
-                                        .delete(new Associer(Integer.parseInt(idElementPrincipal), Integer.parseInt(idAssocie)));
+                                        .deleteById(idElementPrincipal, idAssocie);
                                 break;
 
                             case "apparaitre": // Charge ↔ Index_Compteur
@@ -371,12 +396,12 @@ public class GestionAffichageDonnees<T> {
 
                             case "indexer": // Immeuble ↔ Index_Compteur
                                 new DaoIndexer(CictOracleDataSource.getConnectionBD())
-                                        .delete(new Indexer(Integer.parseInt(idElementPrincipal), Integer.parseInt(idAssocie)));
+                                		.deleteById(idElementPrincipal, idAssocie);
                                 break;
 
                             case "associer_louable": // Louable ↔ Index_Compteur
                                 new DaoAssocier(CictOracleDataSource.getConnectionBD())
-                                        .delete(new Associer(Integer.parseInt(idElementPrincipal), Integer.parseInt(idAssocie)));
+                                		.deleteById(idElementPrincipal, idAssocie);
                                 break;
 
                             case "apparaitre_charge": // Charge ↔ Index_Compteur
@@ -386,12 +411,12 @@ public class GestionAffichageDonnees<T> {
 
                             case "indexer_immeuble": // Immeuble ↔ Index_Compteur
                                 new DaoIndexer(CictOracleDataSource.getConnectionBD())
-                                        .delete(new Indexer(Integer.parseInt(idElementPrincipal), Integer.parseInt(idAssocie)));
+                                		.deleteById(idElementPrincipal, idAssocie);                               
                                 break;
 
                             case "indexer_index": // Index_Compteur ↔ Immeuble
                                 new DaoIndexer(CictOracleDataSource.getConnectionBD())
-                                        .delete(new Indexer(Integer.parseInt(idAssocie), Integer.parseInt(idElementPrincipal))); // Inversé
+                                		.deleteById(idElementPrincipal, idAssocie);
                                 break;
                             }
 
@@ -449,7 +474,8 @@ public class GestionAffichageDonnees<T> {
 	///////////////////////////
     
     
-    public void enregistrerModifications() {
+    @SuppressWarnings("unchecked")
+	public void enregistrerModifications() {
         try {
             // Parcourt les attributs et met à jour l'objet avec les nouvelles valeurs des champs
             for (Field champ : elementSelectionne.getClass().getDeclaredFields()) {
@@ -685,23 +711,32 @@ public class GestionAffichageDonnees<T> {
 	                String valeurSaisie = ((JTextField) composant).getText();
 	                Class<?> typeChamp = champs[i].getType();
 
-	                // Vérifie si le champ est une classe complexe et récupère l'objet via un DAO
-	                if (typeChamp == Immeuble.class) {
-	                    DaoImmeuble daoImmeuble = new DaoImmeuble(CictOracleDataSource.getConnectionBD());
-	                    Immeuble immeuble = daoImmeuble.findById(valeurSaisie);
-	                    if (immeuble == null) {
-	                        throw new IllegalArgumentException("Immeuble avec ID " + valeurSaisie + " introuvable.");
+	                // Gérer les dates spécifiquement
+	                if (typeChamp == java.util.Date.class || typeChamp == java.sql.Date.class) {
+	                    if (valeurSaisie == null || valeurSaisie.isEmpty()) {
+	                        valeursParametres[i] = null; // Si la date est vide, on met null
+	                    } else {
+	                        try {
+	                            // Conversion de la chaîne en Date
+	                            java.util.Date utilDate = new java.text.SimpleDateFormat("yyyy-MM-dd").parse(valeurSaisie);
+	                            if (typeChamp == java.sql.Date.class) {
+	                                valeursParametres[i] = new java.sql.Date(utilDate.getTime());
+	                            } else {
+	                                valeursParametres[i] = utilDate;
+	                            }
+	                        } catch (java.text.ParseException e) {
+	                            throw new IllegalArgumentException("Format de date invalide pour le champ " + champs[i].getName() + ". Attendu : yyyy-MM-dd");
+	                        }
 	                    }
-	                    valeursParametres[i] = immeuble;
-	                } else if (typeChamp == Locataire.class) {
-	                    DaoLocataire daoLocataire = new DaoLocataire(CictOracleDataSource.getConnectionBD());
-	                    Locataire locataire = daoLocataire.findById(valeurSaisie);
-	                    if (locataire == null) {
-	                        throw new IllegalArgumentException("Locataire avec ID " + valeurSaisie + " introuvable.");
+	                } else if (estClasseMetier(typeChamp)) {
+	                    // Si le champ est une classe métier, récupérer l'objet via le DAO
+	                    Object objetMetier = recupererObjetMetier(typeChamp, valeurSaisie);
+	                    if (objetMetier == null) {
+	                        throw new IllegalArgumentException(typeChamp.getSimpleName() + " avec ID " + valeurSaisie + " introuvable.");
 	                    }
-	                    valeursParametres[i] = locataire;
+	                    valeursParametres[i] = objetMetier;
 	                } else {
-	                    // Conversion standard pour les types simples
+	                    // Conversion standard pour les autres types
 	                    valeursParametres[i] = casterValeur(valeurSaisie, typeChamp);
 	                }
 
@@ -710,6 +745,7 @@ public class GestionAffichageDonnees<T> {
 	        }
 
 	        // Instancie l'objet avec le constructeur à paramètres
+	        @SuppressWarnings("unchecked")
 	        T nouvelElement = (T) elementSelectionne.getClass()
 	                                .getDeclaredConstructor(typesParametres)
 	                                .newInstance(valeursParametres);
@@ -734,5 +770,45 @@ public class GestionAffichageDonnees<T> {
 	        JOptionPane.showMessageDialog(fenetreAffichageDonnees, "Erreur lors de l'ajout de l'élément : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
 	    }
 	}
+
+
+	private boolean estClasseMetier(Class<?> type) {
+	    // Liste des classes métier à vérifier
+	    return type == Louable.class || type == Diagnostic.class || type == Immeuble.class || type == Locataire.class || type == Entreprise.class
+	        || type == Assureur.class || type == Charge.class || type == Facture.class || type == ContratDeLocation.class;
+	}
+
+	private Object recupererObjetMetier(Class<?> type, String id) throws SQLException {
+	    if (type == Louable.class) {
+	        DaoLouable daoLouable = new DaoLouable(CictOracleDataSource.getConnectionBD());
+	        return daoLouable.findById(id);
+	    } else if (type == Diagnostic.class) {
+	        DaoDiagnostic daoDiagnostic = new DaoDiagnostic(CictOracleDataSource.getConnectionBD());
+	        return daoDiagnostic.findById(id);
+	    } else if (type == Immeuble.class) {
+	        DaoImmeuble daoImmeuble = new DaoImmeuble(CictOracleDataSource.getConnectionBD());
+	        return daoImmeuble.findById(id);
+	    } else if (type == Locataire.class) {
+	        DaoLocataire daoLocataire = new DaoLocataire(CictOracleDataSource.getConnectionBD());
+	        return daoLocataire.findById(id);
+	    } else if (type == Assureur.class) {
+	        DaoAssureur daoAssureur = new DaoAssureur(CictOracleDataSource.getConnectionBD());
+	        return daoAssureur.findById(id);
+	    } else if (type == Charge.class) {
+	        DaoCharge daoCharge = new DaoCharge(CictOracleDataSource.getConnectionBD());
+	        return daoCharge.findById(id);
+	    } else if (type == Facture.class) {
+	        DaoFacture daoFacture = new DaoFacture(CictOracleDataSource.getConnectionBD());
+	        return daoFacture.findById(id);
+	    } else if (type == Entreprise.class) {
+	        DaoEntreprise daoEntreprise = new DaoEntreprise(CictOracleDataSource.getConnectionBD());
+	        return daoEntreprise.findById(id);
+	    } else if (type == ContratDeLocation.class) {
+	        DaoContratDeLocation daoContratDeLocation = new DaoContratDeLocation(CictOracleDataSource.getConnectionBD());
+	        return daoContratDeLocation.findById(id);
+	    }
+	    return null;
+	}
+
 
 }

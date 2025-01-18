@@ -22,12 +22,18 @@ public class RequeteCreateAssureur implements Requete<Assureur> {
 	}
 
 	@Override
-	public void parametres(PreparedStatement prSt, Assureur donnee) throws SQLException {
-		prSt.setInt(1, donnee.getIdAssureur());
-        prSt.setString(2, donnee.getNom());
-        java.util.Date utilDate = donnee.getDateAssurance();
-        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());  
-        prSt.setDate(3, sqlDate);
-        prSt.setInt(4, donnee.getPrime());
+	public void parametres(PreparedStatement prSt, Assureur donnees) throws SQLException {
+		prSt.setInt(1, donnees.getIdAssureur());
+        prSt.setString(2, donnees.getNom());
+
+        java.util.Date utilDate = donnees.getDateAssurance();
+	    if (utilDate != null) {
+	        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+	        prSt.setDate(3, sqlDate);
+	    } else {
+	        prSt.setNull(3, java.sql.Types.DATE);
+	    }
+        
+        prSt.setInt(4, donnees.getPrime());
 	}
 }

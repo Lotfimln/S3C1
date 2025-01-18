@@ -94,7 +94,8 @@ public class DaoApparaitre implements Dao<Apparaitre> {
     	RequeteSelectApparaitreByCharge requeteSelectByCharge = new RequeteSelectApparaitreByCharge();
         List<Apparaitre> apparaitreList = new ArrayList<>();
         try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectByCharge.requete())) {
-            try (ResultSet rs = prSt.executeQuery()) {
+        	requeteSelectByCharge.parametres(prSt, id);
+        	try (ResultSet rs = prSt.executeQuery()) {
                 while (rs.next()) {
                     apparaitreList.add(new Apparaitre(
                             rs.getInt("Id_Charge"),

@@ -78,6 +78,7 @@ public class DaoColocataire implements Dao<Colocataire> {
     	RequeteSelectColocataireByLocataire requeteSelectLocataire = new RequeteSelectColocataireByLocataire();
 	    List<Colocataire> colocataires = new ArrayList<>();
 	    try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectLocataire.requete())) {
+	    	requeteSelectLocataire.parametres(prSt, id);
 	        try (ResultSet rs = prSt.executeQuery()) {
 	            while (rs.next()) {
 	                colocataires.add(new Colocataire(

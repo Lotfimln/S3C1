@@ -67,6 +67,14 @@ public class DaoAssocier implements Dao<Associer> {
             prSt.executeUpdate();
         }
     }
+    
+    public void deleteById(String... id) throws SQLException {
+        RequeteDeleteAssocier requeteDelete = new RequeteDeleteAssocier();
+        try (PreparedStatement prSt = connection.prepareStatement(requeteDelete.requete())) {
+            requeteDelete.parametres(prSt, id);
+            prSt.executeUpdate();
+        }
+    }
 
     @Override
     public Associer findById(String... id) throws SQLException {
@@ -79,13 +87,13 @@ public class DaoAssocier implements Dao<Associer> {
         RequeteSelectAssocier requeteSelectAll = new RequeteSelectAssocier();
         List<Associer> associer = new ArrayList<>();
         try (PreparedStatement prSt = connection.prepareStatement(requeteSelectAll.requete());
-             ResultSet rs = prSt.executeQuery()) {
+            ResultSet rs = prSt.executeQuery()) {
             while (rs.next()) {
                 associer.add(new Associer(
                 		rs.getInt("Id_Louable"),
                         rs.getInt("Id_Index_Compteur"),
                         rs.getDate("DateReleve"),
-                        rs.getDouble("PrixAbonement"),
+                        rs.getDouble("PrixAbonnement"),
                         rs.getDate("DateRegularisation")
                 ));
             }
@@ -97,13 +105,14 @@ public class DaoAssocier implements Dao<Associer> {
     	RequeteSelectAssocierByIndex requeteSelectIndex = new RequeteSelectAssocierByIndex();
     	List<Associer> associerList = new ArrayList<>();
         try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectIndex.requete())) {
-            try (ResultSet rs = prSt.executeQuery()) {
+        	requeteSelectIndex.parametres(prSt, id);
+        	try (ResultSet rs = prSt.executeQuery()) {
                 while (rs.next()) {
                     associerList.add(new Associer(
                             rs.getInt("Id_Louable"),
                             rs.getInt("Id_Index_Compteur"),
                             rs.getDate("DateReleve"),
-                            rs.getDouble("PrixAbonement"),
+                            rs.getDouble("PrixAbonnement"),
                             rs.getDate("DateRegularisation")));
                 }
             }
@@ -115,13 +124,14 @@ public class DaoAssocier implements Dao<Associer> {
     	RequeteSelectAssocierByLouable requeteSelectLouable = new RequeteSelectAssocierByLouable();
         List<Associer> associerList = new ArrayList<>();
         try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectLouable.requete())) {
-            try (ResultSet rs = prSt.executeQuery()) {
+        	requeteSelectLouable.parametres(prSt, id);
+        	try (ResultSet rs = prSt.executeQuery()) {
                 while (rs.next()) {
                     associerList.add(new Associer(
                             rs.getInt("Id_Louable"),
                             rs.getInt("Id_Index_Compteur"),
                             rs.getDate("DateReleve"),
-                            rs.getDouble("PrixAbonement"),
+                            rs.getDouble("PrixAbonnement"),
                             rs.getDate("DateRegularisation")));
                 }
             }

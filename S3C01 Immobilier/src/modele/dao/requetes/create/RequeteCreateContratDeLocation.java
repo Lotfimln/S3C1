@@ -30,16 +30,35 @@ public class RequeteCreateContratDeLocation implements Requete<ContratDeLocation
 	@Override
 	public void parametres(PreparedStatement prSt, ContratDeLocation donnees) throws SQLException {
 		prSt.setInt(1, donnees.getIdContratDeLocation());
+		
 		java.util.Date utilDate = donnees.getDateDebut();
-        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-        prSt.setDate(2, sqlDate);
-		java.util.Date utilDate1 = donnees.getDateFin();
-        java.sql.Date sqlDate1 = new java.sql.Date(utilDate1.getTime());
-        prSt.setDate(3, sqlDate1);
+	    if (utilDate != null) {
+	        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+	        prSt.setDate(2, sqlDate);
+	    } else {
+	        prSt.setNull(2, java.sql.Types.DATE);
+	    }
+
+	    java.util.Date utilDate1 = donnees.getDateFin();
+	    if (utilDate1 != null) {
+	        java.sql.Date sqlDate = new java.sql.Date(utilDate1.getTime());
+	        prSt.setDate(3, sqlDate);
+	    } else {
+	        prSt.setNull(3, java.sql.Types.DATE);
+	    }
+
 		prSt.setDouble(4, donnees.getMontantLoyer());
 		prSt.setDouble(5, donnees.getProvisionsCharges());
 		prSt.setString(6, donnees.getTypeContrat());
-		prSt.setDate(7, new java.sql.Date(donnees.getDateAnniversaire().getTime()));
+		
+		java.util.Date utilDate2 = donnees.getDateAnniversaire();
+	    if (utilDate2 != null) {
+	        java.sql.Date sqlDate = new java.sql.Date(utilDate2.getTime());
+	        prSt.setDate(7, sqlDate);
+	    } else {
+	        prSt.setNull(7, java.sql.Types.DATE);
+	    }
+		
 		prSt.setDouble(8, donnees.getIndiceICC());
 		prSt.setDouble(9, donnees.getMontantCaution());
 		prSt.setInt(10, donnees.getLouable().getIdLouable());

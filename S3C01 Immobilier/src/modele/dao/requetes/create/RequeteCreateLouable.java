@@ -10,7 +10,7 @@ public class RequeteCreateLouable implements Requete<Louable> {
 
 	@Override
 	public String requete() {
-		return "INSERT INTO Louable (Id_Louable, TypeLouable, Adresse, Superficie, NumeroFiscal, Statut, DateAnniversaire, Id_Immeuble, Id_Assureur, NbPieces) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		return "INSERT INTO Louable (Id_Louable, TypeLouable, Adresse, Superficie, NumeroFiscal, Statut, DateAnniversaire, DateAcquisition, Id_Immeuble, Id_Assureur, NbPieces) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	}
 
 	@Override
@@ -35,11 +35,25 @@ public class RequeteCreateLouable implements Requete<Louable> {
 		prSt.setDouble(4, donnees.getSuperficie());
 		prSt.setString(5, donnees.getNumeroFiscal());
 		prSt.setString(6, donnees.getStatut());
-		java.util.Date utilDate = donnees.getDateAnniversaire();	            
-		java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-		prSt.setDate(7, sqlDate);
-		prSt.setInt(8, donnees.getImmeuble().getIdImmeuble());
-		prSt.setInt(9, donnees.getAssureur().getIdAssureur());
-		prSt.setInt(10, donnees.getNbPieces());
+
+		java.util.Date utilDate = donnees.getDateAnniversaire();
+	    if (utilDate != null) {
+	        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+	        prSt.setDate(7, sqlDate);
+	    } else {
+	        prSt.setNull(7, java.sql.Types.DATE);
+	    }
+	    
+	    java.util.Date utilDate1 = donnees.getDateAcquisition();
+	    if (utilDate1 != null) {
+	        java.sql.Date sqlDate = new java.sql.Date(utilDate1.getTime());
+	        prSt.setDate(8, sqlDate);
+	    } else {
+	        prSt.setNull(8, java.sql.Types.DATE);
+	    }
+		
+		prSt.setInt(9, donnees.getImmeuble().getIdImmeuble());
+		prSt.setInt(10, donnees.getAssureur().getIdAssureur());
+		prSt.setInt(11, donnees.getNbPieces());
 	}
 }

@@ -73,7 +73,7 @@ public class DaoIndexCompteur implements Dao<IndexCompteur> {
 		RequeteSelectIndexCompteur requeteSelectAll = new RequeteSelectIndexCompteur();
 		List<IndexCompteur> compteurs = new ArrayList<>();
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectAll.requete());
-				ResultSet rs = prSt.executeQuery()) {
+			ResultSet rs = prSt.executeQuery()) {
 			while (rs.next()) {
 				compteurs.add(new IndexCompteur(
 						rs.getInt("Id_Index_Compteur"), 

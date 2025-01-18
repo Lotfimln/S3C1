@@ -10,7 +10,7 @@ public class RequeteCreateLocataire implements Requete<Locataire> {
 
 	@Override
 	public String requete() {
-		return "INSERT INTO Locataire (Id_Locataire, Nom, Prenom, Mail, Telephone, DateNaissance, DateDepart) VALUES (?, ?, ?, ?, ?, ?)";
+		return "INSERT INTO Locataire (Id_Locataire, Nom, Prenom, Mail, Telephone, DateNaissance, DateDepart) VALUES (?, ?, ?, ?, ?, ?, ?)";
 	}
 
 	@Override
@@ -31,11 +31,21 @@ public class RequeteCreateLocataire implements Requete<Locataire> {
 		prSt.setString(3, donnees.getPrenom());
 		prSt.setString(4, donnees.getMail());
 		prSt.setString(5, donnees.getTelephone());
-		java.util.Date utilDate = donnees.getDateDepart();
-        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-        prSt.setDate(6, sqlDate);
-		java.util.Date utilDate1 = donnees.getDateDepart();
-        java.sql.Date sqlDate1 = new java.sql.Date(utilDate1.getTime());
-        prSt.setDate(7, sqlDate1);
+		
+		java.util.Date utilDate = donnees.getDateNaissance();
+	    if (utilDate != null) {
+	        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+	        prSt.setDate(6, sqlDate);
+	    } else {
+	        prSt.setNull(6, java.sql.Types.DATE);
+	    }
+	    
+	    java.util.Date utilDate1 = donnees.getDateDepart();
+	    if (utilDate1 != null) {
+	        java.sql.Date sqlDate = new java.sql.Date(utilDate1.getTime());
+	        prSt.setDate(7, sqlDate);
+	    } else {
+	        prSt.setNull(7, java.sql.Types.DATE);
+	    }
 	}
 }

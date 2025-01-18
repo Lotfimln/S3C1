@@ -23,15 +23,26 @@ public class RequeteCreateIndexer implements Requete<Indexer> {
 	}
 
 	@Override
-	public void parametres(PreparedStatement prSt, Indexer donnee) throws SQLException {
-		prSt.setInt(1, donnee.getIdIndexCompteur());
-		prSt.setInt(2, donnee.getIdImmeuble());
-		java.util.Date utilDate = donnee.getDateReleve();
-        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime()); 
-        prSt.setDate(3, sqlDate);
-        prSt.setDouble(4, donnee.getPrixAbonnement());
-        java.util.Date utilDate1 = donnee.getDateRegularisation();
-        java.sql.Date sqlDate1 = new java.sql.Date(utilDate1.getTime()); 
-        prSt.setDate(5, sqlDate1);
+	public void parametres(PreparedStatement prSt, Indexer donnees) throws SQLException {
+		prSt.setInt(1, donnees.getIdIndexCompteur());
+		prSt.setInt(2, donnees.getIdImmeuble());
+
+		java.util.Date utilDate = donnees.getDateReleve();
+	    if (utilDate != null) {
+	        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+	        prSt.setDate(3, sqlDate);
+	    } else {
+	        prSt.setNull(3, java.sql.Types.DATE);
+	    }
+		
+        prSt.setDouble(4, donnees.getPrixAbonnement());
+
+        java.util.Date utilDate1 = donnees.getDateRegularisation();
+	    if (utilDate1 != null) {
+	        java.sql.Date sqlDate = new java.sql.Date(utilDate1.getTime());
+	        prSt.setDate(5, sqlDate);
+	    } else {
+	        prSt.setNull(5, java.sql.Types.DATE);
+	    }
 	}
 }

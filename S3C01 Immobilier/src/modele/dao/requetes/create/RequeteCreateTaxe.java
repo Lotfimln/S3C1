@@ -25,9 +25,15 @@ public class RequeteCreateTaxe implements Requete<Taxe> {
 	public void parametres(PreparedStatement prSt, Taxe donnees) throws SQLException {
 		prSt.setInt(1, donnees.getIdTaxe());
 		prSt.setDouble(2, donnees.getMontantTaxeFoncieres());
+
 		java.util.Date utilDate = donnees.getDateTaxe();
-        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-        prSt.setDate(3, sqlDate);
+	    if (utilDate != null) {
+	        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+	        prSt.setDate(3, sqlDate);
+	    } else {
+	        prSt.setNull(3, java.sql.Types.DATE);
+	    }
+		
 		prSt.setInt(4, donnees.getImmeuble().getIdImmeuble());
 	}
 }

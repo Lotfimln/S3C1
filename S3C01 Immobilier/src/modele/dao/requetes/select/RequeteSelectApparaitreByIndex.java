@@ -11,7 +11,7 @@ public class RequeteSelectApparaitreByIndex implements Requete<Apparaitre> {
 
 	@Override
 	public String requete() {
-		return "SELECT * FROM Apparaitre where Id_Index = ?";
+		return "SELECT * FROM Apparaitre where Id_Index_Compteur = ?";
 	}
 
 	@Override
