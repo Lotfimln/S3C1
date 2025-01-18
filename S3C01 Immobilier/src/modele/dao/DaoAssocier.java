@@ -76,6 +76,7 @@ public class DaoAssocier implements Dao<Associer> {
         }
     }
 
+    // Inutile
     @Override
     public Associer findById(String... id) throws SQLException {
         return null;

@@ -10,7 +10,7 @@ public class RequeteCreateAssureur implements Requete<Assureur> {
 
 	@Override
 	public String requete() {
-		return "INSERT INTO Assureur (Id_Assureur, Nom, DateAssurance, Prime) VALUES (?, ?, ?, ?)";
+		return "INSERT INTO Assureur (Id_Assureur, Nom, DateAssurance, Prime, TypeAssureur) VALUES (?, ?, ?, ?, ?)";
 	}
 
 	@Override
@@ -35,5 +35,6 @@ public class RequeteCreateAssureur implements Requete<Assureur> {
 	    }
         
         prSt.setInt(4, donnees.getPrime());
+        prSt.setString(5, donnees.getTypeAssureur());
 	}
 }

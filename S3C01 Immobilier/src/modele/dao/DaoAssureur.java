@@ -61,7 +61,7 @@ public class DaoAssureur implements Dao<Assureur> {
                         rs.getString("Nom"),
                         rs.getDate("DateAssurance"),
                         rs.getInt("Prime"),
-                        rs.getString("TypeAssurance")
+                        rs.getString("TypeAssureur")
                     );
                 }
             }
@@ -81,7 +81,7 @@ public class DaoAssureur implements Dao<Assureur> {
                     rs.getString("Nom"),
                     rs.getDate("DateAssurance"),
                     rs.getInt("Prime"),
-                    rs.getString("TypeAssurance")
+                    rs.getString("TypeAssureur")
                 ));
             }
         }
