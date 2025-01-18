@@ -143,7 +143,7 @@ BEGIN
     
     -- Récupérer la date de la dernière régularisation pour le bien
     BEGIN
-        SELECT DateRegularisation INTO v_date_derniere_regularisation
+        SELECT MAX(DateRegularisation) INTO v_date_derniere_regularisation
         FROM Associer
         WHERE Id_Louable = P_Id_Louable;
     EXCEPTION
@@ -173,7 +173,7 @@ BEGIN
         RAISE_APPLICATION_ERROR(-20012, 'La période d''occupation du bien est invalide.');
     END IF;
     
-    UPDATE Associer SET DateReleve = SYSDATE WHERE Id_Louable = P_Id_Louable AND Id_Index_Compteur = v_IndexCompteur;
+
     v_soluce := v_PrixAbonnement * v_nb_mois_utilisation + PartieVariableConso(v_IndexCompteur);
     RETURN v_soluce;
 
@@ -186,213 +186,34 @@ EXCEPTION
 END PrixConsoLogement;
 /
 
-
 -------------------------------------------------------------------------------
-------------- CALCUL LA CONSOMMATION D'UN SEUL BIEN A PARTIR DU ---------------
----------- MONTANT DE LA DERNIERE FACTURE DE L'IMMEUBLE, PRENANT EN -----------
--------------------------- COMPTE LA QUOTITE ----------------------------------
--------------------------------------------------------------------------------
--- Fonction pour calculer le prix total de la consommation pour un logement
--- en prenant en compte la quotité du bien pour un type de compteur spécifique
-CREATE OR REPLACE FUNCTION PrixConsoLogementQuotite(
-    p_Id_Bien IN Bien.Id_Bien%TYPE,
-    p_Id_Compteur IN Compteur.Id_Compteur%TYPE
-) RETURN NUMBER
-IS
-    -- Déclaration des variables
-    v_ConsommationLogement NUMBER := 0;  -- Initialiser à 0 en cas d'absence de facture
-    v_Quotite NUMBER(20, 10);
-    v_TypeQuotite VARCHAR2(50);
-    v_TypeCompteur COMPTEUR.typeComp%TYPE;
-    v_PrixConsommationTotale NUMBER;
-
-BEGIN
-    -- Récupérer le type de compteur
-    SELECT typeComp 
-    INTO v_TypeCompteur
-    FROM Compteur 
-    WHERE Id_Compteur = p_Id_Compteur;
-
-    -- Récupérer la quotité du bien
-    SELECT pourcentage, type_quotite
-    INTO v_Quotite, v_TypeQuotite
-    FROM Quotter
-    WHERE Id_Bien = p_Id_Bien
-    AND type_quotite = v_TypeCompteur;
-
-    -- Vérifier si la quotité a été trouvée
-    IF v_Quotite IS NULL THEN
-        -- Si non, générer une erreur personnalisée
-        RAISE_APPLICATION_ERROR(-20001, 'Quotité non trouvée pour le bien donné et le type de compteur spécifié.');
-    END IF;
-
-    -- Récupérer le montant de la dernière facture de type de compteur pour l'immeuble
-    BEGIN
-        SELECT NVL(SUM(montant), 0)  -- Utiliser NVL pour remplacer NULL par 0
-        INTO v_PrixConsommationTotale
-        FROM Facture
-        WHERE Id_Immeuble = (SELECT Id_Immeuble FROM Bien WHERE Id_Bien = p_Id_Bien)
-          AND designation = v_TypeCompteur
-          AND date_emission > (SELECT date_derniere_reg FROM Louer WHERE Id_Bien = p_Id_Bien);
-
-    EXCEPTION
-        WHEN NO_DATA_FOUND THEN
-            -- Gérer le cas où aucune donnée n'est trouvée
-            DBMS_OUTPUT.PUT_LINE('Aucune facture trouvée pour le type de compteur spécifié.');
-            RETURN 0;
-        WHEN OTHERS THEN
-            -- Gérer les autres exceptions
-            RAISE_APPLICATION_ERROR(-20004, 'Erreur lors de la récupération du montant de la facture.');
-    END;
-
-    -- Vérifier si la consommation est nulle ou négative
-    IF v_PrixConsommationTotale < 0 THEN
-        -- Si oui, générer une erreur personnalisée
-        RAISE_APPLICATION_ERROR(-20005, 'Montant de la facture invalide.');
-    END IF;
-
-    -- Calculer le prix de la consommation en prenant en compte la quotité
-    v_ConsommationLogement := v_PrixConsommationTotale * (v_Quotite / 100);
-
-    -- Retourner le prix de la consommation
-    RETURN v_ConsommationLogement;
-
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        -- Gérer le cas où aucune donnée trouvée pour le compteur spécifié
-        RETURN 0; -- On en a besoin car cette fonction est appelée dans les fonctions suivantes
-        RAISE_APPLICATION_ERROR(-20002, 'Aucune donnée trouvée.');
-    WHEN OTHERS THEN
-        -- Gérer les autres exceptions
-        RAISE_APPLICATION_ERROR(-20006, 'Une erreur s''est produite : ' || SQLERRM);
-        RETURN NULL;
-END;
-/
-
----------------------- Bloc anonyme pour tester la fonction—---------------------------
-DECLARE
-    v_PrixConsommation NUMBER;
-BEGIN
-    -- Appeler la fonction CalculerConsommationBien
-    v_PrixConsommation := PrixConsoLogementQuotite('B004', 'ComptImmCompans_EauGeneral');
-
-    IF v_PrixConsommation IS NOT NULL THEN
-        DBMS_OUTPUT.PUT_LINE('PrixConsoLogementQuotite : ' || v_PrixConsommation);
-    ELSE
-        DBMS_OUTPUT.PUT_LINE('Erreur');
-    END IF;
-END;
-/
-
-
--------------------------------------------------------------------------------
--------------- CALCUL LA CONSOMMATION D'UN SEUL BIEN A PARTIR DU --------------
---------------------- COMPTEUR, EN FONCTION DE SON TYPE -----------------------
--------------------------------------------------------------------------------
--- Fonction pour calculer la consommation d'un bien à partir d'un compteur
--- en focntion de son type (propre au bine, ou général)
-CREATE OR REPLACE FUNCTION CalculerConsoBien(
-    p_Id_immeuble IN Compteur.Id_immeuble%TYPE,
-    p_Id_Bien IN Compteur.Id_Bien%TYPE,
-    p_Id_Compteur IN Compteur.Id_Compteur%TYPE
-) RETURN NUMBER
-IS
-    -- Déclaration des variables
-    v_Id_Bien_compteur Compteur.Id_Bien%TYPE;
-    v_Id_immeuble_compteur Compteur.Id_Immeuble%TYPE;
-BEGIN
-    -- Vérifier si l'immeuble existe
-    SELECT Id_Immeuble
-    INTO v_Id_immeuble_compteur
-    FROM Compteur
-    WHERE Id_Compteur = p_Id_Compteur;
-
-    -- Vérifier si le bien existe dans l'immeuble spécifié
-    SELECT Id_Bien
-    INTO v_Id_Bien_compteur
-    FROM Compteur
-    WHERE Id_Compteur = p_Id_Compteur;
-
-    -- Gérer le cas où le bien n'appartient pas à l'immeuble indiqué
-    IF v_Id_immeuble_compteur IS NOT NULL AND v_Id_immeuble_compteur <> p_Id_immeuble THEN
-        -- Si oui, générer une erreur personnalisée
-        RAISE_APPLICATION_ERROR(-20012, 'Le bien spécifié n''appartient pas à l''immeuble indiqué.');
-    END IF;
-
-    -- Vérifier si le compteur est propre (lié à un bien spécifique)
-    IF v_Id_Bien_compteur IS NOT NULL AND v_Id_immeuble_compteur IS NULL THEN
-        -- Appeler la fonction PrixConsoLogement
-        RETURN PrixConsoLogement(p_Id_Compteur);
-    -- Si le compteur est général (lié à un immeuble)
-    ELSIF v_Id_Bien_compteur IS NULL AND v_Id_immeuble_compteur IS NOT NULL THEN
-        -- Appeler la fonction PrixConsoLogementQuotite
-        RETURN PrixConsoLogementQuotite(p_Id_Bien, p_Id_Compteur);
-    END IF;
-
-    -- Gérer les autres exceptions
-    RAISE_APPLICATION_ERROR(-20007, 'Erreur lors du calcul de la consommation.');
-
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        -- Gérer le cas où aucune donnée trouvée pour le compteur spécifié
-        RETURN 0; -- On en a besoin car cette fonction est appelée dans les fontions prochaines
-    WHEN OTHERS THEN
-        -- Gérer les autres exceptions en affichant le message d'erreur d'origine
-        RAISE_APPLICATION_ERROR(-20009, 'Une erreur s''est produite : ' || SQLERRM);
-        RETURN NULL;
-END;
-/
-
-
------------------------ Bloc anonyme pour tester la fonction—---------------------------
-DECLARE
-    v_PrixConsommation NUMBER(15, 2);
-BEGIN
-    -- Appeler la fonction CalculerConsommationBien
-    v_PrixConsommation := CalculerConsoBien('Compans_Caffarelli_8','B004', 'ComptImmCompans_EauGeneral');
-
-    IF v_PrixConsommation IS NOT NULL THEN
-        DBMS_OUTPUT.PUT_LINE('CalculerConsoBien : ' || v_PrixConsommation);
-    ELSE
-        DBMS_OUTPUT.PUT_LINE('Erreur');
-    END IF;
-END;
-/
-
--------------------------------------------------------------------------------
--------------- CALCUL LA CONSOMMATION REELLEES DES CHARGES  ------------------
+-------------- CALCUL LA CONSOMMATION DES CHARGES PAR IMMEUBLE  ---------------
 --------------------- (eau, gaz, electricite) --------------------------------
-------------------EN UTILISANT LES INDEX DES COMPTEURS-------------------------
 -------------------------------------------------------------------------------
--- Fonction pour calculer la somme totale des consommations réelles
--- liées à un immeuble ou à un bien spécifique
-CREATE OR REPLACE FUNCTION TOTALChargesReelles (
-    p_Id_immeuble IN Bien.Id_Immeuble%TYPE DEFAULT NULL,
-    p_Id_Bien IN Bien.Id_Bien%TYPE DEFAULT NULL
+CREATE OR REPLACE FUNCTION TOTALChargesImmeuble (
+    p_Id_immeuble IN Immeuble.Id_Immeuble%TYPE
 ) RETURN NUMBER
 IS
     -- Variable pour stocker la somme totale des consommations
     v_TotalConsommation NUMBER := 0;
 
     -- Déclarer les variables pour stocker les résultats des requêtes
-    v_Id_Compteur Compteur.Id_Compteur%TYPE;
-    v_ConsommationCompteur NUMBER;
+    v_ConsommationLouable NUMBER;
 
     -- Curseurs pour récupérer les compteurs liés à l'immeuble ou au bien
-    CURSOR cur_Compteurs IS
-        SELECT Id_Compteur
-        FROM Compteur
-        WHERE (Id_Immeuble = p_Id_immeuble AND Id_Bien IS NULL)
-           OR (Id_Bien = p_Id_Bien AND Id_Immeuble IS NULL);
+    CURSOR cur_Immeuble IS
+        SELECT Id_Louable
+        FROM Louable
+        WHERE Id_Immeuble = p_Id_immeuble;
 
 BEGIN
     -- Boucle à travers les compteurs sélectionnés
-    FOR rec_Compteur IN cur_Compteurs LOOP
+    FOR rec_Immeuble IN cur_Immeuble LOOP
         -- Appeler la fonction CalculerConsoBien pour chaque compteur
-        v_ConsommationCompteur := CalculerConsoBien(p_Id_immeuble, p_Id_Bien, rec_Compteur.Id_Compteur);
+        v_ConsommationLouable := PrixConsoLogement(rec_Immeuble.Id_Louable);
         
         -- Ajouter la consommation du compteur à la somme totale (en tenant compte des valeurs nulles)
-        v_TotalConsommation := v_TotalConsommation + COALESCE(v_ConsommationCompteur, 0);
+        v_TotalConsommation := v_ConsommationLouable;
     END LOOP;
 
     -- Retourner la somme totale des consommations
@@ -403,22 +224,9 @@ EXCEPTION
         -- Gérer les autres exceptions
         DBMS_OUTPUT.PUT_LINE('Une erreur s''est produite : ' || SQLERRM);
         RETURN NULL;
-END TOTALChargesReelles;
+END TOTALChargesImmeuble;
 /
 
-
------------------------ Bloc anonyme pour tester la fonction—---------------------------
-
-DECLARE
-    v_TotalConsommation NUMBER;
-BEGIN
-    -- Appel de la fonction pour un immeuble spécifique (remplacez l'ID de l'immeuble)
-    v_TotalConsommation := TOTALChargesReelles('Compans_Caffarelli_8', 'B004');
-
-    -- Affichage du résultat
-    DBMS_OUTPUT.PUT_LINE('Total des charges réelles pour l''immeuble : ' || v_TotalConsommation);
-END;
-/
 
 
 -------------------------------------------
@@ -429,45 +237,41 @@ END;
 -- Elle utilise la différence en mois entre la date actuelle et la date de la dernière régularisation
 -- multipliée par le montant mensuel de la provision
 CREATE OR REPLACE FUNCTION totalProvisions (
-    p_id_Bien IN LOUER.Id_Bien%type
+    p_id_Louable IN Louable.Id_Louable%TYPE
 ) RETURN NUMBER
 IS
-    -- Déclaration de la variable pour stocker le total des provisions
-    v_total_provisions NUMBER(15,2) := 0;
-    BEGIN
-        -- Calcul du total des provisions pour le locataire spécifié
-        SELECT NVL(SUM((MONTHS_BETWEEN(SYSDATE, date_derniere_reg) * provision_chargeMens_TTC)), 0)
-        INTO v_total_provisions
-        FROM Louer
-        WHERE Id_Bien = p_id_Bien;
-        
-        -- Retourner le total des provisions calculé
-        RETURN v_total_provisions;
-        
-        EXCEPTION
-        WHEN NO_DATA_FOUND THEN
-            -- Gérer le cas où aucune donnée n'est trouvée
-            DBMS_OUTPUT.PUT_LINE('Aucune donnée trouvée pour le bien spécifié.');
-            RETURN 0;
-        WHEN OTHERS THEN
-            -- Gérer les autres exceptions
-            RAISE_APPLICATION_ERROR(-20001, 'Une erreur s''est produite : ' || SQLERRM);
-            RETURN NULL;
+    -- Variable pour stocker le total des provisions
+    v_total_provisions NUMBER(15, 2) := 0;
+    -- Variable pour stocker la date du dernier relev�
+    v_date_derniere_releve DATE;
+BEGIN
+    -- R�cup�rer la date du dernier relev� pour le bien lou� sp�cifi�
+    SELECT MAX(DateReleve)
+    INTO v_date_derniere_releve
+    FROM Associer
+    WHERE Id_Louable = p_id_Louable;
+
+    -- Calcul du total des provisions bas�es sur la date du dernier relev�
+    SELECT NVL(SUM((MONTHS_BETWEEN(SYSDATE, v_date_derniere_releve) * ProvisionsCharges)), 0)
+    INTO v_total_provisions
+    FROM Contrat_de_location
+    WHERE Id_Louable = p_id_Louable
+      AND (DateFin IS NULL OR DateFin > SYSDATE);
+
+    -- Retourner le total des provisions calcul�es
+    RETURN v_total_provisions;
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        -- Aucun relev� ou contrat trouv� pour le bien lou� sp�cifi�
+        DBMS_OUTPUT.PUT_LINE('Aucune donn�e trouv�e pour le bien lou� sp�cifi�.');
+        RETURN 0;
+    WHEN OTHERS THEN
+        -- G�rer toute autre exception
+        RAISE_APPLICATION_ERROR(-20001, 'Une erreur s''est produite : ' || SQLERRM);
+        RETURN NULL;
 END totalProvisions;
 /
-
----------------------- Bloc anonyme pour tester la fonction—---------------------------
-DECLARE
-    v_result NUMBER(15,2);
-BEGIN
-    -- Appel de la fonction totalProvisions avec un ID de locataire spécifique
-    v_result := totalProvisions('B004');
-
-    -- Affichage du résultat
-    DBMS_OUTPUT.PUT_LINE('Total des provisions : ' || v_result);
-END;
-/
-
 
 -------------------------------------
 -- SOMMES TOTAL ORDURES MENAGERES ---
@@ -477,105 +281,80 @@ END;
 -- Elle récupère la somme des montants des factures émises entre la date de la dernière régularisation et la date actuelle
 -- pour le bien spécifié, avec la désignation 'Ordures ménagères'.
 CREATE OR REPLACE FUNCTION totalOrduresMenageres (
-    p_Id_Bien IN LOUER.Id_Bien%type
+    p_Id_Louable IN Louable.Id_Louable%TYPE
 ) RETURN NUMBER
 IS
-    v_total_charges NUMBER := 0; -- Variable pour stocker le total des charges réelles
+    v_total_charges NUMBER := 0; -- Variable pour stocker le total des charges
+    v_superficie_appt NUMBER(10, 3); -- Superficie du bien louable
 BEGIN
-    -- Calcul du total des charges réelles pour le locataire spécifié
-    SELECT NVL(SUM(f.montant), 0)
+    -- R�cup�rer la superficie du bien louable
+    SELECT Superficie
+    INTO v_superficie_appt
+    FROM Louable
+    WHERE Id_Louable = p_Id_Louable;
+
+    -- Calcul du total des charges d'ordures m�nag�res
+    SELECT NVL(SUM(f.Montant * (v_superficie_appt / (
+                SELECT SUM(L.Superficie)
+                FROM Louable L
+                WHERE L.Id_Immeuble = (SELECT Id_Immeuble FROM Louable WHERE Id_Louable = p_Id_Louable)
+            ))), 0)
     INTO v_total_charges
-    FROM FACTURE f, Louer l
-    WHERE p_Id_Bien = l.Id_Bien
-    AND l.Id_Bien = f.Id_Bien
-    AND f.date_emission BETWEEN l.date_derniere_reg AND SYSDATE 
-    AND f.designation IN ('Ordures ménagères');
-    
-    -- Retourner le total des charges réelles calculé
+    FROM Facture f
+    WHERE f.Id_Louable = p_Id_Louable
+      AND f.DateFacture BETWEEN (
+            SELECT MAX(DateRegularisation) FROM Associer WHERE Id_Louable = p_Id_Louable
+        ) AND SYSDATE
+      AND f.ReferenceDevis = 'Ordures m�nag�res'; -- D�signation sp�cifique pour les ordures m�nag�res
+
+    -- Retourner le total des charges calcul�es
     RETURN v_total_charges;
-    
-    EXCEPTION
+
+EXCEPTION
     WHEN NO_DATA_FOUND THEN
-        -- Gérer le cas où aucune donnée n'est trouvée
-        DBMS_OUTPUT.PUT_LINE('Aucune donnée trouvée pour le bien spécifié.');
+        -- G�rer le cas o� aucune donn�e n'est trouv�e
+        DBMS_OUTPUT.PUT_LINE('Aucune donn�e trouv�e pour le bien lou� sp�cifi�.');
         RETURN 0;
     WHEN OTHERS THEN
-        -- Gérer les autres exceptions
+        -- G�rer les autres exceptions
         RAISE_APPLICATION_ERROR(-20001, 'Une erreur s''est produite : ' || SQLERRM);
         RETURN NULL;
 END totalOrduresMenageres;
 /
 
------------------------ Bloc anonyme pour tester la fonction—---------------------------
-DECLARE
-    v_result NUMBER;
-BEGIN
-    -- Appel de la fonction totalOrduresMenageres avec un ID de locataire spécifique
-    v_result := totalOrduresMenageres('B010');
-    
-    -- Affichage du résultat
-    DBMS_OUTPUT.PUT_LINE('Total des charges réelles : ' || v_result);
-END;
-/
+
 
 ----------------------------------
--------- LOYERS RESTANTS DU ------
--- prendre tous types de charges --
+-------- LOYERS DE L'IMMEUBLE------
 ----------------------------------
--- Fonction pour calculer le montant restant dû pour les loyers réels d'un bien loué spécifié
--- Elle récupère le total des loyers réels émis entre la date de la dernière régularisation et la date actuelle,
--- puis soustrait le total des loyers réellement payés sur la même période
-CREATE OR REPLACE FUNCTION restantDuLoyers (
-    p_Id_Bien IN LOUER.Id_Bien%type
+CREATE OR REPLACE FUNCTION totalLoyersPayes (
+    p_Id_Immeuble IN Immeuble.Id_Immeuble%TYPE
 ) RETURN NUMBER
 IS
-    v_totalLoyerReels NUMBER := 0;
-    v_totalLoyerPayes NUMBER := 0;
+    -- Variable pour stocker le total des loyers pay�s
+    v_totalLoyersPayes NUMBER := 0;
 BEGIN
-    -- Calcul du total des loyers reels pour le locataire spécifié
-    SELECT NVL(SUM(f.montant), 0)
-    INTO v_totalLoyerReels
-    FROM FACTURE f, Louer l
-    WHERE p_Id_Bien = l.Id_Bien
-    AND l.Id_Bien = f.Id_Bien
-    AND f.date_emission BETWEEN l.date_derniere_reg AND SYSDATE 
-    AND f.designation IN ('Loyer');
-    
-    -- Calcul du total des loyers payes pour le locataire spécifié
-    SELECT NVL(SUM(f.montant_reel_paye), 0)
-    INTO v_totalLoyerPayes
-    FROM FACTURE f, Louer l
-    WHERE p_Id_Bien = l.Id_Bien
-    AND l.Id_Bien = f.Id_Bien
-    AND f.date_emission BETWEEN l.date_derniere_reg AND SYSDATE 
-    AND f.designation IN ('Loyer');
-    
-    -- Retourner le total des charges réelles calculé
-    RETURN v_totalLoyerReels - v_totalLoyerPayes;
-    
+    -- Calcul du total des loyers pay�s pour tous les logements associ�s � l'immeuble
+    SELECT NVL(SUM(q.MontantLoyer), 0)
+    INTO v_totalLoyersPayes
+    FROM Quittances q
+    JOIN Contrat_de_location cdl ON q.Id_Contrat_de_location = cdl.Id_Contrat_de_location
+    JOIN Louable l ON cdl.Id_Louable = l.Id_Louable
+    WHERE l.Id_Immeuble = p_Id_Immeuble;
+
+    -- Retourner le total des loyers pay�s
+    RETURN v_totalLoyersPayes;
+
 EXCEPTION
     WHEN NO_DATA_FOUND THEN
-        -- Gérer le cas où aucune donnée n'est trouvée
-        DBMS_OUTPUT.PUT_LINE('Aucune donnée trouvée pour le bien spécifié.');
+        -- G�rer le cas o� aucune donn�e n'est trouv�e
+        DBMS_OUTPUT.PUT_LINE('Aucune donn�e trouv�e pour l''immeuble sp�cifi�.');
         RETURN 0;
     WHEN OTHERS THEN
-        -- Gérer les autres exceptions
+        -- G�rer toute autre exception
         RAISE_APPLICATION_ERROR(-20001, 'Une erreur s''est produite : ' || SQLERRM);
         RETURN NULL;
-        
-END restantDuLoyers;
-/
-
------------------------ Bloc anonyme pour tester la fonction—---------------------------
-DECLARE
-    v_result NUMBER;
-BEGIN
-    -- Appel de la fonction totalChargesRéelles avec un ID de locataire spécifique
-    v_result := restantDuLoyers('B005');
-    
-    -- Affichage du résultat
-    DBMS_OUTPUT.PUT_LINE('restantDuLoyers : ' || v_result);
-END;
+END totalLoyersPayes;
 /
 
 
@@ -586,104 +365,156 @@ END;
 -- Elle récupère le total des travaux émis pour le bien spécifié et l'immeuble associé,
 -- puis retourne la somme des deux
 CREATE OR REPLACE FUNCTION totalDesTravauxBienEtImmeuble(
-    p_Id_Bien IN BIEN.Id_Bien%TYPE
+    p_Id_Louable IN Louable.Id_Louable%TYPE
 )
 RETURN NUMBER 
 IS 
-    v_total_bien NUMBER := 0;       -- Initialisation de la somme des travaux pour le bien
-    v_total_immeuble NUMBER := 0;   -- Initialisation de la somme des travaux pour l'immeuble
-    v_id_immeuble BIEN.Id_Immeuble%TYPE;  -- Variable pour stocker l'ID de l'immeuble associé au bien
+    v_total_bien NUMBER := 0;       -- Somme des travaux pour le bien louable
+    v_total_immeuble NUMBER := 0;   -- Somme des travaux pour l'immeuble associ�
+    v_id_immeuble Immeuble.Id_Immeuble%TYPE;  -- ID de l'immeuble associ� au bien louable
 BEGIN 
-    -- Calculer la somme des travaux pour le bien
-    SELECT COALESCE(SUM(montant), 0) INTO v_total_bien
-    FROM facture f
-    WHERE f.id_bien IS NOT NULL
-    AND f.id_bien = p_Id_Bien
-    AND f.designation = 'Travaux';
+    -- Calculer la somme des travaux pour le bien louable
+    SELECT NVL(SUM(f.Montant), 0)
+    INTO v_total_bien
+    FROM Facture f
+    WHERE f.Id_Louable IS NOT NULL
+      AND f.Id_Louable = p_Id_Louable
+      AND f.ReferenceDevis = 'Travaux'; -- Filtrer les factures de travaux
 
-    -- Rechercher l'immeuble où se trouve le bien 
-    SELECT ID_Immeuble INTO v_id_immeuble FROM BIEN WHERE Id_Bien = p_Id_Bien; 
-    
+    -- R�cup�rer l'ID de l'immeuble associ� au bien louable
+    SELECT Id_Immeuble
+    INTO v_id_immeuble
+    FROM Louable
+    WHERE Id_Louable = p_Id_Louable;
+
     -- Calculer la somme des travaux pour l'immeuble
-    SELECT COALESCE(SUM(montant), 0) INTO v_total_immeuble
-    FROM facture f
-    WHERE f.id_immeuble IS NOT NULL
-    AND f.id_immeuble = v_id_immeuble
-    AND f.designation = 'Travaux';
+    SELECT NVL(SUM(f.Montant), 0)
+    INTO v_total_immeuble
+    FROM Facture f
+    WHERE f.Id_Louable IS NULL -- Factures g�n�rales � l'immeuble
+      AND f.Id_Entreprise IS NOT NULL -- Factures directement li�es � des travaux d'immeuble
+      AND f.ReferenceDevis = 'Travaux';
 
-    -- Retourner la somme totale des travaux pour le bien et son immeuble
+    -- Retourner la somme totale des travaux
     RETURN v_total_bien + v_total_immeuble;
 
 EXCEPTION
     WHEN NO_DATA_FOUND THEN
-        --- Gérer le cas où aucune donnée n'est trouvée
-        DBMS_OUTPUT.PUT_LINE('Aucune donnée trouvée pour le bien spécifié.');
+        -- G�rer le cas o� aucune donn�e n'est trouv�e
+        DBMS_OUTPUT.PUT_LINE('Aucune donn�e trouv�e pour le bien sp�cifi�.');
         RETURN 0;
     WHEN OTHERS THEN
+        -- G�rer d'autres exceptions
+        RAISE_APPLICATION_ERROR(-20001, 'Une erreur s''est produite : ' || SQLERRM);
         RETURN NULL;
 END;
 /
 
------------------------ Bloc anonyme pour tester la fonction—---------------------------
-DECLARE
-    v_result NUMBER;
-    v_id_bien BIEN.Id_Bien%TYPE := 'B009';
+
+---------------------------------------------------------
+------------- CALCUL FACTURES IMPAYES ---------------
+---------------------------------------------------------
+CREATE OR REPLACE FUNCTION totalFactureImpayees RETURN NUMBER IS
+    v_somme NUMBER := 0;  -- Variable pour stocker la somme des factures non pay�es
 BEGIN
-    v_result := totalDesTravauxBienEtImmeuble(p_Id_Bien => v_id_bien);
-    DBMS_OUTPUT.PUT_LINE('Le total des travaux est : ' || TO_CHAR(v_result));
-EXCEPTION
-    WHEN OTHERS THEN
-        DBMS_OUTPUT.PUT_LINE('Erreur : ' || SQLERRM);
-END;
-/
-
----------------------------------------------------------
-------------- CALCUL TRAVAUX IMPUTABLES ---------------
----------------------------------------------------------
--- Fonction pour calculer la somme totale des travaux imputables au locataire pour un bien spécifié
--- Elle récupère le total des travaux émis pour le bien spécifié qui sont imputables au locataire,
--- puis retourne cette somme
-CREATE OR REPLACE FUNCTION totalTravauxImputableLocataire(
-    p_Id_Bien IN BIEN.Id_Bien%TYPE
-)
-RETURN NUMBER 
-IS 
-    v_total_bien NUMBER := 0;       
-BEGIN 
-    -- Calculer la somme des travaux imputables au locataire pour le bien
-    SELECT COALESCE(SUM(montant), 0) INTO v_total_bien
-    FROM facture f
-    WHERE f.id_bien IS NOT NULL
-    AND f.id_bien = p_Id_Bien
-    AND f.imputable_locataire = 1
-    AND f.designation = 'Travaux';
+    -- Calcule la somme des factures non pay�es
+    SELECT SUM(Montant) 
+    INTO v_somme
+    FROM Facture
+    WHERE DatePaiement IS NULL;
     
-    -- Retourner la somme totale des travaux imputables au locataire pour le bien
-    RETURN v_total_bien ;
-
+    -- Retourne le r�sultat
+    RETURN v_somme;
 EXCEPTION
     WHEN NO_DATA_FOUND THEN
-        -- Gérer le cas où aucune donnée n'est trouvée
-        DBMS_OUTPUT.PUT_LINE('Aucune donnée trouvée pour le bien spécifié.');
+        -- Si aucune facture non pay�e n'est trouv�e, retourner 0
         RETURN 0;
     WHEN OTHERS THEN
-        -- Gérer les autres exceptions
-        RETURN NULL;
+        -- G�rer les autres exceptions
+        RAISE;
 END;
 /
 
------------------------ Bloc anonyme pour tester la fonction—---------------------------
-DECLARE
-    v_result NUMBER;
-    v_id_bien BIEN.Id_Bien%TYPE := '8-RC'; -- Remplacez 'B009' par un ID existant
+----------------------------------------------
+---------- RECUPERATION LOYERS IMPAYES --------
+----------------------------------------------
+CREATE OR REPLACE FUNCTION GenererDatesLoyers(Id_Louable INT) RETURN SYS_REFCURSOR IS
+    v_cursor SYS_REFCURSOR;
 BEGIN
-    v_result := totalTravauxImputableLocataire(p_Id_Bien => v_id_bien);
-    DBMS_OUTPUT.PUT_LINE('Le total des travaux imputables au locataire est : ' || TO_CHAR(v_result));
+    -- Cr�ation du curseur pour g�n�rer les dates mensuelles
+    OPEN v_cursor FOR
+    SELECT TRUNC(ADD_MONTHS(l.DateAcquisition, LEVEL - 1), 'MM') AS Date_Loyer
+    FROM Louable l
+    WHERE l.Id_Louable = Id_Louable
+    CONNECT BY PRIOR l.Id_Louable = l.Id_Louable
+        AND ADD_MONTHS(l.DateAcquisition, LEVEL - 1) <= SYSDATE
+    AND LEVEL <= MONTHS_BETWEEN(SYSDATE, l.DateAcquisition) + 1
+    ORDER BY Date_Loyer;
+
+    RETURN v_cursor;
 EXCEPTION
     WHEN OTHERS THEN
-        DBMS_OUTPUT.PUT_LINE('Erreur : ' || SQLERRM);
+        -- G�rer les exceptions
+        RAISE;
 END;
 /
+
+CREATE OR REPLACE FUNCTION ListerLoyersImpayees RETURN SYS_REFCURSOR IS
+    v_cursor SYS_REFCURSOR;
+    v_dates_cursor SYS_REFCURSOR;
+    v_date_loyer DATE;
+    v_id_louable INT;
+    v_adresse VARCHAR2(50);
+BEGIN
+    -- Cr�ation du curseur principal pour r�cup�rer les loyers impay�s
+    OPEN v_cursor FOR
+    SELECT l.Id_Louable, l.Adresse
+    FROM Louable l
+    WHERE l.DateAcquisition <= SYSDATE
+    ORDER BY l.Id_Louable;
+
+    -- Parcours des r�sultats pour r�cup�rer les loyers impay�s
+    LOOP
+        FETCH v_cursor INTO v_id_louable, v_adresse;
+        EXIT WHEN v_cursor%NOTFOUND;
+        
+        -- Utilisation de la fonction GenererDatesLoyers pour r�cup�rer les dates
+        v_dates_cursor := GenererDatesLoyers(v_id_louable);
+        
+        -- Parcours des dates g�n�r�es pour v�rifier les paiements
+        LOOP
+            FETCH v_dates_cursor INTO v_date_loyer;
+            EXIT WHEN v_dates_cursor%NOTFOUND;
+            
+            -- V�rifier si le paiement est manquant pour cette date
+            IF NOT EXISTS (
+                SELECT 1
+                FROM Quittances q
+                WHERE q.Id_Contrat_de_location IN (SELECT Id_Contrat_de_location FROM Correspondre WHERE Id_Locataire = q.Id_Locataire)
+                AND TRUNC(q.DatePaiement, 'MM') = v_date_loyer
+            ) THEN
+                -- Si pas de paiement trouv�, afficher le loyer impay�
+                DBMS_OUTPUT.PUT_LINE('Id_Louable: ' || v_id_louable || ', Adresse: ' || v_adresse || ', Date Loyer Impay�: ' || v_date_loyer);
+            END IF;
+        END LOOP;
+
+        CLOSE v_dates_cursor;
+    END LOOP;
+
+    CLOSE v_cursor;
+    RETURN NULL;  -- Aucun curseur de retour dans cette version, mais la logique peut �tre �tendue
+EXCEPTION
+    WHEN OTHERS THEN
+        -- G�rer les exceptions
+        RAISE;
+END;
+/
+
+
+
+
+
+
 
 
 ----------------------------------------------
@@ -745,19 +576,6 @@ EXCEPTION
         -- Gérer toutes les autres exceptions
         RAISE_APPLICATION_ERROR(-20003, 'Erreur inattendue : ' || SQLERRM);
 END calculerRegularisationCharges;
-/
-
-
------------------------ Bloc anonyme pour tester la fonction ---------------------------
-DECLARE
-    v_result NUMBER;
-BEGIN
-    -- Appel de la fonction totalProvisions avec un ID du bien spécifique
-    v_result := calculerRegularisationCharges('BienD', 'Roy_Anthony', '05/02/23');
-
-    -- Affichage du résultat
-    DBMS_OUTPUT.PUT_LINE('Total des charges régularisées : ' || v_result);
-END;
 /
 
 ----------------------------------------------
@@ -845,17 +663,3 @@ EXCEPTION
         RAISE_APPLICATION_ERROR(-20003, 'Erreur inattendue : ' || SQLERRM);
 END calculerSoldeDeToutCompte;
 /
-
-
------------------------ Bloc anonyme pour tester la fonction ---------------------------
-DECLARE
-    v_result NUMBER;
-BEGIN
-    -- Appel de la fonction totalProvisions avec un ID du bien spécifique
-    v_result := calculerSoldeDeToutCompte('BienA', 'Roy_Anthony', '05/02/23');
-
-    -- Affichage du résultat
-    DBMS_OUTPUT.PUT_LINE('calculerSoldeDeToutCompte : ' || v_result);
-END;
-/
-

@@ -43,6 +43,7 @@ create table Assureur(
     Nom VARCHAR2(50),
     DateAssurance DATE,
     Prime NUMBER,
+    TypeAssurance VARCHAR(15), --soit propriétaire ou aide juridique 
     constraint pk_assu primary key(Id_Assureur)
 );
 
@@ -236,10 +237,10 @@ INSERT INTO Immeuble (Id_Immeuble, Adresse)
 VALUES (2, '5 Avenue des Champs');
 
 -- Table Assureur
-INSERT INTO Assureur (Id_Assureur, Nom, DateAssurance, Prime)
-VALUES (1, 'Assureur Plus', TO_DATE('2023-01-01', 'YYYY-MM-DD'), 1000);
-INSERT INTO Assureur (Id_Assureur, Nom, DateAssurance, Prime)
-VALUES (2, 'Sécurimmo', TO_DATE('2023-06-15', 'YYYY-MM-DD'), 1500);
+INSERT INTO Assureur (Id_Assureur, Nom, DateAssurance, Prime, TypeAssurance)
+VALUES (1, 'Assureur Plus', TO_DATE('2023-01-01', 'YYYY-MM-DD'), 1000, 'aide juridique');
+INSERT INTO Assureur (Id_Assureur, Nom, DateAssurance, Prime, TypeAssurance)
+VALUES (2, 'Sécurimmo', TO_DATE('2023-06-15', 'YYYY-MM-DD'), 1500, ' propriétaire');
 
 -- Table Entreprise
 INSERT INTO Entreprise (Id_Entreprise, Nom, SIREN, Adresse)
@@ -340,10 +341,10 @@ INSERT INTO Immeuble (Id_Immeuble, Adresse)
 VALUES (4, '45 Allée des Acacias');
 
 -- Table Assureur
-INSERT INTO Assureur (Id_Assureur, Nom, DateAssurance, Prime)
-VALUES (3, 'HabitatSecure', TO_DATE('2022-05-01', 'YYYY-MM-DD'), 2000);
-INSERT INTO Assureur (Id_Assureur, Nom, DateAssurance, Prime)
-VALUES (4, 'ProtégerPlus', TO_DATE('2023-08-15', 'YYYY-MM-DD'), 1800);
+INSERT INTO Assureur (Id_Assureur, Nom, DateAssurance, Prime, TypeAssurance)
+VALUES (3, 'HabitatSecure', TO_DATE('2022-05-01', 'YYYY-MM-DD'), 2000, 'propriétaire');
+INSERT INTO Assureur (Id_Assureur, Nom, DateAssurance, Prime, TypeAssurance)
+VALUES (4, 'ProtégerPlus', TO_DATE('2023-08-15', 'YYYY-MM-DD'), 1800, ' propriétaire');
 
 -- Table Entreprise
 INSERT INTO Entreprise (Id_Entreprise, Nom, SIREN, Adresse)
@@ -429,5 +430,3 @@ VALUES ('L003', 3);
 INSERT INTO Correspondre (Id_Locataire, Id_Contrat_de_location)
 VALUES ('L004', 4);
 
-
-delete from Facture where Id_Facture = 1;
