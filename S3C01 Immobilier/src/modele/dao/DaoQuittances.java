@@ -13,7 +13,9 @@ import modele.Quittances;
 import modele.dao.requetes.create.RequeteCreateQuittances;
 import modele.dao.requetes.delete.RequeteDeleteQuittances;
 import modele.dao.requetes.select.RequeteSelectQuittances;
+import modele.dao.requetes.select.RequeteSelectQuittancesByContratDeLocation;
 import modele.dao.requetes.select.RequeteSelectQuittancesByID;
+import modele.dao.requetes.select.RequeteSelectQuittancesByLocataire;
 import modele.dao.requetes.update.RequeteUpdateQuittances;
 
 public class DaoQuittances implements Dao<Quittances> {
@@ -87,6 +89,58 @@ public class DaoQuittances implements Dao<Quittances> {
 	    DaoContratDeLocation daoContratDeLocation = new DaoContratDeLocation(this.connection);
 
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectAll.requete());
+				ResultSet rs = prSt.executeQuery()) {
+			while (rs.next()) {
+				String idLocataire = rs.getString("Id_Locataire");
+                int idContratDeLocation = rs.getInt("Id_Contrat_de_location");
+                Locataire locataire = daoLocataire.findById(String.valueOf(idLocataire));
+                ContratDeLocation contratDeLocation = daoContratDeLocation.findById(String.valueOf(idContratDeLocation));
+
+				quittances.add(new Quittances(
+						rs.getInt("Id_Quittances"), 
+						rs.getDate("DatePaiement"),
+						rs.getDouble("MontantLoyer"), 
+						rs.getDouble("MontantProvision"), 
+						locataire,
+						contratDeLocation));
+			}
+		}
+		return quittances;
+	}
+	
+	public List<Quittances> findByContratDeLocation() throws SQLException {
+		RequeteSelectQuittancesByContratDeLocation requeteSelectContrat = new RequeteSelectQuittancesByContratDeLocation();
+		List<Quittances> quittances = new ArrayList<>();
+	    DaoLocataire daoLocataire = new DaoLocataire(this.connection);
+	    DaoContratDeLocation daoContratDeLocation = new DaoContratDeLocation(this.connection);
+
+		try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectContrat.requete());
+				ResultSet rs = prSt.executeQuery()) {
+			while (rs.next()) {
+				String idLocataire = rs.getString("Id_Locataire");
+                int idContratDeLocation = rs.getInt("Id_Contrat_de_location");
+                Locataire locataire = daoLocataire.findById(String.valueOf(idLocataire));
+                ContratDeLocation contratDeLocation = daoContratDeLocation.findById(String.valueOf(idContratDeLocation));
+
+				quittances.add(new Quittances(
+						rs.getInt("Id_Quittances"), 
+						rs.getDate("DatePaiement"),
+						rs.getDouble("MontantLoyer"), 
+						rs.getDouble("MontantProvision"), 
+						locataire,
+						contratDeLocation));
+			}
+		}
+		return quittances;
+	}
+	
+	public List<Quittances> findByLocataire() throws SQLException {
+		RequeteSelectQuittancesByLocataire requeteSelectLocataire = new RequeteSelectQuittancesByLocataire();
+		List<Quittances> quittances = new ArrayList<>();
+	    DaoLocataire daoLocataire = new DaoLocataire(this.connection);
+	    DaoContratDeLocation daoContratDeLocation = new DaoContratDeLocation(this.connection);
+
+		try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectLocataire.requete());
 				ResultSet rs = prSt.executeQuery()) {
 			while (rs.next()) {
 				String idLocataire = rs.getString("Id_Locataire");

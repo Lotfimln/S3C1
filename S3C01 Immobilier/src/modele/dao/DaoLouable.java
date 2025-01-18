@@ -14,6 +14,7 @@ import modele.dao.requetes.create.RequeteCreateLouable;
 import modele.dao.requetes.delete.RequeteDeleteLouable;
 import modele.dao.requetes.update.RequeteUpdateLouable;
 import modele.dao.requetes.select.RequeteSelectLouableByID;
+import modele.dao.requetes.select.RequeteSelectLouableByImmeuble;
 import modele.dao.requetes.select.RequeteSelectLouable;
 
 public class DaoLouable implements Dao<Louable> {
@@ -149,4 +150,43 @@ public class DaoLouable implements Dao<Louable> {
         }
         return logements;
     }
+	public Louable findByImmeuble(String... id) throws SQLException {
+	    RequeteSelectLouableByImmeuble requeteSelectByImmeuble = new RequeteSelectLouableByImmeuble();
+	    DaoAssureur daoAssureur = new DaoAssureur(this.connection);
+	    DaoImmeuble daoImmeuble = new DaoImmeuble(this.connection);
+
+	    try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectByImmeuble.requete())) {
+	    	requeteSelectByImmeuble.parametres(prSt, id);
+	        try (ResultSet rs = prSt.executeQuery()) {
+	            if (rs.next()) {
+	                // Vérifiez les noms des colonnes ici
+	                int idAssureur = rs.getInt("Id_Assureur");
+	                int idImmeuble = rs.getInt("Id_Immeuble");
+	                Assureur assureur = daoAssureur.findById(String.valueOf(idAssureur));
+	                Immeuble immeuble = daoImmeuble.findById(String.valueOf(idImmeuble));
+	                
+	                return new Louable(
+	                    rs.getInt("Id_Louable"),
+	                    rs.getString("TypeLouable"),
+	                    rs.getString("Adresse"),
+	                    rs.getDouble("Superficie"),
+	                    rs.getString("NumeroFiscal"),
+	                    rs.getString("Statut"),
+	                    rs.getDate("DateAnniversaire"),
+	                    rs.getDate("DateAcquisition"),
+	                    rs.getInt("NbPieces"),
+	                    immeuble,
+	                    assureur
+	                );
+	            } else {
+	                throw new SQLException("Aucun immeuble trouvé avec Id_Louable = " + id[0]);
+	            }
+	        }
+	    } catch (SQLException e) {
+	        String messageErreur = "Erreur lors de la récupération de l'immeuble avec Id_Louable = " + id[0] +
+	                                ". Détails : " + e.getMessage();
+	        System.err.println(messageErreur);
+	        throw new SQLException(messageErreur, e);
+	    }
+	}
 }

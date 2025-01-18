@@ -7,12 +7,14 @@ public class Assureur {
     private String nom;
     private java.util.Date dateAssurance;
     private int prime;
+    private String typeAssurance;
 
-    public Assureur(int idAssureur, String nom, java.util.Date dateAssurance, int prime) {
+    public Assureur(int idAssureur, String nom, java.util.Date dateAssurance, int prime, String typeAssurance) {
         this.idAssureur = idAssureur;
         this.nom = nom;
         this.dateAssurance = dateAssurance;
         this.prime = prime;
+        this.typeAssurance = typeAssurance;
     }
 
 	public int getIdAssureur() {
@@ -46,6 +48,14 @@ public class Assureur {
 	public void setPrime(int prime) {
 		this.prime = prime;
 	}
+	
+	public String getTypeAssurance() {
+		return nom;
+	}
+
+	public void setTypeAssurance(String typeAssurance) {
+		this.typeAssurance = typeAssurance;
+	}
 
 	@Override
 	public String toString() {
@@ -54,7 +64,7 @@ public class Assureur {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(dateAssurance, idAssureur, nom, prime);
+		return Objects.hash(dateAssurance, idAssureur, nom, prime, typeAssurance);
 	}
 
 	@Override
@@ -67,6 +77,6 @@ public class Assureur {
 		}
 		Assureur other = (Assureur) obj;
 		return Objects.equals(dateAssurance, other.dateAssurance) && idAssureur == other.idAssureur
-				&& Objects.equals(nom, other.nom) && Objects.equals(prime, other.prime);
+				&& Objects.equals(nom, other.nom) && Objects.equals(prime, other.typeAssurance) && Objects.equals(typeAssurance, other.typeAssurance);
 	}
 }
