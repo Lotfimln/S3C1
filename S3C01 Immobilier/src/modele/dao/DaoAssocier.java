@@ -11,6 +11,8 @@ import modele.Associer;
 import modele.dao.requetes.create.RequeteCreateAssocier;
 import modele.dao.requetes.delete.RequeteDeleteAssocier;
 import modele.dao.requetes.select.RequeteSelectAssocier;
+import modele.dao.requetes.select.RequeteSelectAssocierByIndex;
+import modele.dao.requetes.select.RequeteSelectAssocierByLouable;
 import modele.dao.requetes.update.RequeteUpdateAssocier;
 import modele.dao.requetes.update.RequeteUpdateAssocierByIndexCompteur;
 import modele.dao.requetes.update.RequeteUpdateAssocierByLouable;
@@ -90,10 +92,9 @@ public class DaoAssocier implements Dao<Associer> {
     }
     
     public List<Associer> findByIndexCompteur(String... id) throws SQLException {
-        String sql = "SELECT * FROM Associer WHERE Id_Index_Compteur = ?";
-        List<Associer> associerList = new ArrayList<>();
-        try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
-            prSt.setInt(1, Integer.parseInt(id[0]));
+    	RequeteSelectAssocierByIndex requeteSelectIndex = new RequeteSelectAssocierByIndex();
+    	List<Associer> associerList = new ArrayList<>();
+        try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectIndex.requete())) {
             try (ResultSet rs = prSt.executeQuery()) {
                 while (rs.next()) {
                     associerList.add(new Associer(
@@ -106,10 +107,9 @@ public class DaoAssocier implements Dao<Associer> {
     }
     
     public List<Associer> findByLouable(String... id) throws SQLException {
-        String sql = "SELECT * FROM Associer WHERE Id_Louable = ?";
+    	RequeteSelectAssocierByLouable requeteSelectLouable = new RequeteSelectAssocierByLouable();
         List<Associer> associerList = new ArrayList<>();
-        try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
-            prSt.setInt(1, Integer.parseInt(id[0]));
+        try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectLouable.requete())) {
             try (ResultSet rs = prSt.executeQuery()) {
                 while (rs.next()) {
                     associerList.add(new Associer(

@@ -11,6 +11,8 @@ import modele.Apparaitre;
 import modele.dao.requetes.create.RequeteCreateApparaitre;
 import modele.dao.requetes.delete.RequeteDeleteApparaitre;
 import modele.dao.requetes.select.RequeteSelectApparaitre;
+import modele.dao.requetes.select.RequeteSelectApparaitreByCharge;
+import modele.dao.requetes.select.RequeteSelectApparaitreByIndex;
 import modele.dao.requetes.update.RequeteUpdateApparaitre;
 import modele.dao.requetes.update.RequeteUpdateApparaitreByCharge;
 import modele.dao.requetes.update.RequeteUpdateApparaitreByIndexCompteur;
@@ -89,10 +91,9 @@ public class DaoApparaitre implements Dao<Apparaitre> {
     }
     
     public List<Apparaitre> findByCharge(String... id) throws SQLException {
-        String sql = "SELECT * FROM Apparaitre WHERE Id_Charge = ?";
+    	RequeteSelectApparaitreByCharge requeteSelectByCharge = new RequeteSelectApparaitreByCharge();
         List<Apparaitre> apparaitreList = new ArrayList<>();
-        try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
-            prSt.setInt(1, Integer.parseInt(id[0])); // Conversion de l'ID en int
+        try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectByCharge.requete())) {
             try (ResultSet rs = prSt.executeQuery()) {
                 while (rs.next()) {
                     apparaitreList.add(new Apparaitre(
@@ -105,9 +106,9 @@ public class DaoApparaitre implements Dao<Apparaitre> {
     }
     
     public List<Apparaitre> findByIndex(String... id) throws SQLException {
-        String sql = "SELECT * FROM Apparaitre WHERE Id_Index_Compteur = ?";
+    	RequeteSelectApparaitreByIndex requeteSelectByIndex = new RequeteSelectApparaitreByIndex();
         List<Apparaitre> apparaitreList = new ArrayList<>();
-        try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
+        try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectByIndex.requete())) {
             prSt.setInt(1, Integer.parseInt(id[0]));
             try (ResultSet rs = prSt.executeQuery()) {
                 while (rs.next()) {

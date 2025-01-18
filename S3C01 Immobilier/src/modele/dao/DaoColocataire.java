@@ -15,6 +15,7 @@ import modele.dao.requetes.delete.RequeteDeleteColocataire;
 import modele.dao.requetes.delete.RequeteDeleteLocataire;
 import modele.dao.requetes.select.RequeteSelectColocataire;
 import modele.dao.requetes.select.RequeteSelectColocataireByID;
+import modele.dao.requetes.select.RequeteSelectColocataireByLocataire;
 import modele.dao.requetes.update.RequeteUpdateColocataire;
 
 public class DaoColocataire implements Dao<Colocataire> {
@@ -74,10 +75,9 @@ public class DaoColocataire implements Dao<Colocataire> {
     }
     
     public List<Colocataire> findByLocataire(String... id) throws SQLException {
-	    String sql = "SELECT * FROM Colocataire WHERE Id_Locataire = ?";
+    	RequeteSelectColocataireByLocataire requeteSelectLocataire = new RequeteSelectColocataireByLocataire();
 	    List<Colocataire> colocataires = new ArrayList<>();
-	    try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
-	        prSt.setString(1, id[0]);
+	    try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectLocataire.requete())) {
 	        try (ResultSet rs = prSt.executeQuery()) {
 	            while (rs.next()) {
 	                colocataires.add(new Colocataire(

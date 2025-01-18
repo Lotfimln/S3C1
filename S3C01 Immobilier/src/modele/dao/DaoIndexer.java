@@ -11,6 +11,7 @@ import modele.Indexer;
 import modele.dao.requetes.create.RequeteCreateIndexer;
 import modele.dao.requetes.delete.RequeteDeleteIndexer;
 import modele.dao.requetes.select.RequeteSelectIndexer;
+import modele.dao.requetes.select.RequeteSelectIndexerByImmeuble;
 import modele.dao.requetes.update.RequeteUpdateIndexer;
 import modele.dao.requetes.update.RequeteUpdateIndexerByImmeuble;
 import modele.dao.requetes.update.RequeteUpdateIndexerByIndexCompteur;
@@ -90,10 +91,9 @@ public class DaoIndexer implements Dao<Indexer> {
 	}
 	
 	public List<Indexer> findByImmeuble(String... id) throws SQLException {
-		String sql = "SELECT * FROM Indexer WHERE Id_Immeuble = ?";
+		RequeteSelectIndexerByImmeuble requeteSelectImmeuble = new RequeteSelectIndexerByImmeuble();
 		List<Indexer> indexers = new ArrayList<>();
-		try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
-			prSt.setInt(1, Integer.parseInt(id[0]));
+		try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectImmeuble.requete())) {
 			try (ResultSet rs = prSt.executeQuery()) {
 				while (rs.next()) {
 					indexers.add(new Indexer(
@@ -107,9 +107,8 @@ public class DaoIndexer implements Dao<Indexer> {
 	
 	public List<Indexer> findByIndexCompteur(String[] params) throws SQLException {
 	    List<Indexer> result = new ArrayList<>();
-	    String sql = "SELECT * FROM Indexer WHERE Id_Index_Compteur = ?";
-	    try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-	        pstmt.setString(1, params[0]);
+	    RequeteSelectIndexerByImmeuble requeteSelectImmeuble = new RequeteSelectIndexerByImmeuble();
+	    try (PreparedStatement pstmt = connection.prepareStatement(requeteSelectImmeuble.requete())) {
 	        try (ResultSet rs = pstmt.executeQuery()) {
 	            while (rs.next()) {
 	                result.add(new Indexer(
