@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import modele.Entreprise;
+import modele.dao.requetes.create.RequeteCreateEntreprise;
 import modele.dao.requetes.delete.RequeteDeleteEntreprise;
 import modele.dao.requetes.select.RequeteSelectEntreprise;
 import modele.dao.requetes.select.RequeteSelectEntrepriseByID;
@@ -23,11 +24,9 @@ public class DaoEntreprise implements Dao<Entreprise> {
 
 	@Override
 	public void create(Entreprise donnees) throws SQLException {
-		String sql = "INSERT INTO Entreprise (Nom, SIREN, Adresse) VALUES (?, ?, ?)";
-		try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
-			prSt.setString(1, donnees.getNom());
-			prSt.setString(2, donnees.getSiren());
-			prSt.setString(3, donnees.getAdresse());
+		RequeteCreateEntreprise requeteCreate = new RequeteCreateEntreprise();	
+		try (PreparedStatement prSt = this.connection.prepareStatement(requeteCreate.requete())) {
+			requeteCreate.parametres(prSt, donnees);
 			prSt.executeUpdate();
 		}
 	}

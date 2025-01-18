@@ -10,6 +10,7 @@ import java.util.List;
 import modele.Colocataire;
 import modele.Correspondre;
 import modele.Locataire;
+import modele.dao.requetes.create.RequeteCreateColocataire;
 import modele.dao.requetes.delete.RequeteDeleteColocataire;
 import modele.dao.requetes.delete.RequeteDeleteLocataire;
 import modele.dao.requetes.select.RequeteSelectColocataire;
@@ -26,10 +27,9 @@ public class DaoColocataire implements Dao<Colocataire> {
 
 	@Override
 	public void create(Colocataire donnees) throws SQLException {
-		String sql = "INSERT INTO Colocataire (Id_Locataire, Id_Locataire_1) VALUES (?, ?)";
-		try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
-			prSt.setString(1, donnees.getIdLocataire());
-			prSt.setString(2, donnees.getIdLocataire1());
+		RequeteCreateColocataire requeteCreate = new RequeteCreateColocataire();
+		try (PreparedStatement prSt = this.connection.prepareStatement(requeteCreate.requete())) {
+			requeteCreate.parametres(prSt, donnees);
 			prSt.executeUpdate();
 		}
 	}

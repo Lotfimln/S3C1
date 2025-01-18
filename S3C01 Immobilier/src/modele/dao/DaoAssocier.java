@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import modele.Associer;
+import modele.dao.requetes.create.RequeteCreateAssocier;
 import modele.dao.requetes.delete.RequeteDeleteAssocier;
 import modele.dao.requetes.select.RequeteSelectAssocier;
 import modele.dao.requetes.update.RequeteUpdateAssocier;
@@ -24,10 +25,9 @@ public class DaoAssocier implements Dao<Associer> {
 
     @Override
     public void create(Associer donnees) throws SQLException {
-        String sql = "INSERT INTO Assureur (Id_Louable, Id_Index_Compteur) VALUES (?, ?)";
-        try (PreparedStatement prSt = connection.prepareStatement(sql)) {
-            prSt.setInt(1, donnees.getIdLouable());
-            prSt.setInt(2, donnees.getIdIndexCompteur());
+        RequeteCreateAssocier requeteCreate = new RequeteCreateAssocier();
+        try (PreparedStatement prSt = connection.prepareStatement(requeteCreate.requete())) {
+        	requeteCreate.parametres(prSt, donnees);
             prSt.executeUpdate();
         }
     }

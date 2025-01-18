@@ -10,6 +10,7 @@ import java.util.List;
 import modele.Charge;
 import modele.Facture;
 import modele.Louable;
+import modele.dao.requetes.create.RequeteCreateCharge;
 import modele.dao.requetes.delete.RequeteDeleteCharge;
 import modele.dao.requetes.select.RequeteSelectCharge;
 import modele.dao.requetes.select.RequeteSelectChargeByID;
@@ -25,20 +26,9 @@ public class DaoCharge implements Dao<Charge> {
 
 	@Override
 	public void create(Charge donnees) throws SQLException {
-		String sql = "INSERT INTO Charge (Id_Charge, TypeCharge, Montant, Recuperable, PeriodeDebut, PeriodeFin, Id_Facture, Id_Louable) VALUES (?, ?, ?, ?, ?, ?, ?)";
-		try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
-			prSt.setInt(1, donnees.getIdCharge());
-			prSt.setString(2, donnees.getTypeCharge());
-			prSt.setDouble(3, donnees.getMontant());
-			prSt.setString(4, donnees.isRecuperable());
-			java.util.Date utilDate = donnees.getPeriodeDebut();
-            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());  // Convertir en java.sql.Date
-            prSt.setDate(5, sqlDate);
-			java.util.Date utilDate1 = donnees.getPeriodeFin();
-            java.sql.Date sqlDate1 = new java.sql.Date(utilDate1.getTime());  // Convertir en java.sql.Date
-            prSt.setDate(6, sqlDate1);
-			prSt.setInt(7, donnees.getFacture().getIdFacture());
-			prSt.setInt(8, donnees.getLouable().getIdLouable());
+		RequeteCreateCharge requeteCreate = new RequeteCreateCharge();
+		try (PreparedStatement prSt = this.connection.prepareStatement(requeteCreate.requete())) {
+			requeteCreate.parametres(prSt, donnees);
 			prSt.executeUpdate();
 		}
 	}

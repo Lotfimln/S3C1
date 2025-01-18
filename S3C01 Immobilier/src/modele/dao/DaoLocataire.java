@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import modele.Locataire;
+import modele.dao.requetes.create.RequeteCreateLocataire;
 import modele.dao.requetes.delete.RequeteDeleteLocataire;
 import modele.dao.requetes.select.RequeteSelectLocataire;
 import modele.dao.requetes.select.RequeteSelectLocataireByID;
@@ -23,19 +24,9 @@ public class DaoLocataire implements Dao<Locataire> {
 
 	@Override
 	public void create(Locataire donnees) throws SQLException {
-		String sql = "INSERT INTO Locataire (Id_Locataire, Nom, Prenom, Mail, Telephone, DateNaissance, DateDepart) VALUES (?, ?, ?, ?, ?, ?)";
-		try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
-			prSt.setString(1, donnees.getIdLocataire());
-			prSt.setString(2, donnees.getNom());
-			prSt.setString(3, donnees.getPrenom());
-			prSt.setString(4, donnees.getMail());
-			prSt.setString(5, donnees.getTelephone());
-			java.util.Date utilDate = donnees.getDateDepart();
-            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-            prSt.setDate(6, sqlDate);
-			java.util.Date utilDate1 = donnees.getDateDepart();
-            java.sql.Date sqlDate1 = new java.sql.Date(utilDate1.getTime());
-            prSt.setDate(7, sqlDate1);
+		RequeteCreateLocataire requeteCreate = new RequeteCreateLocataire();
+		try (PreparedStatement prSt = this.connection.prepareStatement(requeteCreate.requete())) {
+			requeteCreate.parametres(prSt, donnees);
 			prSt.executeUpdate();
 		}
 	}

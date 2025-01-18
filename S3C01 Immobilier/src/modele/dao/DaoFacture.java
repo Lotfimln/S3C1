@@ -10,6 +10,7 @@ import java.util.List;
 import modele.Entreprise;
 import modele.Facture;
 import modele.Louable;
+import modele.dao.requetes.create.RequeteCreateFacture;
 import modele.dao.requetes.delete.RequeteDeleteFacture;
 import modele.dao.requetes.select.RequeteSelectFacture;
 import modele.dao.requetes.select.RequeteSelectFactureByID;
@@ -25,18 +26,9 @@ public class DaoFacture implements Dao<Facture> {
 
 	@Override
 	public void create(Facture donnees) throws SQLException {
-		String sql = "INSERT INTO Facture (Montant, DateFacture, ReferenceDevis, Entreprise, DatePaiement, Id_Entreprise, Id_Louable) VALUES (?, ?, ?, ?, ?, ?, ?)";
-		try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
-			prSt.setDouble(1, donnees.getMontant());
-			java.util.Date utilDate = donnees.getDateFacture();
-            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-            prSt.setDate(2, sqlDate);
-			prSt.setString(3, donnees.getReferenceDevis());
-			java.util.Date utilDate1 = donnees.getDatePaiement();
-            java.sql.Date sqlDate1 = new java.sql.Date(utilDate1.getTime());
-            prSt.setDate(5, sqlDate1);
-			prSt.setInt(6, donnees.getEntreprise().getIdEntreprise());
-			prSt.setInt(7, donnees.getLouable().getIdLouable());
+		RequeteCreateFacture requeteCreate = new RequeteCreateFacture();
+		try (PreparedStatement prSt = this.connection.prepareStatement(requeteCreate.requete())) {
+			requeteCreate.parametres(prSt, donnees);
 			prSt.executeUpdate();
 		}
 	}

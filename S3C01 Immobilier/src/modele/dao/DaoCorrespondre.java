@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import modele.Correspondre;
+import modele.dao.requetes.create.RequeteCreateCorrespondre;
 import modele.dao.requetes.delete.RequeteDeleteCorrespondre;
 import modele.dao.requetes.select.RequeteSelectCorrespondre;
 import modele.dao.requetes.update.RequeteUpdateCorrespondre;
@@ -24,10 +25,9 @@ public class DaoCorrespondre implements Dao<Correspondre> {
 
 	@Override
 	public void create(Correspondre donnees) throws SQLException {
-		String sql = "INSERT INTO Correspondre (Id_Locataire, Id_Contrat_de_location) VALUES (?, ?)";
-		try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
-			prSt.setString(1, donnees.getIdLocataire());
-			prSt.setInt(2, donnees.getIdContratDeLocation());
+		RequeteCreateCorrespondre requeteCreate = new RequeteCreateCorrespondre();
+		try (PreparedStatement prSt = this.connection.prepareStatement(requeteCreate.requete())) {
+			requeteCreate.parametres(prSt, donnees);
 			prSt.executeUpdate();
 		}
 	}

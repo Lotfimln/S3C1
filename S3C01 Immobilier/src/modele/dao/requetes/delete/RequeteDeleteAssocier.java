@@ -10,7 +10,7 @@ public class RequeteDeleteAssocier implements Requete<Associer> {
 
 	@Override
 	public String requete() {
-		return "DELETE FROM associer WHERE Id_Louable = ? AND Id_Index_Compteur = ?";
+		return "INSERT INTO Assureur (Id_Louable, Id_Index_Compteur) VALUES (?, ?)";
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import java.util.List;
 
 import modele.Immeuble;
 import modele.Taxe;
+import modele.dao.requetes.create.RequeteCreateTaxe;
 import modele.dao.requetes.delete.RequeteDeleteTaxe;
 import modele.dao.requetes.select.RequeteSelectTaxe;
 import modele.dao.requetes.select.RequeteSelectTaxeByID;
@@ -24,14 +25,9 @@ public class DaoTaxe implements Dao<Taxe> {
 
 	@Override
 	public void create(Taxe donnees) throws SQLException {
-		String sql = "INSERT INTO Taxe (Id_Taxe, MontantTaxeFoncieres, DateTaxe, Id_Immeuble) VALUES (?, ?, ?, ?)";
-		try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
-			prSt.setInt(1, donnees.getIdTaxe());
-			prSt.setDouble(2, donnees.getMontantTaxeFoncieres());
-			java.util.Date utilDate = donnees.getDateTaxe();
-            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-            prSt.setDate(3, sqlDate);
-			prSt.setInt(4, donnees.getImmeuble().getIdImmeuble());
+		RequeteCreateTaxe requeteCreate = new RequeteCreateTaxe();
+		try (PreparedStatement prSt = this.connection.prepareStatement(requeteCreate.requete())) {
+			requeteCreate.parametres(prSt, donnees);
 			prSt.executeUpdate();
 		}
 	}

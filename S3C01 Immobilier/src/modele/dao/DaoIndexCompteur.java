@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import modele.IndexCompteur;
+import modele.dao.requetes.create.RequeteCreateIndexCompteur;
 import modele.dao.requetes.delete.RequeteDeleteIndexCompteur;
 import modele.dao.requetes.select.RequeteSelectIndexCompteur;
 import modele.dao.requetes.select.RequeteSelectIndexCompteurByID;
@@ -23,12 +24,9 @@ public class DaoIndexCompteur implements Dao<IndexCompteur> {
 
 	@Override
 	public void create(IndexCompteur donnees) throws SQLException {
-		String sql = "INSERT INTO Index_Compteur (TypeCompteur, ValeurCourante, AncienneValeur, DateReleve) VALUES (?, ?, ?, ?)";
-		try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
-			prSt.setString(1, donnees.getTypeCompteur());
-			prSt.setDouble(2, donnees.getValeurCourante());
-			prSt.setDouble(3, donnees.getAncienneValeur());
-			prSt.setDate(4, new java.sql.Date(donnees.getDateReleve().getTime()));
+		RequeteCreateIndexCompteur requeteCreate = new RequeteCreateIndexCompteur();
+		try (PreparedStatement prSt = this.connection.prepareStatement(requeteCreate.requete())) {
+			requeteCreate.parametres(prSt, donnees);
 			prSt.executeUpdate();
 		}
 	}

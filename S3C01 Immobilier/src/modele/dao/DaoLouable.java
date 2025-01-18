@@ -10,6 +10,7 @@ import java.util.List;
 import modele.Assureur;
 import modele.Immeuble;
 import modele.Louable;
+import modele.dao.requetes.create.RequeteCreateLouable;
 import modele.dao.requetes.delete.RequeteDeleteLouable;
 import modele.dao.requetes.update.RequeteUpdateLouable;
 import modele.dao.requetes.select.RequeteSelectLouableByID;
@@ -25,23 +26,9 @@ public class DaoLouable implements Dao<Louable> {
 
 	@Override
 	public void create(Louable donnees) throws SQLException {
-		String sql = "INSERT INTO Louable (Id_Louable, TypeLouable, Adresse, Superficie, NumeroFiscal, Statut, DateAnniversaire, Id_Immeuble, Id_Assureur, NbPieces) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-		try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
-			prSt.executeUpdate();
-				
-			// Insertion dans la table Louable
-			prSt.setInt(1, donnees.getIdLouable());
-			prSt.setString(2, donnees.getTypeLouable());
-			prSt.setString(3, donnees.getAdresse());
-			prSt.setDouble(4, donnees.getSuperficie());
-			prSt.setString(5, donnees.getNumeroFiscal());
-			prSt.setString(6, donnees.getStatut());
-			java.util.Date utilDate = donnees.getDateAnniversaire();	            
-			java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-			prSt.setDate(7, sqlDate);
-			prSt.setInt(8, donnees.getImmeuble().getIdImmeuble());
-			prSt.setInt(9, donnees.getAssureur().getIdAssureur());
-			prSt.setInt(10, donnees.getNbPieces());
+		RequeteCreateLouable requeteCreate = new RequeteCreateLouable();
+		try (PreparedStatement prSt = this.connection.prepareStatement(requeteCreate.requete())) {
+			requeteCreate.parametres(prSt, donnees);
 			prSt.executeUpdate();
 			}
 		catch (SQLException e) {

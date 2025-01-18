@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import modele.Indexer;
+import modele.dao.requetes.create.RequeteCreateIndexer;
 import modele.dao.requetes.delete.RequeteDeleteIndexer;
 import modele.dao.requetes.select.RequeteSelectIndexer;
 import modele.dao.requetes.update.RequeteUpdateIndexer;
@@ -24,10 +25,9 @@ public class DaoIndexer implements Dao<Indexer> {
 
 	@Override
 	public void create(Indexer donnees) throws SQLException {
-		String sql = "INSERT INTO Indexer (Id_Index_Compteur, Id_Immeuble) VALUES (?, ?)";
-		try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
-			prSt.setInt(1, donnees.getIdIndexCompteur());
-			prSt.setInt(2, donnees.getIdImmeuble());
+		RequeteCreateIndexer requeteCreate = new RequeteCreateIndexer();
+		try (PreparedStatement prSt = this.connection.prepareStatement(requeteCreate.requete())) {
+			requeteCreate.parametres(prSt, donnees);
 			prSt.executeUpdate();
 		}
 	}

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import modele.Assureur;
+import modele.dao.requetes.create.RequeteCreateAssureur;
 import modele.dao.requetes.delete.RequeteDeleteAssureur;
 import modele.dao.requetes.select.RequeteSelectAssureur;
 import modele.dao.requetes.select.RequeteSelectAssureurByID;
@@ -23,14 +24,9 @@ public class DaoAssureur implements Dao<Assureur> {
 
     @Override
     public void create(Assureur donnees) throws SQLException {
-        String sql = "INSERT INTO Assureur (Id_Assureur, Nom, DateAssurance, Prime) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement prSt = connection.prepareStatement(sql)) {
-            prSt.setInt(1, donnees.getIdAssureur());
-            prSt.setString(2, donnees.getNom());
-            java.util.Date utilDate = donnees.getDateAssurance();
-            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());  // Convertir en java.sql.Date
-            prSt.setDate(3, sqlDate);
-            prSt.setInt(4, donnees.getPrime());
+        RequeteCreateAssureur requeteCreate = new RequeteCreateAssureur();
+        try (PreparedStatement prSt = connection.prepareStatement(requeteCreate.requete())) {
+        	requeteCreate.parametres(prSt, donnees);
             prSt.executeUpdate();
         }
     }

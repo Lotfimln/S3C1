@@ -9,6 +9,7 @@ import java.util.List;
 
 import modele.Diagnostic;
 import modele.Louable;
+import modele.dao.requetes.create.RequeteCreateDiagnostic;
 import modele.dao.requetes.delete.RequeteDeleteDiagnostic;
 import modele.dao.requetes.select.RequeteSelectDiagnostic;
 import modele.dao.requetes.select.RequeteSelectDiagnosticByID;
@@ -24,11 +25,9 @@ public class DaoDiagnostic implements Dao<Diagnostic> {
 
 	@Override
 	public void create(Diagnostic donnees) throws SQLException {
-		String sql = "INSERT INTO Diagnostic (Type, DateDiagnostic, Id_Louable) VALUES (?, ?, ?)";
-		try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
-			prSt.setString(1, donnees.getTypeDiagnostic());
-			prSt.setDate(2, new java.sql.Date(donnees.getDateDiagnostic().getTime()));
-			prSt.setInt(3, donnees.getLouable().getIdLouable());
+		RequeteCreateDiagnostic requeteCreate = new RequeteCreateDiagnostic();
+		try (PreparedStatement prSt = this.connection.prepareStatement(requeteCreate.requete())) {
+			requeteCreate.parametres(prSt, donnees);
 			prSt.executeUpdate();
 		}
 	}

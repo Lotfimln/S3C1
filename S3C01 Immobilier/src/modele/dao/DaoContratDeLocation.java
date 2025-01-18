@@ -9,6 +9,7 @@ import java.util.List;
 
 import modele.ContratDeLocation;
 import modele.Louable;
+import modele.dao.requetes.create.RequeteCreateContratDeLocation;
 import modele.dao.requetes.delete.RequeteDeleteContratDeLocation;
 import modele.dao.requetes.select.RequeteSelectContratDeLocation;
 import modele.dao.requetes.select.RequeteSelectContratDeLocationByID;
@@ -24,22 +25,9 @@ public class DaoContratDeLocation implements Dao<ContratDeLocation> {
 
 	@Override
 	public void create(ContratDeLocation donnees) throws SQLException {
-		String sql = "INSERT INTO Contrat_de_location (Id_Contrat_de_location, DateDebut, DateFin, MontantLoyer, ProvisionsCharges, TypeContrat, DateAnniversaire, IndiceICC, MontantCaution, Id_Louable) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-		try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
-			prSt.setInt(1, donnees.getIdContratDeLocation());
-			java.util.Date utilDate = donnees.getDateDebut();
-            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-            prSt.setDate(2, sqlDate);
-			java.util.Date utilDate1 = donnees.getDateFin();
-            java.sql.Date sqlDate1 = new java.sql.Date(utilDate1.getTime());
-            prSt.setDate(3, sqlDate1);
-			prSt.setDouble(4, donnees.getMontantLoyer());
-			prSt.setDouble(5, donnees.getProvisionsCharges());
-			prSt.setString(6, donnees.getTypeContrat());
-			prSt.setDate(7, new java.sql.Date(donnees.getDateAnniversaire().getTime()));
-			prSt.setDouble(8, donnees.getIndiceICC());
-			prSt.setDouble(9, donnees.getMontantCaution());
-			prSt.setInt(10, donnees.getLouable().getIdLouable());
+		RequeteCreateContratDeLocation requeteCreate = new RequeteCreateContratDeLocation();
+		try (PreparedStatement prSt = this.connection.prepareStatement(requeteCreate.requete())) {
+			requeteCreate.parametres(prSt, donnees);
 			prSt.executeUpdate();
 		}
 	}

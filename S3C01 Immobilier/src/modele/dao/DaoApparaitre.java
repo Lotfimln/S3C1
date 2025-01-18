@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import modele.Apparaitre;
+import modele.dao.requetes.create.RequeteCreateApparaitre;
 import modele.dao.requetes.delete.RequeteDeleteApparaitre;
 import modele.dao.requetes.select.RequeteSelectApparaitre;
 import modele.dao.requetes.update.RequeteUpdateApparaitre;
@@ -24,10 +25,9 @@ public class DaoApparaitre implements Dao<Apparaitre> {
 
     @Override
     public void create(Apparaitre donnees) throws SQLException {
-        String sql = "INSERT INTO Assureur (Id_Charge, Id_Index_Compteur) VALUES (?, ?)";
-        try (PreparedStatement prSt = connection.prepareStatement(sql)) {
-            prSt.setInt(1, donnees.getIdCharge());
-            prSt.setInt(2, donnees.getIdIndexCompteur());
+        RequeteCreateApparaitre requeteCreate = new RequeteCreateApparaitre();
+        try (PreparedStatement prSt = connection.prepareStatement(requeteCreate.requete())) {
+        	requeteCreate.parametres(prSt, donnees);
             prSt.executeUpdate();
         }
     }

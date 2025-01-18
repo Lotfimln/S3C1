@@ -10,6 +10,7 @@ import java.util.List;
 import modele.ContratDeLocation;
 import modele.Locataire;
 import modele.Quittances;
+import modele.dao.requetes.create.RequeteCreateQuittances;
 import modele.dao.requetes.delete.RequeteDeleteQuittances;
 import modele.dao.requetes.select.RequeteSelectQuittances;
 import modele.dao.requetes.select.RequeteSelectQuittancesByID;
@@ -25,16 +26,9 @@ public class DaoQuittances implements Dao<Quittances> {
 
 	@Override
 	public void create(Quittances donnees) throws SQLException {
-		String sql = "INSERT INTO Quittances (Id_Quittances, DatePaiement, MontantLoyer, MontantProvision, Id_Locataire, Id_Contrat_de_location) VALUES (?, ?, ?, ?, ?, ?)";
-		try (PreparedStatement prSt = this.connection.prepareStatement(sql)) {
-			prSt.setDouble(1, donnees.getMontantLoyer());
-			java.util.Date utilDate = donnees.getDatePaiement();
-            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-            prSt.setDate(2, sqlDate);
-			prSt.setDouble(3, donnees.getMontantLoyer());
-			prSt.setDouble(4, donnees.getMontantProvision());
-			prSt.setString(5, donnees.getLocataire().getIdLocataire());
-			prSt.setInt(6, donnees.getContratDeLocation().getIdContratDeLocation());
+		RequeteCreateQuittances requeteCreate = new RequeteCreateQuittances();
+		try (PreparedStatement prSt = this.connection.prepareStatement(requeteCreate.requete())) {
+			requeteCreate.parametres(prSt, donnees);
 			prSt.executeUpdate();
 		}
 	}

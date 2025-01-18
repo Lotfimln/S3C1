@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import modele.Immeuble;
+import modele.dao.requetes.create.RequeteCreateImmeuble;
 import modele.dao.requetes.delete.RequeteDeleteImmeuble;
 import modele.dao.requetes.select.RequeteSelectImmeuble;
 import modele.dao.requetes.select.RequeteSelectImmeubleByID;
@@ -23,10 +24,9 @@ public class DaoImmeuble implements Dao<Immeuble> {
 
     @Override
     public void create(Immeuble donnees) throws SQLException {
-        String sql = "INSERT INTO Immeuble (Id_Immeuble, Adresse) VALUES (?, ?)";
-        try (PreparedStatement prSt = connection.prepareStatement(sql)) {
-            prSt.setInt(1, donnees.getIdImmeuble());
-            prSt.setString(2, donnees.getAdresse());
+        RequeteCreateImmeuble requeteCreate = new RequeteCreateImmeuble();
+        try (PreparedStatement prSt = connection.prepareStatement(requeteCreate.requete())) {
+        	requeteCreate.parametres(prSt, donnees);
             prSt.executeUpdate();
         }
     }
