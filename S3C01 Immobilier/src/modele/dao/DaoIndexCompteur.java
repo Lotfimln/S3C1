@@ -60,8 +60,8 @@ public class DaoIndexCompteur implements Dao<IndexCompteur> {
 							rs.getInt("Id_Index_Compteur"), 
 							rs.getString("TypeCompteur"),
 							rs.getDouble("ValeurCourante"), 
-							rs.getDouble("AncienneValeur"), 
-							rs.getDate("DateReleve"));
+							rs.getDouble("AncienneValeur")
+						);
 				}
 			}
 		}
@@ -79,8 +79,8 @@ public class DaoIndexCompteur implements Dao<IndexCompteur> {
 						rs.getInt("Id_Index_Compteur"), 
 						rs.getString("TypeCompteur"),
 						rs.getDouble("ValeurCourante"), 
-						rs.getDouble("AncienneValeur"), 
-						rs.getDate("DateReleve")));
+						rs.getDouble("AncienneValeur")
+					));
 			}
 		}
 		return compteurs;

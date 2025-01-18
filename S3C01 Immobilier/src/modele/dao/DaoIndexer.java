@@ -84,7 +84,10 @@ public class DaoIndexer implements Dao<Indexer> {
 			while (rs.next()) {
 				indexers.add(new Indexer(
 						rs.getInt("Id_Index_Compteur"), 
-						rs.getInt("Id_Immeuble")));
+						rs.getInt("Id_Immeuble"),
+						rs.getDate("DateReleve"),
+                        rs.getDouble("PrixAbonement"),
+                        rs.getDate("DateRegularisation")));
 			}
 		}
 		return indexers;
@@ -98,7 +101,10 @@ public class DaoIndexer implements Dao<Indexer> {
 				while (rs.next()) {
 					indexers.add(new Indexer(
 							rs.getInt("Id_Index_Compteur"), 
-							rs.getInt("Id_Immeuble")));
+							rs.getInt("Id_Immeuble"),
+							rs.getDate("DateReleve"),
+	                        rs.getDouble("PrixAbonement"),
+	                        rs.getDate("DateRegularisation")));
 				}
 			}
 		}
@@ -113,7 +119,10 @@ public class DaoIndexer implements Dao<Indexer> {
 	            while (rs.next()) {
 	                result.add(new Indexer(
 	                    rs.getInt("Id_Index_Compteur"),
-	                    rs.getInt("Id_Immeuble")
+	                    rs.getInt("Id_Immeuble"),
+	                    rs.getDate("DateReleve"),
+                        rs.getDouble("PrixAbonement"),
+                        rs.getDate("DateRegularisation")
 	                ));
 	            }
 	        }

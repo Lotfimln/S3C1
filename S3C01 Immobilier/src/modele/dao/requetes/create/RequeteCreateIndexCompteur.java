@@ -10,7 +10,7 @@ public class RequeteCreateIndexCompteur implements Requete<IndexCompteur> {
 
 	@Override
 	public String requete() {
-		return "INSERT INTO Index_Compteur (TypeCompteur, ValeurCourante, AncienneValeur, DateReleve) VALUES (?, ?, ?, ?)";
+		return "INSERT INTO Index_Compteur (Id_Index_Compteur, TypeCompteur, ValeurCourante, AncienneValeur) VALUES (?, ?, ?, ?)";
 	}
 
 	@Override
@@ -23,9 +23,9 @@ public class RequeteCreateIndexCompteur implements Requete<IndexCompteur> {
 
 	@Override
 	public void parametres(PreparedStatement prSt, IndexCompteur donnees) throws SQLException {
-		prSt.setString(1, donnees.getTypeCompteur());
-		prSt.setDouble(2, donnees.getValeurCourante());
-		prSt.setDouble(3, donnees.getAncienneValeur());
-		prSt.setDate(4, new java.sql.Date(donnees.getDateReleve().getTime()));
+		prSt.setInt(1, donnees.getIdIndexCompteur());
+		prSt.setString(2, donnees.getTypeCompteur());
+		prSt.setDouble(3, donnees.getValeurCourante());
+		prSt.setDouble(4, donnees.getAncienneValeur());
 	}
 }

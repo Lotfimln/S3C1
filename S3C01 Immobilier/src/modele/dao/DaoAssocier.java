@@ -68,7 +68,6 @@ public class DaoAssocier implements Dao<Associer> {
         }
     }
 
-	// Cette methode est inutile, car elle renvoie exactement les parametres de la requete
     @Override
     public Associer findById(String... id) throws SQLException {
         return null;
@@ -84,7 +83,10 @@ public class DaoAssocier implements Dao<Associer> {
             while (rs.next()) {
                 associer.add(new Associer(
                 		rs.getInt("Id_Louable"),
-                        rs.getInt("Id_Index_Compteur")
+                        rs.getInt("Id_Index_Compteur"),
+                        rs.getDate("DateReleve"),
+                        rs.getDouble("PrixAbonement"),
+                        rs.getDate("DateRegularisation")
                 ));
             }
         }
@@ -99,7 +101,10 @@ public class DaoAssocier implements Dao<Associer> {
                 while (rs.next()) {
                     associerList.add(new Associer(
                             rs.getInt("Id_Louable"),
-                            rs.getInt("Id_Index_Compteur")));
+                            rs.getInt("Id_Index_Compteur"),
+                            rs.getDate("DateReleve"),
+                            rs.getDouble("PrixAbonement"),
+                            rs.getDate("DateRegularisation")));
                 }
             }
         }
@@ -114,7 +119,10 @@ public class DaoAssocier implements Dao<Associer> {
                 while (rs.next()) {
                     associerList.add(new Associer(
                             rs.getInt("Id_Louable"),
-                            rs.getInt("Id_Index_Compteur")));
+                            rs.getInt("Id_Index_Compteur"),
+                            rs.getDate("DateReleve"),
+                            rs.getDouble("PrixAbonement"),
+                            rs.getDate("DateRegularisation")));
                 }
             }
         }

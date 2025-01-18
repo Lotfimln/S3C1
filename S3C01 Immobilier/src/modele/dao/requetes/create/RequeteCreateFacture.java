@@ -10,11 +10,12 @@ public class RequeteCreateFacture implements Requete<Facture> {
 
 	@Override
 	public String requete() {
-		return "INSERT INTO Facture (Montant, DateFacture, ReferenceDevis, Entreprise, DatePaiement, Id_Entreprise, Id_Louable) VALUES (?, ?, ?, ?, ?, ?, ?)";
+		return "INSERT INTO Facture (Id_Facture, Montant, DateFacture, ReferenceDevis, Entreprise, DatePaiement, Id_Entreprise, Id_Louable) VALUES (?, ?, ?, ?, ?, ?, ?)";
 	}
 
 	@Override
 	public void parametres(PreparedStatement prSt, String... id) throws SQLException {
+		prSt.setString(1, id[0]);
 		prSt.setString(1, id[0]);
 		prSt.setString(2, id[1]);
 		prSt.setString(3, id[2]);
@@ -26,11 +27,12 @@ public class RequeteCreateFacture implements Requete<Facture> {
 
 	@Override
 	public void parametres(PreparedStatement prSt, Facture donnees) throws SQLException {
-		prSt.setDouble(1, donnees.getMontant());
+		prSt.setInt(1, donnees.getIdFacture());
+		prSt.setDouble(2, donnees.getMontant());
 		java.util.Date utilDate = donnees.getDateFacture();
         java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-        prSt.setDate(2, sqlDate);
-		prSt.setString(3, donnees.getReferenceDevis());
+        prSt.setDate(3, sqlDate);
+		prSt.setString(4, donnees.getReferenceDevis());
 		java.util.Date utilDate1 = donnees.getDatePaiement();
         java.sql.Date sqlDate1 = new java.sql.Date(utilDate1.getTime());
         prSt.setDate(5, sqlDate1);
