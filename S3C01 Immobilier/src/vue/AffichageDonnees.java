@@ -55,6 +55,8 @@ public class AffichageDonnees extends JInternalFrame {
 
         JButton btnAjouterElement = new JButton("+");
         panelSelecteur.add(btnAjouterElement);
+        btnAjouterElement.addActionListener(e -> gestionAffichageDonnees.ajouterElement());
+
 
         JCheckBox checkboxArchive = new JCheckBox("Archivés");
         panelSelecteur.add(checkboxArchive);
