@@ -1,5 +1,6 @@
 package modele.dao;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,6 +14,7 @@ import modele.dao.requetes.delete.RequeteDeleteLocataire;
 import modele.dao.requetes.select.RequeteSelectLocataire;
 import modele.dao.requetes.select.RequeteSelectLocataireByID;
 import modele.dao.requetes.update.RequeteUpdateLocataire;
+import oracle.jdbc.OracleTypes;
 
 public class DaoLocataire implements Dao<Locataire> {
 
@@ -89,4 +91,25 @@ public class DaoLocataire implements Dao<Locataire> {
 		}
 		return locataires;
 	}
+	
+	public List<Object[]> detecterLoyersImpayes() throws SQLException {
+	    String sql = "{ call DetecterLoyersImpayes(?) }";
+	    List<Object[]> loyersImpaye = new ArrayList<>();
+	    try (CallableStatement stmt = connection.prepareCall(sql)) {
+	        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+	        stmt.execute();
+
+	        try (ResultSet rs = (ResultSet) stmt.getObject(1)) {
+	            while (rs.next()) {
+	                Object[] tuple = new Object[2];
+	                tuple[0] = rs.getInt("Id_Louable");
+	                tuple[1] = rs.getDate("DateImpayee").toLocalDate();
+	                loyersImpaye.add(tuple);
+	            }
+	        }
+	    }
+	    return loyersImpaye;
+	}
+
+
 }

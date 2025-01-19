@@ -20,6 +20,8 @@ import javax.swing.table.DefaultTableModel;
 import controleur.GestionAffichageDonnees;
 import controleur.GestionSelecteur;
 import modele.dao.Dao;
+import rapport.RapportAnnuelImmeuble;
+
 import java.awt.GridBagLayout;
 
 public class AffichageDonnees extends JInternalFrame {
@@ -29,6 +31,11 @@ public class AffichageDonnees extends JInternalFrame {
     private JTable tableListeElements; // Table de gauche affichant les éléments d'une entité
     private JPanel panelAttributs; // Panneau à droite pour afficher les attributs d'un élément
     private JScrollPane scrollPaneListeElements;
+    private JCheckBox caseArchive;
+    private JButton btnADI;
+    private JButton btnSTC;
+    private JButton btnDF;
+    private JButton btnDO;
 
     private GestionAffichageDonnees gestionAffichageDonnees;
 
@@ -58,8 +65,8 @@ public class AffichageDonnees extends JInternalFrame {
         btnAjouterElement.addActionListener(e -> gestionAffichageDonnees.ajouterElement());
 
 
-        JCheckBox checkboxArchive = new JCheckBox("Archivés");
-        panelSelecteur.add(checkboxArchive);
+        caseArchive = new JCheckBox("Archivés");
+        panelSelecteur.add(caseArchive);
 
         // Initialisation du tableau
         tableListeElements = new JTable();
@@ -85,13 +92,35 @@ public class AffichageDonnees extends JInternalFrame {
 
         JButton bouttonMAJ = new JButton("Mettre à jour");
         panelBoutons.add(bouttonMAJ);
+        bouttonMAJ.addActionListener(e -> gestionAffichageDonnees.enregistrerModifications());
 
         JButton bouttonSupprimer = new JButton("Supprimer");
         panelBoutons.add(bouttonSupprimer);
         bouttonSupprimer.addActionListener(e -> gestionAffichageDonnees.supprimerElement());
 
-        JButton bouttonDocument = new JButton("Créer le document");
-        panelBoutons.add(bouttonDocument);
+        btnADI = new JButton("Annuel de l'immeuble");
+        panelBoutons.add(btnADI);
+        btnADI.addActionListener(e -> gestionAffichageDonnees.genererRapportAnnuelImmeuble());
+        btnADI.setVisible(false);
+        
+        btnSTC = new JButton("Solde tout compte");
+        panelBoutons.add(btnSTC);
+        btnSTC.addActionListener(e -> gestionAffichageDonnees.genererRapportSoldeToutCompte());
+        btnSTC.setVisible(false);
+        
+        btnDF = new JButton("Declaration Fiscale");
+        panelBoutons.add(btnDF);
+        btnDF.addActionListener(e -> gestionAffichageDonnees.genererRapportDeclarationFiscale());
+        btnDF.setVisible(false);
+        
+        btnDO = new JButton("Diagnostics obligatoires");
+        panelBoutons.add(btnDO);
+        btnDO.addActionListener(e -> gestionAffichageDonnees.genererRapportDiagnosticsObligatoires());
+        btnDO.setVisible(false);
+        
+        JButton btnLI = new JButton("Loyers impayés");
+        panelBoutons.add(btnLI);
+        btnLI.addActionListener(e -> gestionAffichageDonnees.genererRapportLoyersImpayes());
 
         // Panneau pour afficher les attributs de l'élément sélectionné
         panelAttributs = new JPanel();
@@ -111,7 +140,7 @@ public class AffichageDonnees extends JInternalFrame {
         bouttonSupprimer.addActionListener(e -> {
             // Suppression de l'élément (à implémenter si besoin)
         });
-        bouttonDocument.addActionListener(e -> {
+        btnADI.addActionListener(e -> {
             // Génération de document (à implémenter si besoin)
         });
     }
@@ -130,5 +159,43 @@ public class AffichageDonnees extends JInternalFrame {
             gestionAffichageDonnees.setDao(dao); // Définit le DAO dans GestionAffichageDonnees
         }
     }
+    
+	public boolean isArchiveCoche() {
+	    return caseArchive.isSelected(); // 'caseArchive' correspond au JCheckBox
+	}
+
+	public JButton getBtnADI() {
+		return btnADI;
+	}
+
+	public void setBtnADI(JButton btnADI) {
+		this.btnADI = btnADI;
+	}
+
+	public JButton getBtnSTC() {
+		return btnSTC;
+	}
+
+	public void setBtnSTC(JButton btnSTC) {
+		this.btnSTC = btnSTC;
+	}
+
+	public JButton getBtnDF() {
+		return btnDF;
+	}
+
+	public void setBtnDF(JButton btnDF) {
+		this.btnDF = btnDF;
+	}
+
+	public JButton getBtnDO() {
+		return btnDO;
+	}
+
+	public void setBtnDO(JButton btnDO) {
+		this.btnDO = btnDO;
+	}
+
+	
 
 }

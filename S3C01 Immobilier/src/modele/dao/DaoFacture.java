@@ -1,5 +1,6 @@
 package modele.dao;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,6 +16,7 @@ import modele.dao.requetes.delete.RequeteDeleteFacture;
 import modele.dao.requetes.select.RequeteSelectFacture;
 import modele.dao.requetes.select.RequeteSelectFactureByID;
 import modele.dao.requetes.update.RequeteUpdateFacture;
+import oracle.jdbc.OracleTypes;
 
 public class DaoFacture implements Dao<Facture> {
 
@@ -107,4 +109,38 @@ public class DaoFacture implements Dao<Facture> {
 		}
 		return factures;
 	}
+	
+	public List<Facture> facturesImpayeParImmeuble() throws SQLException {
+	    String sql = "{ call FacturesImpayeParImmeuble(?) }";
+	    List<Facture> factures = new ArrayList<>();
+	    DaoEntreprise daoEntreprise = new DaoEntreprise(this.connection);
+	    DaoLouable daoLouable = new DaoLouable(this.connection);
+	    try (CallableStatement stmt = connection.prepareCall(sql)) {
+	        stmt.registerOutParameter(1, OracleTypes.CURSOR);
+	        stmt.execute();
+	        
+	        try (ResultSet rs = (ResultSet) stmt.getObject(1)) {
+	            while (rs.next()) {
+	            	
+	            	int idEntreprise = rs.getInt("Id_Facture");
+	                int idLouable = rs.getInt("Id_Louable");
+	                
+	                Entreprise entreprise = daoEntreprise.findById(String.valueOf(idEntreprise));
+	                Louable louable = daoLouable.findById(String.valueOf(idLouable));
+	            	
+	                Facture facture = new Facture(
+							rs.getInt("Id_Facture"), 
+							rs.getDouble("Montant"), 
+							rs.getDate("DateFacture"),
+							rs.getString("ReferenceDevis"), 
+							rs.getDate("DatePaiement"),
+							entreprise, 
+							louable);
+	                factures.add(facture);
+	            }
+	        }
+	    }
+	    return factures;
+	}
+
 }

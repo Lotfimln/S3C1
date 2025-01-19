@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
@@ -33,6 +34,8 @@ public class GestionSelecteur implements ActionListener {
             if (selection == null) {
                 return;
             }
+            
+            afficherBoutonsSelonSelection(selection);
 
             try {
                 switch (selection) {
@@ -105,10 +108,65 @@ public class GestionSelecteur implements ActionListener {
             }
         }
     }
+    
+    private void afficherBoutonsSelonSelection(ElementsSelectionnables selection) {
+        // Rendre visibles ou invisibles les boutons selon la sélection
+        boolean isImmeuble = selection == ElementsSelectionnables.IMMEUBLE;
+        boolean isLouable = selection == ElementsSelectionnables.LOUABLE;
+
+        // Gérer les boutons pour "Immeuble"
+        fenetreAffichageDonnees.getBtnADI().setVisible(isImmeuble);
+        fenetreAffichageDonnees.getBtnDF().setVisible(isImmeuble);
+        fenetreAffichageDonnees.getBtnDO().setVisible(isImmeuble);
+
+        // Gérer les boutons pour "Louable"
+        fenetreAffichageDonnees.getBtnSTC().setVisible(isLouable);
+
+        // Cacher les autres boutons si la sélection ne correspond pas
+        if (!isImmeuble) {
+            fenetreAffichageDonnees.getBtnADI().setVisible(false);
+            fenetreAffichageDonnees.getBtnDF().setVisible(false);
+            fenetreAffichageDonnees.getBtnDO().setVisible(false);
+        }
+
+        if (!isLouable) {
+            fenetreAffichageDonnees.getBtnSTC().setVisible(false);
+        }
+    }
 
     private <T> void afficherDonnees(Dao<T> dao, Class<T> type) throws SQLException {
         // Récupérer toutes les données du type spécifié depuis le DAO
         List<T> donnees = dao.findAll();
+
+        // Vérifier si la case "archivé" est cochée
+        boolean afficherArchives = fenetreAffichageDonnees.isArchiveCoche();
+
+        // Appliquer des filtres spécifiques selon les types et l'état de la case "archivé"
+        donnees = donnees.stream()
+            .filter(obj -> {
+                if (obj instanceof Locataire) {
+                    Locataire locataire = (Locataire) obj;
+                    return afficherArchives || locataire.getDateDepart() == null; // Inclut ou exclut les locataires archivés
+                }
+                if (obj instanceof ContratDeLocation) {
+                    ContratDeLocation contrat = (ContratDeLocation) obj;
+                    return afficherArchives || contrat.getDateFin() == null; // Inclut ou exclut les contrats terminés
+                }
+                if (obj instanceof Facture) {
+                    Facture facture = (Facture) obj;
+                    return afficherArchives || facture.getDatePaiement() == null; // Inclut ou exclut les factures payées
+                }
+                if (obj instanceof Taxe) {
+                    Taxe taxe = (Taxe) obj;
+                    return afficherArchives || taxe.getDateTaxe() == null; // Inclut ou exclut les taxes non validées
+                }
+                if (obj instanceof Charge) {
+                    Charge charge = (Charge) obj;
+                    return afficherArchives || charge.getPeriodeFin() == null; // Inclut ou exclut les charges terminées
+                }
+                return true; // Pas de filtre pour les autres types
+            })
+            .collect(Collectors.toList());
 
         // Initialisation des colonnes et des données
         String[] colonnes;
@@ -122,7 +180,8 @@ public class GestionSelecteur implements ActionListener {
                 .map(obj -> (Locataire) obj)
                 .map(locataire -> new Object[]{
                     locataire.getIdLocataire(),
-                    locataire.getNom()
+                    locataire.getNom(),
+                    locataire.getDateDepart()
                 })
                 .toArray(Object[][]::new);
             break;
@@ -177,7 +236,8 @@ public class GestionSelecteur implements ActionListener {
                 .map(obj -> (Taxe) obj)
                 .map(taxe -> new Object[]{
                     taxe.getIdTaxe(),
-                    taxe.getMontantTaxeFoncieres()
+                    taxe.getMontantTaxeFoncieres(),
+                    taxe.getDateTaxe()
                 })
                 .toArray(Object[][]::new);
             break;
@@ -188,7 +248,8 @@ public class GestionSelecteur implements ActionListener {
                 .map(obj -> (Facture) obj)
                 .map(facture -> new Object[]{
                     facture.getIdFacture(),
-                    facture.getDateFacture()
+                    facture.getDateFacture(),
+                    facture.getDatePaiement()
                 })
                 .toArray(Object[][]::new);
             break;
@@ -210,7 +271,8 @@ public class GestionSelecteur implements ActionListener {
                 .map(obj -> (ContratDeLocation) obj)
                 .map(contrat -> new Object[]{
                     contrat.getIdContratDeLocation(),
-                    contrat.getMontantLoyer()
+                    contrat.getMontantLoyer(),
+                    contrat.getDateFin()
                 })
                 .toArray(Object[][]::new);
             break;
@@ -221,7 +283,8 @@ public class GestionSelecteur implements ActionListener {
                 .map(obj -> (Charge) obj)
                 .map(charge -> new Object[]{
                     charge.getIdCharge(),
-                    charge.getTypeCharge()
+                    charge.getTypeCharge(),
+                    charge.getPeriodeFin()
                 })
                 .toArray(Object[][]::new);
             break;
@@ -242,15 +305,15 @@ public class GestionSelecteur implements ActionListener {
             data = donnees.stream()
                 .map(obj -> (Louable) obj)
                 .map(louable -> new Object[]{
-                		louable.getIdLouable(),
-                		louable.getTypeLouable()
+                    louable.getIdLouable(),
+                    louable.getTypeLouable()
                 })
                 .toArray(Object[][]::new);
             break;
 
-        default:
-            throw new IllegalArgumentException("Type non pris en charge : " + type.getSimpleName());
-    }
+            default:
+                throw new IllegalArgumentException("Type non pris en charge : " + type.getSimpleName());
+        }
 
         // Met à jour le tableau de la fenêtre avec les données
         JTable tableListeElements = fenetreAffichageDonnees.getTableListeElements();

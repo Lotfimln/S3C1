@@ -1,9 +1,11 @@
 package modele.dao;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,4 +84,46 @@ public class DaoImmeuble implements Dao<Immeuble> {
         }
         return immeubles;
     }
+    
+    public double totalChargesImmeuble(int idImmeuble) throws SQLException {
+        String sql = "{ ? = call TOTALChargesImmeuble(?) }";
+        try (CallableStatement stmt = connection.prepareCall(sql)) {
+            stmt.registerOutParameter(1, Types.DOUBLE);
+            stmt.setInt(2, idImmeuble);
+            stmt.execute();
+            return stmt.getDouble(1);
+        }
+    }
+
+    public double totalLoyersPayes(int idImmeuble) throws SQLException {
+        String sql = "{ ? = call TotalLoyersPayes(?) }";
+        try (CallableStatement stmt = connection.prepareCall(sql)) {
+            stmt.registerOutParameter(1, Types.DOUBLE);
+            stmt.setInt(2, idImmeuble);
+            stmt.execute();
+            return stmt.getDouble(1);
+        }
+    }
+
+    public double totalDesTravauxImmeuble(int idImmeuble) throws SQLException {
+        String sql = "{ ? = call TotalDesTravauxImmeuble(?) }";
+        try (CallableStatement stmt = connection.prepareCall(sql)) {
+            stmt.registerOutParameter(1, Types.DOUBLE);
+            stmt.setInt(2, idImmeuble);
+            stmt.execute();
+            return stmt.getDouble(1);
+        }
+    }
+
+    public double facturesImpayeParImmeuble(int idImmeuble) throws SQLException {
+        String sql = "{ ? = call FacturesImpayeParImmeuble(?) }";
+        try (CallableStatement stmt = connection.prepareCall(sql)) {
+            stmt.registerOutParameter(1, Types.DOUBLE);
+            stmt.setInt(2, idImmeuble);
+            stmt.execute();
+            return stmt.getDouble(1);
+        }
+    }
+
+
 }

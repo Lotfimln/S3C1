@@ -13,6 +13,7 @@ import modele.dao.requetes.create.RequeteCreateDiagnostic;
 import modele.dao.requetes.delete.RequeteDeleteDiagnostic;
 import modele.dao.requetes.select.RequeteSelectDiagnostic;
 import modele.dao.requetes.select.RequeteSelectDiagnosticByID;
+import modele.dao.requetes.select.RequeteSelectDiagnosticByLouable;
 import modele.dao.requetes.update.RequeteUpdateDiagnostic;
 
 public class DaoDiagnostic implements Dao<Diagnostic> {
@@ -89,6 +90,29 @@ public class DaoDiagnostic implements Dao<Diagnostic> {
 						rs.getString("TypeDiagnostic"),
 						rs.getDate("DateDiagnostic"), 
 						louable));
+			}
+		}
+		return diagnostics;
+	}
+	
+	public List<Diagnostic> findByLouable(String... id) throws SQLException {
+		RequeteSelectDiagnosticByLouable requeteSelectByLouable = new RequeteSelectDiagnosticByLouable();
+	    DaoLouable daoLouable = new DaoLouable(this.connection);
+	    List<Diagnostic> diagnostics = new ArrayList<>();
+	    
+	    try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectByLouable.requete())) {
+			requeteSelectByLouable.parametres(prSt, id);
+			try (ResultSet rs = prSt.executeQuery()) {
+				if (rs.next()) {
+	                int idLouable = rs.getInt("Id_Louable");
+	                Louable louable = daoLouable.findById(String.valueOf(idLouable));
+
+	                diagnostics.add (new Diagnostic(
+							rs.getInt("Id_Diagnostic"), 
+							rs.getString("TypeDiagnostic"),
+							rs.getDate("DateDiagnostic"), 
+							louable));
+				}
 			}
 		}
 		return diagnostics;

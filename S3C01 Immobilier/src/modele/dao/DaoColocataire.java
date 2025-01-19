@@ -17,6 +17,7 @@ import modele.dao.requetes.delete.RequeteDeleteLocataire;
 import modele.dao.requetes.select.RequeteSelectColocataire;
 import modele.dao.requetes.select.RequeteSelectColocataireByID;
 import modele.dao.requetes.select.RequeteSelectColocataireByLocataire;
+import modele.dao.requetes.select.RequeteSelectColocataireByLocataire1;
 import modele.dao.requetes.update.RequeteUpdateColocataire;
 
 public class DaoColocataire implements Dao<Colocataire> {
@@ -94,6 +95,17 @@ public class DaoColocataire implements Dao<Colocataire> {
 	                colocataires.add(new Colocataire(
 	                        rs.getString("Id_Locataire"),
 	                        rs.getString("Id_Locataire_1")));
+	            }
+	        }
+	    }	    
+	    RequeteSelectColocataireByLocataire1 requeteSelectLocataire1 = new RequeteSelectColocataireByLocataire1();
+	    try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectLocataire1.requete())) {
+	    	requeteSelectLocataire.parametres(prSt, id);
+	        try (ResultSet rs = prSt.executeQuery()) {
+	            while (rs.next()) {
+	                colocataires.add(new Colocataire(
+	                        rs.getString("Id_Locataire_1"),
+	                        rs.getString("Id_Locataire")));
 	            }
 	        }
 	    }

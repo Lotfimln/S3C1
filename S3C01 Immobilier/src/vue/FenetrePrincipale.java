@@ -1,12 +1,8 @@
 package vue;
 
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.WindowConstants;
-
+import javax.swing.*;
 import controleur.GestionFenetrePrincipale;
+import modele.dao.ImportCSV;
 
 public class FenetrePrincipale extends JFrame {
 	/**
@@ -49,12 +45,32 @@ public class FenetrePrincipale extends JFrame {
 		JMenuItem menuItemProprietaire = new JMenuItem("Proprietaire");
 		menuParametres.add(menuItemProprietaire);
 
+		// Nouveau bouton pour importer le CSV
+		JMenuItem menuItemImporterCSV = new JMenuItem("Importer CSV");
+		menuParametres.add(menuItemImporterCSV);
+
 		// Ajout des contrôleur
 		GestionFenetrePrincipale gestionClic = new GestionFenetrePrincipale(this);
 		menuItemQuitter.addActionListener(gestionClic);
 		menuItemProprietaire.addActionListener(gestionClic);
 		this.menuItemConnecter.addActionListener(gestionClic);
 		this.menuItemDeconnecter.addActionListener(gestionClic);
+
+		// Action pour importer un CSV
+		menuItemImporterCSV.addActionListener(e -> {
+			ImportCSV importCSV = new ImportCSV();
+			importCSV.choisirChemin();
+			String cheminFichier = importCSV.getSelectedFilePath();
+			if (cheminFichier != null && !cheminFichier.isEmpty()) {
+				JOptionPane.showMessageDialog(this, "Fichier sélectionné : " + cheminFichier,
+						"Import CSV", JOptionPane.INFORMATION_MESSAGE);
+				// Appeler ici une méthode pour traiter le fichier, ex :
+				// QuittanceCSVImporter.importerQuittances(cheminFichier);
+			} else {
+				JOptionPane.showMessageDialog(this, "Aucun fichier sélectionné.", "Erreur",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		});
 	}
 
 	public void setConnecte(boolean connecte) {

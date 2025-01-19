@@ -10,7 +10,7 @@ public class RequeteCreateTaxe implements Requete<Taxe> {
 
 	@Override
 	public String requete() {
-		return "INSERT INTO Taxe (Id_Taxe, MontantTaxeFoncieres, DateTaxe, Id_Immeuble) VALUES (?, ?, ?, ?)";
+		return "INSERT INTO Taxe (Id_Taxe, MontantTaxeFoncieres, DatePaiement, DateTaxe, Id_Immeuble) VALUES (?, ?, ?, ?, ?)";
 	}
 
 	@Override
@@ -19,6 +19,7 @@ public class RequeteCreateTaxe implements Requete<Taxe> {
 		prSt.setString(2, id[1]);
 		prSt.setString(3, id[2]);
 		prSt.setString(4, id[3]);
+		prSt.setString(5, id[4]);
 	}
 
 	@Override
@@ -33,7 +34,15 @@ public class RequeteCreateTaxe implements Requete<Taxe> {
 	    } else {
 	        prSt.setNull(3, java.sql.Types.DATE);
 	    }
+	    
+	    java.util.Date utilDate1 = donnees.getDatePaiement();
+	    if (utilDate1 != null) {
+	        java.sql.Date sqlDate = new java.sql.Date(utilDate1.getTime());
+	        prSt.setDate(4, sqlDate);
+	    } else {
+	        prSt.setNull(4, java.sql.Types.DATE);
+	    }
 		
-		prSt.setInt(4, donnees.getImmeuble().getIdImmeuble());
+		prSt.setInt(5, donnees.getImmeuble().getIdImmeuble());
 	}
 }

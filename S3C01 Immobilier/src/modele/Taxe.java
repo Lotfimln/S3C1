@@ -5,12 +5,14 @@ import java.util.Objects;
 public class Taxe {
     private int idTaxe;
     private double montantTaxeFoncieres;
+    private java.util.Date datePaiement;
     private java.util.Date dateTaxe;
     private Immeuble immeuble; // Relation avec Immeuble
 
-    public Taxe(int idTaxe, double montantTaxeFoncieres, java.util.Date dateTaxe, Immeuble immeuble) {
+    public Taxe(int idTaxe, double montantTaxeFoncieres, java.util.Date datePaiement, java.util.Date dateTaxe, Immeuble immeuble) {
         this.idTaxe = idTaxe;
         this.montantTaxeFoncieres = montantTaxeFoncieres;
+        this.datePaiement = datePaiement;
         this.dateTaxe = dateTaxe;
         this.immeuble = immeuble;
     }
@@ -45,6 +47,14 @@ public class Taxe {
 
 	public void setImmeuble(Immeuble immeuble) {
 		this.immeuble = immeuble;
+	}
+
+	public java.util.Date getDatePaiement() {
+		return datePaiement;
+	}
+
+	public void setDatePaiement(java.util.Date datePaiement) {
+		this.datePaiement = datePaiement;
 	}
 
 	@Override

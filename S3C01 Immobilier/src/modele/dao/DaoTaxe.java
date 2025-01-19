@@ -63,7 +63,7 @@ public class DaoTaxe implements Dao<Taxe> {
 	                Immeuble immeuble= daoImmeuble.findById(String.valueOf(idImmeuble));
 
 					return new Taxe(rs.getInt("Id_Taxe"), rs.getDouble("MontantTaxeFoncieres"),
-							rs.getDate("DateTaxe"), immeuble);
+							rs.getDate("DatePaiement"), rs.getDate("DateTaxe"), immeuble);
 				}
 			}
 		}
@@ -82,11 +82,8 @@ public class DaoTaxe implements Dao<Taxe> {
 				int idImmeuble = rs.getInt("Id_Immeuble");
                 Immeuble immeuble= daoImmeuble.findById(String.valueOf(idImmeuble));
 
-				taxes.add(new Taxe(
-						rs.getInt("Id_Taxe"), 
-						rs.getDouble("MontantTaxeFoncieres"),
-						rs.getDate("DateTaxe"), 
-						immeuble));
+				taxes.add(new Taxe(rs.getInt("Id_Taxe"), rs.getDouble("MontantTaxeFoncieres"),
+						rs.getDate("DatePaiement"), rs.getDate("DateTaxe"), immeuble));
 			}
 		}
 		return taxes;
