@@ -51,11 +51,10 @@ public class LireCSV {
 
                     // Création de l'objet Quittances
                     Quittances quittance = new Quittances(numeroLigne, datePaiement, montantLoyer, montantProvision, locataire, contrat);
+                    System.out.print(quittance);
                     DaoQuittances daoQuittances = new DaoQuittances(CictOracleDataSource.getConnectionBD());
                     daoQuittances.create(quittance);
-                    
-                    // Insérer dans la base de données (exemple via DAO)
-                    // QuittanceDAO.ajouterQuittance(quittance);
+
 
                     System.out.println("Quittance créée : " + quittance);
                 } catch (Exception e) {

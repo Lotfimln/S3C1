@@ -1,6 +1,7 @@
 package controleur;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.lang.reflect.Field;
@@ -459,6 +460,7 @@ public class GestionAffichageDonnees<T> {
         
         
         // Ajout des composants au panneau
+        scrollPaneTable.setPreferredSize(new Dimension(500, 80));
         panelAttributs.add(scrollPaneTable);
         panelAttributs.add(panelBoutons);
         panelAttributs.revalidate();

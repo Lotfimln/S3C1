@@ -1,0 +1,152 @@
+INSERT INTO Locataire (Id_Locataire, Nom, Prenom, Mail, Telephone, DateNaissance, DateDepart) VALUES
+('L001', 'Dupont', 'Marie', 'marie.dupont@example.com', '0601010101', TO_DATE('1990-05-15', 'YYYY-MM-DD'), NULL);
+INSERT INTO Locataire (Id_Locataire, Nom, Prenom, Mail, Telephone, DateNaissance, DateDepart) VALUES
+('L002', 'Martin', 'Jean', 'jean.martin@example.com', '0602020202', TO_DATE('1985-09-20', 'YYYY-MM-DD'), TO_DATE('2024-12-31', 'YYYY-MM-DD'));
+INSERT INTO Locataire (Id_Locataire, Nom, Prenom, Mail, Telephone, DateNaissance, DateDepart) VALUES
+('L003', 'Bernard', 'Alice', 'alice.bernard@example.com', '0603030303', TO_DATE('1992-03-12', 'YYYY-MM-DD'), NULL);
+INSERT INTO Locataire (Id_Locataire, Nom, Prenom, Mail, Telephone, DateNaissance, DateDepart) VALUES
+('L004', 'Durand', 'Paul', 'paul.durand@example.com', '0604040404', TO_DATE('1980-07-22', 'YYYY-MM-DD'), TO_DATE('2023-10-01', 'YYYY-MM-DD'));
+
+INSERT INTO Immeuble (Id_Immeuble, Adresse) VALUES
+(1, '12 rue des Lilas');
+INSERT INTO Immeuble (Id_Immeuble, Adresse) VALUES
+(2, '25 avenue des Roses');
+INSERT INTO Immeuble (Id_Immeuble, Adresse) VALUES
+(3, '5 place des Tulipes');
+INSERT INTO Immeuble (Id_Immeuble, Adresse) VALUES
+(4, '10 boulevard des Champs');
+
+INSERT INTO Assureur (Id_Assureur, Nom, DateAssurance, Prime, TypeAssureur) VALUES
+(1, 'AXA', TO_DATE('2022-03-01', 'YYYY-MM-DD'), 1200, 'Propriétaire');
+INSERT INTO Assureur (Id_Assureur, Nom, DateAssurance, Prime, TypeAssureur) VALUES
+(2, 'Allianz', TO_DATE('2023-05-15', 'YYYY-MM-DD'), 800, 'Aide juridique');
+INSERT INTO Assureur (Id_Assureur, Nom, DateAssurance, Prime, TypeAssureur) VALUES
+(3, 'Groupama', TO_DATE('2021-11-10', 'YYYY-MM-DD'), 1000, 'Propriétaire');
+INSERT INTO Assureur (Id_Assureur, Nom, DateAssurance, Prime, TypeAssureur) VALUES
+(4, 'MAIF', TO_DATE('2023-01-20', 'YYYY-MM-DD'), 950, 'Aide juridique');
+
+INSERT INTO Entreprise (Id_Entreprise, Nom, SIREN, Adresse) VALUES
+(1, 'RenovPlus', 123456789, '45 boulevard Haussmann');
+INSERT INTO Entreprise (Id_Entreprise, Nom, SIREN, Adresse) VALUES
+(2, 'EcoServices', 987654321, '78 chemin Vert');
+INSERT INTO Entreprise (Id_Entreprise, Nom, SIREN, Adresse) VALUES
+(3, 'Batipro', 456789123, '32 avenue Montaigne');
+INSERT INTO Entreprise (Id_Entreprise, Nom, SIREN, Adresse) VALUES
+(4, 'GreenFix', 321654987, '90 chemin des Vignes');
+
+INSERT INTO Index_Compteur (Id_Index_Compteur, TypeCompteur, ValeurCourante, AncienneValeur) VALUES
+(1, 'Eau', 150.123, 140.456);
+INSERT INTO Index_Compteur (Id_Index_Compteur, TypeCompteur, ValeurCourante, AncienneValeur) VALUES
+(2, 'Gaz', 200.500, 190.000);
+INSERT INTO Index_Compteur (Id_Index_Compteur, TypeCompteur, ValeurCourante, AncienneValeur) VALUES
+(3, 'Energie', 300.800, 290.300);
+INSERT INTO Index_Compteur (Id_Index_Compteur, TypeCompteur, ValeurCourante, AncienneValeur) VALUES
+(4, 'Eau', 400.250, 390.150);
+
+INSERT INTO Louable (Id_Louable, TypeLouable, Adresse, Superficie, NumeroFiscal, Statut, DateAnniversaire, DateAcquisition, Id_Immeuble, Id_Assureur, NbPieces) VALUES
+(1, 'Logement', '12 rue des Lilas', 70.500, 'FR123456', 'Y', TO_DATE('2023-02-01', 'YYYY-MM-DD'), TO_DATE('2022-01-15', 'YYYY-MM-DD'), 1, 1, 3);
+INSERT INTO Louable (Id_Louable, TypeLouable, Adresse, Superficie, NumeroFiscal, Statut, DateAnniversaire, DateAcquisition, Id_Immeuble, Id_Assureur, NbPieces) VALUES
+(2, 'Garage', '25 avenue des Roses', 15.000, 'FR987654', 'N', NULL, TO_DATE('2021-06-01', 'YYYY-MM-DD'), 2, 2, NULL);
+INSERT INTO Louable (Id_Louable, TypeLouable, Adresse, Superficie, NumeroFiscal, Statut, DateAnniversaire, DateAcquisition, Id_Immeuble, Id_Assureur, NbPieces) VALUES
+(3, 'Logement', '5 place des Tulipes', 85.300, 'FR654321', 'Y', TO_DATE('2023-05-10', 'YYYY-MM-DD'), TO_DATE('2020-12-20', 'YYYY-MM-DD'), 3, 3, 4);
+INSERT INTO Louable (Id_Louable, TypeLouable, Adresse, Superficie, NumeroFiscal, Statut, DateAnniversaire, DateAcquisition, Id_Immeuble, Id_Assureur, NbPieces) VALUES
+(4, 'Garage', '10 boulevard des Champs', 20.000, 'FR112233', 'Y', NULL, TO_DATE('2022-09-15', 'YYYY-MM-DD'), 4, 4, NULL);
+
+INSERT INTO Taxe (Id_Taxe, MontantTaxeFoncieres, DatePaiement, DateTaxe, Id_Immeuble) VALUES
+(1, 500.000, TO_DATE('2024-02-01', 'YYYY-MM-DD'), TO_DATE('2023-11-15', 'YYYY-MM-DD'), 1);
+INSERT INTO Taxe (Id_Taxe, MontantTaxeFoncieres, DatePaiement, DateTaxe, Id_Immeuble) VALUES
+(2, 200.000, TO_DATE('2024-01-01', 'YYYY-MM-DD'), TO_DATE('2023-11-20', 'YYYY-MM-DD'), 2);
+INSERT INTO Taxe (Id_Taxe, MontantTaxeFoncieres, DatePaiement, DateTaxe, Id_Immeuble) VALUES
+(3, 750.000, TO_DATE('2024-04-01', 'YYYY-MM-DD'), TO_DATE('2023-12-01', 'YYYY-MM-DD'), 3);
+INSERT INTO Taxe (Id_Taxe, MontantTaxeFoncieres, DatePaiement, DateTaxe, Id_Immeuble) VALUES
+(4, 300.000, TO_DATE('2024-02-01', 'YYYY-MM-DD'), TO_DATE('2023-10-10', 'YYYY-MM-DD'), 4);
+
+INSERT INTO Facture (Id_Facture, Montant, DateFacture, ReferenceDevis, DatePaiement, Id_Entreprise, Id_Louable) VALUES
+(1, 1000.000, TO_DATE('2023-08-15', 'YYYY-MM-DD'), 'Travaux', TO_DATE('2023-09-01', 'YYYY-MM-DD'), 1, 1);
+INSERT INTO Facture (Id_Facture, Montant, DateFacture, ReferenceDevis, DatePaiement, Id_Entreprise, Id_Louable) VALUES
+(2, 200.000, TO_DATE('2023-09-10', 'YYYY-MM-DD'), 'Entretien', NULL, 2, 2);
+INSERT INTO Facture (Id_Facture, Montant, DateFacture, ReferenceDevis, DatePaiement, Id_Entreprise, Id_Louable) VALUES
+(3, 500.000, TO_DATE('2023-07-20', 'YYYY-MM-DD'), 'Rénovation', TO_DATE('2023-08-05', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO Facture (Id_Facture, Montant, DateFacture, ReferenceDevis, DatePaiement, Id_Entreprise, Id_Louable) VALUES
+(4, 300.000, TO_DATE('2023-10-01', 'YYYY-MM-DD'), 'Travaux imputables', TO_DATE('2023-10-15', 'YYYY-MM-DD'), 4, 4);
+
+INSERT INTO Contrat_de_location (Id_Contrat_de_location, DateDebut, DateFin, MontantLoyer, ProvisionsCharges, TypeContrat, DateAnniversaire, DateDerniereRegularisation, IndiceICC, MontantCaution, NomCaution, AdresseCaution, Id_Louable) VALUES
+(1, TO_DATE('2023-01-01', 'YYYY-MM-DD'), NULL, 750.000, 50.000, 'Bail habitation', TO_DATE('2024-01-01', 'YYYY-MM-DD'), NULL, 120.000, 1500.000, 'Pierre Durand', '15 rue Bleue', 1);
+INSERT INTO Contrat_de_location (Id_Contrat_de_location, DateDebut, DateFin, MontantLoyer, ProvisionsCharges, TypeContrat, DateAnniversaire, DateDerniereRegularisation, IndiceICC, MontantCaution, NomCaution, AdresseCaution, Id_Louable) VALUES
+(2, TO_DATE('2022-05-15', 'YYYY-MM-DD'), TO_DATE('2023-06-15', 'YYYY-MM-DD'), 1200.000, 100.000, 'Bail commercial', TO_DATE('2023-05-15', 'YYYY-MM-DD'), TO_DATE('2023-06-01', 'YYYY-MM-DD'), 140.000, 2000.000, 'Jacques Lefevre', '22 rue Verte', 2);
+INSERT INTO Contrat_de_location (Id_Contrat_de_location, DateDebut, DateFin, MontantLoyer, ProvisionsCharges, TypeContrat, DateAnniversaire, DateDerniereRegularisation, IndiceICC, MontantCaution, NomCaution, AdresseCaution, Id_Louable) VALUES
+(3, TO_DATE('2021-10-01', 'YYYY-MM-DD'), NULL, 850.000, 70.000, 'Bail habitation', TO_DATE('2022-10-01', 'YYYY-MM-DD'), NULL, 130.000, 1800.000, 'Isabelle Moreau', '18 avenue Jaune', 3);
+INSERT INTO Contrat_de_location (Id_Contrat_de_location, DateDebut, DateFin, MontantLoyer, ProvisionsCharges, TypeContrat, DateAnniversaire, DateDerniereRegularisation, IndiceICC, MontantCaution, NomCaution, AdresseCaution, Id_Louable) VALUES
+(4, TO_DATE('2020-01-01', 'YYYY-MM-DD'), TO_DATE('2023-12-31', 'YYYY-MM-DD'), 500.000, 30.000, 'Bail garage', TO_DATE('2021-01-01', 'YYYY-MM-DD'), TO_DATE('2023-11-15', 'YYYY-MM-DD'), 110.000, 1000.000, 'Luc Martin', '34 boulevard Noir', 4);
+
+INSERT INTO Charge (Id_Charge, TypeCharge, Montant, Recuperable, PeriodeDebut, PeriodeFin, Id_Facture, Id_Louable) VALUES
+(1, 'Eau', 50.000, 'Y', TO_DATE('2023-01-01', 'YYYY-MM-DD'), TO_DATE('2023-03-31', 'YYYY-MM-DD'), 1, 1);
+INSERT INTO Charge (Id_Charge, TypeCharge, Montant, Recuperable, PeriodeDebut, PeriodeFin, Id_Facture, Id_Louable) VALUES
+(2, 'Gaz', 30.000, 'N', TO_DATE('2023-04-01', 'YYYY-MM-DD'), TO_DATE('2023-06-30', 'YYYY-MM-DD'), 2, 2);
+INSERT INTO Charge (Id_Charge, TypeCharge, Montant, Recuperable, PeriodeDebut, PeriodeFin, Id_Facture, Id_Louable) VALUES
+(3, 'Energie', 100.000, 'Y', TO_DATE('2023-07-01', 'YYYY-MM-DD'), TO_DATE('2023-09-30', 'YYYY-MM-DD'), 3, 3);
+INSERT INTO Charge (Id_Charge, TypeCharge, Montant, Recuperable, PeriodeDebut, PeriodeFin, Id_Facture, Id_Louable) VALUES
+(4, 'Eau', 20.000, 'N', TO_DATE('2023-10-01', 'YYYY-MM-DD'), TO_DATE('2023-12-31', 'YYYY-MM-DD'), 4, 4);
+
+INSERT INTO Colocataire (Id_Locataire, Id_Locataire_1) VALUES
+('L001', 'L002');
+INSERT INTO Colocataire (Id_Locataire, Id_Locataire_1) VALUES
+('L003', 'L004');
+INSERT INTO Colocataire (Id_Locataire, Id_Locataire_1) VALUES
+('L002', 'L003');
+INSERT INTO Colocataire (Id_Locataire, Id_Locataire_1) VALUES
+('L004', 'L001');
+
+INSERT INTO Diagnostic (Id_Diagnostic, TypeDiagnostic, DateDiagnostic, Id_Louable) VALUES
+(1, 'Amiante', TO_DATE('2023-01-10', 'YYYY-MM-DD'), 1);
+INSERT INTO Diagnostic (Id_Diagnostic, TypeDiagnostic, DateDiagnostic, Id_Louable) VALUES
+(2, 'Plomb', TO_DATE('2022-05-20', 'YYYY-MM-DD'), 2);
+INSERT INTO Diagnostic (Id_Diagnostic, TypeDiagnostic, DateDiagnostic, Id_Louable) VALUES
+(3, 'Gaz', TO_DATE('2021-11-25', 'YYYY-MM-DD'), 3);
+INSERT INTO Diagnostic (Id_Diagnostic, TypeDiagnostic, DateDiagnostic, Id_Louable) VALUES
+(4, 'Électricité', TO_DATE('2023-08-15', 'YYYY-MM-DD'), 4);
+
+INSERT INTO Quittances (Id_Quittances, DatePaiement, MontantLoyer, MontantProvision, Id_Locataire, Id_Contrat_de_location) VALUES
+(1, TO_DATE('2023-01-15', 'YYYY-MM-DD'), 750.000, 50.000, 'L001', 1);
+INSERT INTO Quittances (Id_Quittances, DatePaiement, MontantLoyer, MontantProvision, Id_Locataire, Id_Contrat_de_location) VALUES
+(2, TO_DATE('2023-06-15', 'YYYY-MM-DD'), 1200.000, 100.000, 'L002', 2);
+INSERT INTO Quittances (Id_Quittances, DatePaiement, MontantLoyer, MontantProvision, Id_Locataire, Id_Contrat_de_location) VALUES
+(3, TO_DATE('2023-09-15', 'YYYY-MM-DD'), 850.000, 70.000, 'L003', 3);
+INSERT INTO Quittances (Id_Quittances, DatePaiement, MontantLoyer, MontantProvision, Id_Locataire, Id_Contrat_de_location) VALUES
+(4, TO_DATE('2023-12-15', 'YYYY-MM-DD'), 500.000, 30.000, 'L004', 4);
+
+INSERT INTO Indexer (Id_Index_Compteur, Id_Immeuble, DateReleve, PrixAbonnement, DateRegularisation) VALUES
+(1, 1, TO_DATE('2023-01-01', 'YYYY-MM-DD'), 20.000, TO_DATE('2023-12-31', 'YYYY-MM-DD'));
+INSERT INTO Indexer (Id_Index_Compteur, Id_Immeuble, DateReleve, PrixAbonnement, DateRegularisation) VALUES
+(2, 2, TO_DATE('2023-02-01', 'YYYY-MM-DD'), 25.000, TO_DATE('2023-11-30', 'YYYY-MM-DD'));
+INSERT INTO Indexer (Id_Index_Compteur, Id_Immeuble, DateReleve, PrixAbonnement, DateRegularisation) VALUES
+(3, 3, TO_DATE('2023-03-01', 'YYYY-MM-DD'), 30.000, TO_DATE('2023-10-31', 'YYYY-MM-DD'));
+INSERT INTO Indexer (Id_Index_Compteur, Id_Immeuble, DateReleve, PrixAbonnement, DateRegularisation) VALUES
+(4, 4, TO_DATE('2023-04-01', 'YYYY-MM-DD'), 15.000, TO_DATE('2023-09-30', 'YYYY-MM-DD'));
+
+INSERT INTO Associer (Id_Louable, Id_Index_Compteur, DateReleve, PrixAbonnement, DateRegularisation) VALUES
+(1, 1, TO_DATE('2023-01-01', 'YYYY-MM-DD'), 20.000, TO_DATE('2023-12-31', 'YYYY-MM-DD'));
+INSERT INTO Associer (Id_Louable, Id_Index_Compteur, DateReleve, PrixAbonnement, DateRegularisation) VALUES
+(2, 2, TO_DATE('2023-02-01', 'YYYY-MM-DD'), 25.000, TO_DATE('2023-11-30', 'YYYY-MM-DD'));
+INSERT INTO Associer (Id_Louable, Id_Index_Compteur, DateReleve, PrixAbonnement, DateRegularisation) VALUES
+(3, 3, TO_DATE('2023-03-01', 'YYYY-MM-DD'), 30.000, TO_DATE('2023-10-31', 'YYYY-MM-DD'));
+INSERT INTO Associer (Id_Louable, Id_Index_Compteur, DateReleve, PrixAbonnement, DateRegularisation) VALUES
+(4, 4, TO_DATE('2023-04-01', 'YYYY-MM-DD'), 15.000, TO_DATE('2023-09-30', 'YYYY-MM-DD'));
+
+INSERT INTO Apparaitre (Id_Charge, Id_Index_Compteur) VALUES
+(1, 1);
+INSERT INTO Apparaitre (Id_Charge, Id_Index_Compteur) VALUES
+(2, 2);
+INSERT INTO Apparaitre (Id_Charge, Id_Index_Compteur) VALUES
+(3, 3);
+INSERT INTO Apparaitre (Id_Charge, Id_Index_Compteur) VALUES
+(4, 4);
+
+INSERT INTO Correspondre (Id_Locataire, Id_Contrat_de_location) VALUES
+('L001', 1);
+INSERT INTO Correspondre (Id_Locataire, Id_Contrat_de_location) VALUES
+('L002', 2);
+INSERT INTO Correspondre (Id_Locataire, Id_Contrat_de_location) VALUES
+('L003', 3);
+INSERT INTO Correspondre (Id_Locataire, Id_Contrat_de_location) VALUES
+('L004', 4);

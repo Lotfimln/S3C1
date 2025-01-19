@@ -3,6 +3,7 @@ package vue;
 import javax.swing.*;
 import controleur.GestionFenetrePrincipale;
 import modele.dao.ImportCSV;
+import modele.dao.LireCSV;
 
 public class FenetrePrincipale extends JFrame {
 	/**
@@ -58,18 +59,24 @@ public class FenetrePrincipale extends JFrame {
 
 		// Action pour importer un CSV
 		menuItemImporterCSV.addActionListener(e -> {
-			ImportCSV importCSV = new ImportCSV();
-			importCSV.choisirChemin();
-			String cheminFichier = importCSV.getSelectedFilePath();
-			if (cheminFichier != null && !cheminFichier.isEmpty()) {
-				JOptionPane.showMessageDialog(this, "Fichier sélectionné : " + cheminFichier,
-						"Import CSV", JOptionPane.INFORMATION_MESSAGE);
-				// Appeler ici une méthode pour traiter le fichier, ex :
-				// QuittanceCSVImporter.importerQuittances(cheminFichier);
-			} else {
-				JOptionPane.showMessageDialog(this, "Aucun fichier sélectionné.", "Erreur",
-						JOptionPane.ERROR_MESSAGE);
-			}
+		    ImportCSV importCSV = new ImportCSV();
+		    importCSV.choisirChemin();
+		    String cheminFichier = importCSV.getSelectedFilePath();
+
+		    if (cheminFichier != null && !cheminFichier.isEmpty()) {
+		        try {
+		            // Appeler la méthode pour importer les quittances
+		            LireCSV.importerQuittances(cheminFichier);
+		            JOptionPane.showMessageDialog(this, "Importation réussie du fichier : " + cheminFichier,
+		                    "Import CSV", JOptionPane.INFORMATION_MESSAGE);
+		        } catch (Exception ex) {
+		            JOptionPane.showMessageDialog(this, "Erreur lors de l'importation : " + ex.getMessage(),
+		                    "Erreur", JOptionPane.ERROR_MESSAGE);
+		        }
+		    } else {
+		        JOptionPane.showMessageDialog(this, "Aucun fichier sélectionné.", "Erreur",
+		                JOptionPane.ERROR_MESSAGE);
+		    }
 		});
 	}
 

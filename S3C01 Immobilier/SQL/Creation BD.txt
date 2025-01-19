@@ -1,0 +1,231 @@
+drop table Correspondre;
+drop table Apparaitre;
+drop table Associer;
+drop table Indexer;
+drop table Quittances;
+drop table Diagnostic;
+drop table Colocataire;
+drop table Charge;
+drop table Contrat_de_location;
+drop table Facture;
+drop table Taxe;
+drop table Louable;
+drop table Index_compteur;
+drop table Entreprise;
+drop table Assureur;
+drop table Immeuble;
+drop table Locataire;
+
+---------------------- Table Locataire ----------------------
+create table Locataire(
+    Id_Locataire VARCHAR2(4),
+    Nom VARCHAR2(50),
+    Prenom VARCHAR2(50),
+    Mail VARCHAR2(50),
+    Telephone VARCHAR2(50),
+    DateNaissance DATE,
+    DateDepart DATE,
+    constraint pk_loca primary key (Id_Locataire),
+    constraint un_loca_nom_prenom_d_n unique (Nom, Prenom, DateNaissance)
+);
+
+---------------------- Table Immeuble ----------------------
+create table Immeuble(
+    Id_Immeuble INT,
+    Adresse VARCHAR2(50),
+    constraint pk_imme primary key (Id_Immeuble),
+    constraint ck_adre check (Adresse is not null)
+);
+
+---------------------- Table Assureur ----------------------
+create table Assureur(
+    Id_Assureur INT,
+    Nom VARCHAR2(50),
+    DateAssurance DATE,
+    Prime NUMBER,
+    TypeAssureur VARCHAR2(50),
+    constraint pk_assu primary key(Id_Assureur)
+);
+
+---------------------- Table Entreprise ----------------------
+create table Entreprise(
+    Id_Entreprise INT,
+    Nom VARCHAR2(50),
+    SIREN NUMBER(9),
+    Adresse VARCHAR2(50),
+    constraint pk_entr primary key (Id_Entreprise)
+);
+
+---------------------- Table IndexCompteur ----------------------
+create table Index_Compteur(
+    Id_Index_Compteur INT,
+    TypeCompteur VARCHAR2(50),
+    ValeurCourante NUMBER(10,3),
+    AncienneValeur NUMBER(10,3),
+    constraint pk_indecomp primary key (Id_Index_Compteur),
+    constraint ck_valactu_valavan check (ValeurCourante >= AncienneValeur) -- Cohérence des valeurs
+);
+
+---------------------- Table Louable ----------------------
+create table Louable(
+    Id_Louable INT,
+    TypeLouable VARCHAR2(10),
+    Adresse VARCHAR2(50),
+    Superficie NUMBER(10, 3),
+    NumeroFiscal VARCHAR2(50),
+    Statut VARCHAR2(1), -- Utiliser 'Y' pour vrai et 'N' pour faux
+    DateAnniversaire DATE,
+    DateAcquisition DATE,
+    Id_Immeuble INT,
+    Id_Assureur INT,
+    NbPieces INT,
+    constraint pk_louable primary key (Id_Louable),
+    constraint fk_loua_imme foreign key (Id_Immeuble) references Immeuble(Id_Immeuble) on delete cascade,
+    constraint fk_loua_assu foreign key (Id_Assureur) REFERENCES Assureur(Id_Assureur) on delete cascade
+);
+
+---------------------- Table Taxe ----------------------
+create table Taxe(
+    Id_Taxe INT,
+    MontantTaxeFoncieres NUMBER(10,3),
+    DatePaiement DATE,
+    DateTaxe DATE,
+    Id_Immeuble INT,
+    constraint pk_taxe primary key(Id_Taxe),
+    constraint fk_taxe_imme foreign key(Id_Immeuble) references Immeuble(Id_Immeuble) on delete cascade,
+    constraint ck_monttaxefonc check (MontantTaxeFoncieres > 0) -- Montant de taxe non négatif
+);
+
+---------------------- Table Facture ----------------------
+create table Facture(
+    Id_Facture INT,
+    Montant NUMBER(10,3),
+    DateFacture DATE,
+    ReferenceDevis VARCHAR2(50),
+    DatePaiement DATE,
+    Id_Entreprise INT,
+    Id_Louable INT,
+    constraint pk_fact primary key(Id_Facture),
+    constraint fk_fact_entre foreign key(Id_Entreprise) references Entreprise(Id_Entreprise) on delete cascade,
+    constraint fk_fact_loua foreign key(Id_Louable) references Louable(Id_Louable) on delete cascade
+);
+
+---------------------- Table Contrat_de_location ----------------------
+create table Contrat_de_location(
+    Id_Contrat_de_location INT,
+    DateDebut DATE,
+    DateFin DATE,
+    MontantLoyer NUMBER(10,3),
+    ProvisionsCharges NUMBER(10, 3),
+    TypeContrat VARCHAR2(50),
+    DateAnniversaire DATE,
+    DateDerniereRegularisation DATE,
+    IndiceICC NUMBER(10,3),
+    MontantCaution NUMBER(10,3),
+    NomCaution VARCHAR2(50),
+    AdresseCaution VARCHAR2(50),
+    Id_Louable INT,
+    constraint pk_contloca primary key(Id_Contrat_de_location),
+    constraint fk_contloca_loua foreign key(Id_Louable) references Louable(Id_Louable) on delete cascade,
+    constraint ck_contloca check (MontantLoyer > 0 AND MontantCaution >= 0 and (DateFin is null or DateFin > DateDebut)) -- Validité contrat
+);
+
+---------------------- Table Charge ----------------------
+create table Charge(
+    Id_Charge INT,
+    TypeCharge VARCHAR2(50),
+    Montant NUMBER(10,3),
+    Recuperable VARCHAR2(1), -- Utiliser 'Y' pour vrai et 'N' pour faux
+    PeriodeDebut DATE,
+    PeriodeFin DATE,
+    Id_Facture INT,
+    Id_Louable INT,
+    constraint pk_char primary key (Id_Charge),
+    constraint fk_char_fact foreign key (Id_Facture) references Facture(Id_Facture) on delete cascade,
+    constraint fk_char_loua foreign key (Id_Louable) references Louable(Id_Louable) on delete cascade,
+    constraint ck_mont check (Montant > 0), -- Montant valide
+    constraint ck_peri check (PeriodeDebut < PeriodeFin) -- Cohérence des périodes
+);
+
+---------------------- Table Colocataire ----------------------
+create table Colocataire(
+    Id_Locataire VARCHAR2(4),
+    Id_Locataire_1 VARCHAR2(4),
+    constraint pk_colo primary key (Id_Locataire, Id_Locataire_1),
+    constraint fk_loca_loca1 foreign key(Id_Locataire) references Locataire(Id_Locataire) on delete cascade,
+    constraint fk_loca1_loca foreign key(Id_Locataire_1) references Locataire(Id_Locataire) on delete cascade,
+    constraint ck_loca_diff check (Id_Locataire <> Id_Locataire_1) -- Un colocataire ne peut pas être lui-même
+);
+
+---------------------- Table Diagnostic ----------------------
+create table Diagnostic(
+    Id_Diagnostic INT,
+    TypeDiagnostic VARCHAR2(50),
+    DateDiagnostic DATE,
+    Id_Louable INT,
+    constraint pk_diag primary key (Id_Diagnostic),
+    constraint fk_diag_loua foreign key (Id_Louable) references Louable(Id_Louable) on delete cascade
+);
+
+---------------------- Table Quittances ----------------------
+create table Quittances(
+    Id_Quittances INT,
+    DatePaiement DATE,
+    MontantLoyer NUMBER(10,3),
+    MontantProvision NUMBER(10,3),
+    Id_Locataire VARCHAR2(4),
+    Id_Contrat_de_location INT,
+    constraint pk_quit primary key (Id_Quittances),
+    constraint fk_quit_loca foreign key(Id_Locataire) references Locataire(Id_Locataire) on delete cascade,
+    constraint fk_quit_contloca FOREIGN KEY(Id_Contrat_de_location) REFERENCES Contrat_de_location(Id_Contrat_de_location) ON DELETE CASCADE,
+    constraint ck_montloye check (MontantLoyer > 0), -- Montant du loyer positif
+    constraint ck_montprov check  (MontantProvision >= 0) -- Provision non négative
+);
+
+---------------------- Table Indexer ----------------------
+create table Indexer(
+    Id_Index_Compteur INT,
+    Id_Immeuble INT,
+    DateReleve DATE,
+    PrixAbonnement NUMBER,
+    DateRegularisation DATE,
+    constraint pk_index primary key(Id_Index_Compteur, Id_Immeuble),
+    constraint fk_index_indecomp foreign key(Id_Index_Compteur) references Index_Compteur(Id_Index_Compteur) on delete cascade,
+    constraint fk_index_imme foreign key(Id_Immeuble) references Immeuble(Id_Immeuble) on delete cascade
+);
+
+---------------------- Table Associer ----------------------
+CREATE TABLE Associer(
+   Id_Louable INT,
+   Id_Index_Compteur INT,
+   DateReleve DATE,
+   PrixAbonnement NUMBER,
+   DateRegularisation DATE,
+   PRIMARY KEY(Id_Louable, Id_Index_Compteur),
+   FOREIGN KEY(Id_Louable) REFERENCES Louable(Id_Louable) on delete cascade,
+   FOREIGN KEY(Id_Index_Compteur) REFERENCES Index_Compteur(Id_Index_Compteur) on delete cascade
+);
+
+---------------------- Table Apparaitre ----------------------
+
+CREATE TABLE Apparaitre(
+   Id_Charge INT,
+   Id_Index_Compteur INT,
+   PRIMARY KEY(Id_Charge, Id_Index_Compteur),
+   FOREIGN KEY(Id_Charge) REFERENCES Charge(Id_Charge) on delete cascade,
+   FOREIGN KEY(Id_Index_Compteur) REFERENCES Index_Compteur(Id_Index_Compteur) on delete cascade
+);
+
+---------------------- Table Correspondre ----------------------
+CREATE TABLE Correspondre(
+   Id_Locataire VARCHAR2(4),
+   Id_Contrat_de_location INT,
+   PRIMARY KEY(Id_Locataire, Id_Contrat_de_location),
+   FOREIGN KEY(Id_Locataire) REFERENCES Locataire(Id_Locataire) on delete cascade,
+   FOREIGN KEY(Id_Contrat_de_location) REFERENCES Contrat_de_location(Id_Contrat_de_location) on delete cascade
+);
+
+
+
+
+
