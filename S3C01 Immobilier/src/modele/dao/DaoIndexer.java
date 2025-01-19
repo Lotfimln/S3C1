@@ -122,10 +122,10 @@ public class DaoIndexer implements Dao<Indexer> {
 	}
 	
 	public List<Indexer> findByImmeuble(String... id) throws SQLException {
-	    RequeteSelectIndexerByImmeuble requeteSelectImmeuble = new RequeteSelectIndexerByImmeuble();
+	    RequeteSelectIndexerByImmeuble requeteSelectIndexer = new RequeteSelectIndexerByImmeuble();
 	    List<Indexer> indexers = new ArrayList<>();
-	    try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectImmeuble.requete())) {
-	        requeteSelectImmeuble.parametres(prSt, id);
+	    try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectIndexer.requete())) {
+	    	requeteSelectIndexer.parametres(prSt, id);
 	        try (ResultSet rs = prSt.executeQuery()) {
 	            while (rs.next()) {
 	                indexers.add(new Indexer(

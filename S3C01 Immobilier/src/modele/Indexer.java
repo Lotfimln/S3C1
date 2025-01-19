@@ -13,6 +13,9 @@ public class Indexer {
     public Indexer(int idIndexCompteur, int idImmeuble, Date dateReleve, double prixAbonnement, Date dateRegularisation) {
         this.idIndexCompteur = idIndexCompteur;
         this.idImmeuble = idImmeuble;
+        this.dateReleve = dateReleve;
+        this.prixAbonnement = prixAbonnement;
+        this.dateRegularisation = dateRegularisation;
     }
 
     // Getters et Setters
@@ -56,9 +59,12 @@ public class Indexer {
         this.dateRegularisation = dateRegularisation;
     }
     
+
 	@Override
 	public String toString() {
-		return null;
+		return "Indexer [idIndexCompteur=" + idIndexCompteur + ", idImmeuble=" + idImmeuble + ", dateReleve="
+				+ dateReleve + ", prixAbonnement=" + prixAbonnement + ", dateRegularisation=" + dateRegularisation
+				+ "]";
 	}
 
 	@Override

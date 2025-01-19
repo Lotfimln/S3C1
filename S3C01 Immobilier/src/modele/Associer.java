@@ -13,6 +13,9 @@ public class Associer {
     public Associer(int idLouable, int idIndexCompteur, Date dateReleve, double prixAbonnement, Date dateRegularisation) {
         this.idLouable = idLouable;
         this.idIndexCompteur = idIndexCompteur;
+        this.dateReleve = dateReleve;
+        this.prixAbonnement = prixAbonnement;
+        this.dateRegularisation = dateRegularisation;
     }
 
     // Getters et Setters

@@ -314,6 +314,7 @@ public class GestionAffichageDonnees<T> {
                                 indexer.getPrixAbonnement(),
                                 indexer.getDateRegularisation()
                             });
+                            System.out.println(indexer);
                         }
                     }
                     break;
