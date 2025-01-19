@@ -159,7 +159,6 @@ public class DaoLouable implements Dao<Louable> {
 	    	requeteSelectByImmeuble.parametres(prSt, id);
 	        try (ResultSet rs = prSt.executeQuery()) {
 	            if (rs.next()) {
-	                // Vérifiez les noms des colonnes ici
 	                int idAssureur = rs.getInt("Id_Assureur");
 	                int idImmeuble = rs.getInt("Id_Immeuble");
 	                Assureur assureur = daoAssureur.findById(String.valueOf(idAssureur));

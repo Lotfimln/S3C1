@@ -10,6 +10,7 @@ public class ContratDeLocation {
     private double provisionsCharges;
     private String typeContrat;
     private java.util.Date dateAnniversaire;
+    private java.util.Date dateDerniereRegularisation;
     private double indiceICC;
     private double montantCaution;
     private String NomCaution;
@@ -18,7 +19,7 @@ public class ContratDeLocation {
     private Louable louable; // Relation avec Louable
 
     public ContratDeLocation(int idContratDeLocation, java.util.Date dateDebut, java.util.Date dateFin, double montantLoyer,
-                              double provisionsCharges, String typeContrat, java.util.Date dateAnniversaire, double indiceICC,
+                              double provisionsCharges, String typeContrat, java.util.Date dateAnniversaire, java.util.Date dateDerniereRegularisation, double indiceICC,
                               double montantCaution, String NomCaution, String AdresseCaution, Louable louable) {
         this.idContratDeLocation = idContratDeLocation;
         this.dateDebut = dateDebut;
@@ -27,6 +28,7 @@ public class ContratDeLocation {
         this.provisionsCharges = provisionsCharges;
         this.typeContrat = typeContrat;
         this.dateAnniversaire = dateAnniversaire;
+        this.dateDerniereRegularisation = dateDerniereRegularisation;
         this.indiceICC = indiceICC;
         this.montantCaution = montantCaution;
         this.louable = louable;
@@ -89,6 +91,14 @@ public class ContratDeLocation {
 	public void setDateAnniversaire(java.util.Date dateAnniversaire) {
 		this.dateAnniversaire = dateAnniversaire;
 	}
+	
+	public java.util.Date getDateDerniereRegularisation() {
+		return dateAnniversaire;
+	}
+
+	public void setDateDerniereRegularisation(java.util.Date dateDerniereRegularisation) {
+		this.dateDerniereRegularisation = dateDerniereRegularisation;
+	}
 
 	public double getIndiceICC() {
 		return indiceICC;
@@ -137,8 +147,9 @@ public class ContratDeLocation {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(dateAnniversaire, dateDebut, dateFin, idContratDeLocation, indiceICC, louable,
-				montantCaution, montantLoyer, provisionsCharges, typeContrat);
+		return Objects.hash(AdresseCaution, dateDerniereRegularisation, NomCaution, dateAnniversaire, dateDebut,
+				dateFin, idContratDeLocation, indiceICC, louable, montantCaution, montantLoyer, provisionsCharges,
+				typeContrat);
 	}
 
 	@Override
@@ -150,14 +161,20 @@ public class ContratDeLocation {
 			return false;
 		}
 		ContratDeLocation other = (ContratDeLocation) obj;
-		return Objects.equals(dateAnniversaire, other.dateAnniversaire) && Objects.equals(dateDebut, other.dateDebut)
-				&& Objects.equals(dateFin, other.dateFin) && idContratDeLocation == other.idContratDeLocation
+		return Objects.equals(AdresseCaution, other.AdresseCaution)
+				&& Objects.equals(dateDerniereRegularisation, other.dateDerniereRegularisation)
+				&& Objects.equals(NomCaution, other.NomCaution)
+				&& Objects.equals(dateAnniversaire, other.dateAnniversaire)
+				&& Objects.equals(dateDebut, other.dateDebut) && Objects.equals(dateFin, other.dateFin)
+				&& idContratDeLocation == other.idContratDeLocation
 				&& Double.doubleToLongBits(indiceICC) == Double.doubleToLongBits(other.indiceICC)
 				&& Objects.equals(louable, other.louable)
 				&& Double.doubleToLongBits(montantCaution) == Double.doubleToLongBits(other.montantCaution)
 				&& Double.doubleToLongBits(montantLoyer) == Double.doubleToLongBits(other.montantLoyer)
-				&& Objects.equals(provisionsCharges, other.provisionsCharges)
+				&& Double.doubleToLongBits(provisionsCharges) == Double.doubleToLongBits(other.provisionsCharges)
 				&& Objects.equals(typeContrat, other.typeContrat);
 	}
+
+
 
 }

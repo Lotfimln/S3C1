@@ -10,7 +10,7 @@ public class RequeteCreateContratDeLocation implements Requete<ContratDeLocation
 
 	@Override
 	public String requete() {
-		return "INSERT INTO Contrat_de_location (Id_Contrat_de_location, DateDebut, DateFin, MontantLoyer, ProvisionsCharges, TypeContrat, DateAnniversaire, IndiceICC, MontantCaution, Id_Louable) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		return "INSERT INTO Contrat_de_location (Id_Contrat_de_location, DateDebut, DateFin, MontantLoyer, ProvisionsCharges, TypeContrat, DateAnniversaire, DateDerniereRegulation, IndiceICC, MontantCaution, Id_Louable) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	}
 
 	@Override
@@ -25,6 +25,7 @@ public class RequeteCreateContratDeLocation implements Requete<ContratDeLocation
 		prSt.setString(8, id[7]);
 		prSt.setString(9, id[8]);
 		prSt.setString(10, id[9]);
+		prSt.setString(11, id[10]);
 	}
 
 	@Override
@@ -54,6 +55,14 @@ public class RequeteCreateContratDeLocation implements Requete<ContratDeLocation
 		java.util.Date utilDate2 = donnees.getDateAnniversaire();
 	    if (utilDate2 != null) {
 	        java.sql.Date sqlDate = new java.sql.Date(utilDate2.getTime());
+	        prSt.setDate(7, sqlDate);
+	    } else {
+	        prSt.setNull(7, java.sql.Types.DATE);
+	    }
+	    
+	    java.util.Date utilDate3 = donnees.getDateDerniereRegularisation();
+	    if (utilDate3 != null) {
+	        java.sql.Date sqlDate = new java.sql.Date(utilDate3.getTime());
 	        prSt.setDate(7, sqlDate);
 	    } else {
 	        prSt.setNull(7, java.sql.Types.DATE);
