@@ -16,6 +16,8 @@ import modele.dao.requetes.select.RequeteSelectApparaitreByIndex;
 import modele.dao.requetes.update.RequeteUpdateApparaitre;
 import modele.dao.requetes.update.RequeteUpdateApparaitreByCharge;
 import modele.dao.requetes.update.RequeteUpdateApparaitreByIndexCompteur;
+import modele.dao.requetes.delete.RequeteDeleteApparaitreByCharge;
+import modele.dao.requetes.delete.RequeteDeleteApparaitreByIndexCompteur;
 
 public class DaoApparaitre implements Dao<Apparaitre> {
 
@@ -67,6 +69,23 @@ public class DaoApparaitre implements Dao<Apparaitre> {
             prSt.executeUpdate();
         }
     }
+    
+    public void deleteByCharge(String... id) throws SQLException {
+    	RequeteDeleteApparaitreByCharge requeteDelete = new RequeteDeleteApparaitreByCharge();
+        try (PreparedStatement prSt = connection.prepareStatement(requeteDelete.requete())) {
+            requeteDelete.parametres(prSt, id);
+            prSt.executeUpdate();
+        }
+    }
+    
+    public void deleteByIndexCompteur(String... id) throws SQLException {
+        RequeteDeleteApparaitreByIndexCompteur requeteDelete = new RequeteDeleteApparaitreByIndexCompteur();
+        try (PreparedStatement prSt = connection.prepareStatement(requeteDelete.requete())) {
+            requeteDelete.parametres(prSt, id);
+            prSt.executeUpdate();
+        }
+    }
+
 
 	// Cette methode est inutile, car elle renvoie exactement les parametres de la requete
     @Override

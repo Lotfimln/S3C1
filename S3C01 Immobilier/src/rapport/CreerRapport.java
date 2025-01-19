@@ -10,7 +10,7 @@ import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 
-public class CreerAnnexe {
+public class CreerRapport {
 
     public static void main(String[] args) {
         try {

@@ -10,7 +10,7 @@ public class RequeteCreateApparaitre implements Requete<Apparaitre> {
 
 	@Override
 	public String requete() {
-		return "INSERT INTO Assureur (Id_Charge, Id_Index_Compteur) VALUES (?, ?)";
+		return "INSERT INTO Apparaitre (Id_Charge, Id_Index_Compteur) VALUES (?, ?)";
 	}
 
 	@Override

@@ -10,6 +10,8 @@ import java.util.List;
 import modele.Correspondre;
 import modele.dao.requetes.create.RequeteCreateCorrespondre;
 import modele.dao.requetes.delete.RequeteDeleteCorrespondre;
+import modele.dao.requetes.delete.RequeteDeleteCorrespondreByContratDeLocation;
+import modele.dao.requetes.delete.RequeteDeleteCorrespondreByLocataire;
 import modele.dao.requetes.select.RequeteSelectCorrespondre;
 import modele.dao.requetes.update.RequeteUpdateCorrespondre;
 import modele.dao.requetes.update.RequeteUpdateCorrespondreByContratDeLocation;
@@ -65,6 +67,23 @@ public class DaoCorrespondre implements Dao<Correspondre> {
 			prSt.executeUpdate();
 		}
 	}
+	
+	public void deleteByContratDeLocation(String... id) throws SQLException {
+	    RequeteDeleteCorrespondreByContratDeLocation requeteDelete = new RequeteDeleteCorrespondreByContratDeLocation();
+	    try (PreparedStatement prSt = connection.prepareStatement(requeteDelete.requete())) {
+	        requeteDelete.parametres(prSt, id);
+	        prSt.executeUpdate();
+	    }
+	}
+
+	public void deleteByLocataire(String... id) throws SQLException {
+	    RequeteDeleteCorrespondreByLocataire requeteDelete = new RequeteDeleteCorrespondreByLocataire();
+	    try (PreparedStatement prSt = connection.prepareStatement(requeteDelete.requete())) {
+	        requeteDelete.parametres(prSt, id);
+	        prSt.executeUpdate();
+	    }
+	}
+
 	
 	// Cette methode est inutile, car elle renvoie exactement les parametres de la requete
 	@Override

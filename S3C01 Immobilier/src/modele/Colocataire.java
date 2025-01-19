@@ -30,7 +30,7 @@ public class Colocataire {
 
 	@Override
 	public String toString() {
-		return "" + idLocataire;
+		return "" + idLocataire + " " + idLocataire1;
 	}
 
 	@Override

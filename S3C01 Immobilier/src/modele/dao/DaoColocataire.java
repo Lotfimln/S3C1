@@ -12,6 +12,7 @@ import modele.Correspondre;
 import modele.Locataire;
 import modele.dao.requetes.create.RequeteCreateColocataire;
 import modele.dao.requetes.delete.RequeteDeleteColocataire;
+import modele.dao.requetes.delete.RequeteDeleteColocataireByLocataire;
 import modele.dao.requetes.delete.RequeteDeleteLocataire;
 import modele.dao.requetes.select.RequeteSelectColocataire;
 import modele.dao.requetes.select.RequeteSelectColocataireByID;
@@ -51,6 +52,15 @@ public class DaoColocataire implements Dao<Colocataire> {
             prSt.executeUpdate();
         }
     }
+    
+    public void deleteByLocataire(String... id) throws SQLException {
+        RequeteDeleteColocataireByLocataire requeteDelete = new RequeteDeleteColocataireByLocataire();
+        try (PreparedStatement prSt = connection.prepareStatement(requeteDelete.requete())) {
+            requeteDelete.parametres(prSt, id);
+            prSt.executeUpdate();
+        }
+    }
+
 
     // fonction inutile
     @Override

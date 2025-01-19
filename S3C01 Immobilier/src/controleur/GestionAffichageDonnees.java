@@ -4,7 +4,10 @@ import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.lang.reflect.Field;
+import java.util.Date;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -138,9 +141,11 @@ public class GestionAffichageDonnees<T> {
             JTable tableAssociations = new JTable();
             JScrollPane scrollPaneTable = new JScrollPane(tableAssociations);
 
-            // Boutons "+" et "-"
+            // Boutons "MAJ", "+" et "-"
             JButton boutonAjouter = new JButton("+");
             JButton boutonSupprimer = new JButton("-");
+            JButton boutonMAJ = new JButton("MAJ");
+            panelBoutons.add(boutonMAJ);
             panelBoutons.add(boutonAjouter);
             panelBoutons.add(boutonSupprimer);
             
@@ -331,7 +336,13 @@ public class GestionAffichageDonnees<T> {
                     System.out.println("Association non reconnue : " + association);
                     break;
             }
-
+            
+            
+            // Ajouts des controleurs
+            
+            boutonMAJ.addActionListener(e -> {
+                mettreAJourAssociations(association, elementPrincipal, tableAssociations);
+            });
 
             boutonAjouter.addActionListener(e -> {
                 // Vérifie que la table est bien initialisée
@@ -342,7 +353,6 @@ public class GestionAffichageDonnees<T> {
                     JOptionPane.showMessageDialog(null, "Erreur : La table des associations n'est pas initialisée.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
             });
-
 
             boutonSupprimer.addActionListener(e -> {
                 // Vérifie qu'une ligne est sélectionnée dans la table des associations
@@ -514,11 +524,6 @@ public class GestionAffichageDonnees<T> {
                                 throw new IllegalArgumentException("L'immeuble avec l'ID " + nouvelleValeur + " n'existe pas.");
                             }
                             champ.set(elementSelectionne, immeuble);
-                            
-                            // MAJ association
-                            DaoIndexer daoIndexer = new DaoIndexer(CictOracleDataSource.getConnectionBD());
-                            daoIndexer.update(null);
-                            
                             break;
                         }
                         case "IndexCompteur": {
@@ -629,6 +634,174 @@ public class GestionAffichageDonnees<T> {
         }
     }
     
+    //////////////////////////////////
+    // Bouton MAJ table associative //
+    //////////////////////////////////
+    
+    private void mettreAJourAssociations(String association, Object elementPrincipal, JTable tableAssociations) {
+        try {
+            // Identifie l'élément principal
+            String idPrincipal = "";
+            if (elementPrincipal instanceof Locataire) {
+                idPrincipal = ((Locataire) elementPrincipal).getIdLocataire();
+            } else if (elementPrincipal instanceof ContratDeLocation) {
+                idPrincipal = String.valueOf(((ContratDeLocation) elementPrincipal).getIdContratDeLocation());
+            } else if (elementPrincipal instanceof Louable) {
+                idPrincipal = String.valueOf(((Louable) elementPrincipal).getIdLouable());
+            } else if (elementPrincipal instanceof Charge) {
+                idPrincipal = String.valueOf(((Charge) elementPrincipal).getIdCharge());
+            } else if (elementPrincipal instanceof Immeuble) {
+                idPrincipal = String.valueOf(((Immeuble) elementPrincipal).getIdImmeuble());
+            } else if (elementPrincipal instanceof IndexCompteur) {
+                idPrincipal = String.valueOf(((IndexCompteur) elementPrincipal).getIdIndexCompteur());
+            }
+
+            // Supprime les associations existantes
+            switch (association.toLowerCase()) {
+                case "correspondre_locataire":
+                    new DaoCorrespondre(CictOracleDataSource.getConnectionBD()).deleteByLocataire(idPrincipal);
+                    break;
+                case "colocataire":
+                    new DaoColocataire(CictOracleDataSource.getConnectionBD()).deleteByLocataire(idPrincipal);
+                    break;
+                case "correspondre_contratdelocation":
+                    new DaoCorrespondre(CictOracleDataSource.getConnectionBD()).deleteByContratDeLocation(idPrincipal);
+                    break;
+                case "associer_louable":
+                    new DaoAssocier(CictOracleDataSource.getConnectionBD()).deleteByLouable(idPrincipal);
+                    break;
+                case "apparaitre_charge":
+                    new DaoApparaitre(CictOracleDataSource.getConnectionBD()).deleteByCharge(idPrincipal);
+                    break;
+                case "indexer_immeuble":
+                    new DaoIndexer(CictOracleDataSource.getConnectionBD()).deleteByImmeuble(idPrincipal);
+                    break;
+                case "associer_index":
+                    new DaoAssocier(CictOracleDataSource.getConnectionBD()).deleteByIndexCompteur(idPrincipal);
+                    break;
+                case "apparaitre_index":
+                    new DaoApparaitre(CictOracleDataSource.getConnectionBD()).deleteByIndexCompteur(idPrincipal);
+                    break;
+                case "indexer_index":
+                    new DaoIndexer(CictOracleDataSource.getConnectionBD()).deleteByIndexCompteur(idPrincipal);
+                    break;
+            }
+            
+            // Valide les modifications en cours dans la table
+            if (tableAssociations.isEditing()) {
+                tableAssociations.getCellEditor().stopCellEditing();
+            }
+
+            // Ajout des nouvelles relations
+            DefaultTableModel model = (DefaultTableModel) tableAssociations.getModel();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Format de date attendu
+            for (int i = 0; i < model.getRowCount(); i++) {
+                
+                String idAssocie = model.getValueAt(i, 0).toString();
+
+                switch (association.toLowerCase()) {
+                case "correspondre_locataire":
+                    new DaoCorrespondre(CictOracleDataSource.getConnectionBD())
+                            .create(new Correspondre(idPrincipal, Integer.parseInt(idAssocie)));
+                    break;
+                case "colocataire":
+                    new DaoColocataire(CictOracleDataSource.getConnectionBD())
+                            .create(new Colocataire(idPrincipal, idAssocie));
+                    break;
+                case "correspondre_contratdelocation":
+                    new DaoCorrespondre(CictOracleDataSource.getConnectionBD())
+                            .create(new Correspondre(idAssocie, Integer.parseInt(idPrincipal)));
+                    break;
+                case "associer_louable":{
+                    // Gestion des colonnes multiples pour Associer
+                    String dateReleveStr = model.getValueAt(i, 1) != null ? model.getValueAt(i, 1).toString() : null;
+                    Date dateReleve = dateReleveStr != null ? dateFormat.parse(dateReleveStr) : null;
+
+                    String prixAbonnementStr = model.getValueAt(i, 2) != null ? model.getValueAt(i, 2).toString() : "0";
+                    double prixAbonnement = Double.parseDouble(prixAbonnementStr);
+
+                    String dateRegularisationStr = model.getValueAt(i, 3) != null ? model.getValueAt(i, 3).toString() : null;
+                    Date dateRegularisation = dateRegularisationStr != null ? dateFormat.parse(dateRegularisationStr) : null;
+
+                    new DaoAssocier(CictOracleDataSource.getConnectionBD())
+                            .create(new Associer(Integer.parseInt(idPrincipal), Integer.parseInt(idAssocie),
+                                    dateReleve, prixAbonnement, dateRegularisation));
+                    break;}
+                case "apparaitre_charge":
+                    new DaoApparaitre(CictOracleDataSource.getConnectionBD())
+                            .create(new Apparaitre(Integer.parseInt(idPrincipal), Integer.parseInt(idAssocie)));
+                    break;
+                    
+                case "indexer_immeuble": {
+                    // Gestion des colonnes multiples pour Indexer
+                    String dateReleveStr = model.getValueAt(i, 1) != null ? model.getValueAt(i, 1).toString() : null;
+                    Date dateReleve = dateReleveStr != null ? dateFormat.parse(dateReleveStr) : null;
+
+                    String prixAbonnementStr = model.getValueAt(i, 2) != null ? model.getValueAt(i, 2).toString() : "0";
+                    double prixAbonnement = Double.parseDouble(prixAbonnementStr);
+
+                    String dateRegularisationStr = model.getValueAt(i, 3) != null ? model.getValueAt(i, 3).toString() : null;
+                    Date dateRegularisation = dateRegularisationStr != null ? dateFormat.parse(dateRegularisationStr) : null;
+
+                    // Crée une nouvelle indexation avec les bonnes valeurs
+                    new DaoIndexer(CictOracleDataSource.getConnectionBD())
+                            .create(new Indexer(Integer.parseInt(idAssocie), Integer.parseInt(idPrincipal),
+                                    dateReleve, prixAbonnement, dateRegularisation));
+                    break;}
+                
+                case "associer_index":{
+                    // Gestion des colonnes multiples pour Associer
+                    String dateReleveStr = model.getValueAt(i, 1) != null ? model.getValueAt(i, 1).toString() : null;
+                    Date dateReleve = dateReleveStr != null ? dateFormat.parse(dateReleveStr) : null;
+
+                    String prixAbonnementStr = model.getValueAt(i, 2) != null ? model.getValueAt(i, 2).toString() : "0";
+                    double prixAbonnement = Double.parseDouble(prixAbonnementStr);
+
+                    String dateRegularisationStr = model.getValueAt(i, 3) != null ? model.getValueAt(i, 3).toString() : null;
+                    Date dateRegularisation = dateRegularisationStr != null ? dateFormat.parse(dateRegularisationStr) : null;
+
+                    new DaoAssocier(CictOracleDataSource.getConnectionBD())
+                            .create(new Associer(Integer.parseInt(idAssocie), Integer.parseInt(idPrincipal),
+                                    dateReleve, prixAbonnement, dateRegularisation));
+                    break;}
+                
+                case "apparaitre_index":
+                	new DaoApparaitre(CictOracleDataSource.getConnectionBD())
+                    		.create(new Apparaitre(Integer.parseInt(idAssocie), Integer.parseInt(idPrincipal)));
+                	break;
+                case "indexer_index":{
+                    // Gestion des colonnes multiples pour Indexer
+                    String dateReleveStr = model.getValueAt(i, 1) != null ? model.getValueAt(i, 1).toString() : null;
+                    Date dateReleve = dateReleveStr != null ? dateFormat.parse(dateReleveStr) : null;
+
+                    String prixAbonnementStr = model.getValueAt(i, 2) != null ? model.getValueAt(i, 2).toString() : "0";
+                    double prixAbonnement = Double.parseDouble(prixAbonnementStr);
+
+                    String dateRegularisationStr = model.getValueAt(i, 3) != null ? model.getValueAt(i, 3).toString() : null;
+                    Date dateRegularisation = dateRegularisationStr != null ? dateFormat.parse(dateRegularisationStr) : null;
+
+                    // Crée une nouvelle indexation avec les bonnes valeurs
+                    new DaoIndexer(CictOracleDataSource.getConnectionBD())
+                            .create(new Indexer(Integer.parseInt(idPrincipal), Integer.parseInt(idAssocie),
+                                    dateReleve, prixAbonnement, dateRegularisation));
+                    break;}
+            }
+        }
+
+            JOptionPane.showMessageDialog(null, "Mise à jour des associations réussie.", "Succès", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Erreur lors de la mise à jour des associations : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Erreur lors du parsing des dates : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+
+
+    
     ////////////////////////////////
     // Bouton supprimer une ligne //
     ////////////////////////////////
@@ -689,11 +862,9 @@ public class GestionAffichageDonnees<T> {
 		}
 	}
 	
-	
-	//////////////////////////////////
-	// Bouton ajouter (+) une ligne //
-	//////////////////////////////////
-	
+	////////////////////////
+	// Bouton ajouter (+) //
+	////////////////////////
 	
 	public void ajouterElement() {
 	    try {
@@ -762,8 +933,6 @@ public class GestionAffichageDonnees<T> {
 	            ligne[i] = valeur != null ? valeur.toString() : "";
 	        }
 	        tableModel.addRow(ligne);
-
-	        JOptionPane.showMessageDialog(fenetreAffichageDonnees, "Élément ajouté avec succès !", "Succès", JOptionPane.INFORMATION_MESSAGE);
 
 	    } catch (Exception ex) {
 	        ex.printStackTrace();

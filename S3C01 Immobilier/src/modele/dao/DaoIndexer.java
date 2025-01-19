@@ -10,6 +10,8 @@ import java.util.List;
 import modele.Indexer;
 import modele.dao.requetes.create.RequeteCreateIndexer;
 import modele.dao.requetes.delete.RequeteDeleteIndexer;
+import modele.dao.requetes.delete.RequeteDeleteIndexerByImmeuble;
+import modele.dao.requetes.delete.RequeteDeleteIndexerByIndexCompteur;
 import modele.dao.requetes.select.RequeteSelectIndexer;
 import modele.dao.requetes.select.RequeteSelectIndexerByImmeuble;
 import modele.dao.requetes.update.RequeteUpdateIndexer;
@@ -76,6 +78,23 @@ public class DaoIndexer implements Dao<Indexer> {
 			prSt.executeUpdate();
 		}
 	}
+	
+	public void deleteByIndexCompteur(String... id) throws SQLException {
+	    RequeteDeleteIndexerByIndexCompteur requeteDelete = new RequeteDeleteIndexerByIndexCompteur();
+	    try (PreparedStatement prSt = connection.prepareStatement(requeteDelete.requete())) {
+	        requeteDelete.parametres(prSt, id);
+	        prSt.executeUpdate();
+	    }
+	}
+	
+	public void deleteByImmeuble(String... id) throws SQLException {
+	    RequeteDeleteIndexerByImmeuble requeteDelete = new RequeteDeleteIndexerByImmeuble();
+	    try (PreparedStatement prSt = connection.prepareStatement(requeteDelete.requete())) {
+	        requeteDelete.parametres(prSt, id);
+	        prSt.executeUpdate();
+	    }
+	}
+
 
 	@Override
 	public Indexer findById(String... id) throws SQLException {

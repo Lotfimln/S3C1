@@ -10,6 +10,8 @@ import java.util.List;
 import modele.Associer;
 import modele.dao.requetes.create.RequeteCreateAssocier;
 import modele.dao.requetes.delete.RequeteDeleteAssocier;
+import modele.dao.requetes.delete.RequeteDeleteAssocierByIndexCompteur;
+import modele.dao.requetes.delete.RequeteDeleteAssocierByLouable;
 import modele.dao.requetes.select.RequeteSelectAssocier;
 import modele.dao.requetes.select.RequeteSelectAssocierByIndex;
 import modele.dao.requetes.select.RequeteSelectAssocierByLouable;
@@ -75,6 +77,23 @@ public class DaoAssocier implements Dao<Associer> {
             prSt.executeUpdate();
         }
     }
+    
+    public void deleteByLouable(String... id) throws SQLException {
+        RequeteDeleteAssocierByLouable requeteDelete = new RequeteDeleteAssocierByLouable();
+        try (PreparedStatement prSt = connection.prepareStatement(requeteDelete.requete())) {
+            requeteDelete.parametres(prSt, id);
+            prSt.executeUpdate();
+        }
+    }
+
+    public void deleteByIndexCompteur(String... id) throws SQLException {
+        RequeteDeleteAssocierByIndexCompteur requeteDelete = new RequeteDeleteAssocierByIndexCompteur();
+        try (PreparedStatement prSt = connection.prepareStatement(requeteDelete.requete())) {
+            requeteDelete.parametres(prSt, id);
+            prSt.executeUpdate();
+        }
+    }
+
 
     // Inutile
     @Override
