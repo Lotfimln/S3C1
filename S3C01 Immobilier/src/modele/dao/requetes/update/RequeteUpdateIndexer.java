@@ -15,27 +15,33 @@ public class RequeteUpdateIndexer implements Requete<Indexer> {
 
 	@Override
 	public void parametres(PreparedStatement prSt, Indexer data) throws SQLException {
-		prSt.setInt(1, data.getIdIndexCompteur());	// Id_Index_Compteur (nouvelle valeur)
-		prSt.setInt(2, data.getIdImmeuble());		// Id_Immeuble (nouvelle valeur)
+		prSt.setInt(1, data.getIdIndexCompteur());
+		prSt.setInt(2, data.getIdImmeuble());
+		
 		java.util.Date utilDate = data.getDateReleve();
-        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime()); 
-        prSt.setDate(3, sqlDate);
+	    if (utilDate != null) {
+	        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+	        prSt.setDate(3, sqlDate);
+	    } else {
+	        prSt.setNull(3, java.sql.Types.DATE);
+	    }
+        
         prSt.setDouble(4, data.getPrixAbonnement());
+        
         java.util.Date utilDate1 = data.getDateRegularisation();
-        java.sql.Date sqlDate1 = new java.sql.Date(utilDate1.getTime()); 
-        prSt.setDate(5, sqlDate1);
-		prSt.setInt(6, data.getIdIndexCompteur());	// Id_Index_Compteur (ancienne valeur)
-		prSt.setInt(7, data.getIdImmeuble());		// Id_Immeuble (ancienne valeur)
+	    if (utilDate1 != null) {
+	        java.sql.Date sqlDate = new java.sql.Date(utilDate1.getTime());
+	        prSt.setDate(5, sqlDate);
+	    } else {
+	        prSt.setNull(5, java.sql.Types.DATE);
+	    }
+        
+		prSt.setInt(6, data.getIdIndexCompteur());
+		prSt.setInt(7, data.getIdImmeuble());
 	}
 
 	@Override
 	public void parametres(PreparedStatement prSt, String... id) throws SQLException {
-		prSt.setString(1, id[0]);
-		prSt.setString(2, id[1]);
-		prSt.setString(3, id[2]);
-		prSt.setString(4, id[3]);
-		prSt.setString(5, id[4]);
-		prSt.setString(6, id[5]);
-		prSt.setString(7, id[5]);
+		return;
 	}
 }

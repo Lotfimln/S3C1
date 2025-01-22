@@ -20,6 +20,6 @@ public class RequeteDeleteApparaitreByIndexCompteur implements Requete<Apparaitr
 
     @Override
     public void parametres(PreparedStatement prSt, Apparaitre donnee) throws SQLException {
-        prSt.setInt(1, donnee.getIdIndexCompteur());
+		return;
     }
 }

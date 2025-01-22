@@ -19,7 +19,6 @@ import javax.swing.table.DefaultTableModel;
 import controleur.GestionAffichageDonnees;
 import controleur.GestionSelecteur;
 import controleur.ElementsSelectionnables;
-import controleur.GestionBoutonsRapports;
 import modele.dao.Dao;
 
 public class AffichageDonnees extends JInternalFrame {
@@ -36,7 +35,6 @@ public class AffichageDonnees extends JInternalFrame {
     private JButton btnDO;
 
     private GestionAffichageDonnees gestionAffichageDonnees;
-    private GestionBoutonsRapports gestionBoutonsRapports;
 
     public AffichageDonnees(FenetrePrincipale fenetrePrincipale) {
         this.setTitle("Gestion Immobilière");
@@ -99,27 +97,27 @@ public class AffichageDonnees extends JInternalFrame {
 
         btnADI = new JButton("Annuel de l'immeuble");
         panelBoutons.add(btnADI);
-        btnADI.addActionListener(e -> gestionBoutonsRapports.genererRapportAnnuelImmeuble());
+        btnADI.addActionListener(e -> gestionAffichageDonnees.genererRapportAnnuelImmeuble());
         btnADI.setVisible(false);
         
         btnSTC = new JButton("Solde tout compte");
         panelBoutons.add(btnSTC);
-        btnSTC.addActionListener(e -> gestionBoutonsRapports.genererRapportSoldeToutCompte());
+        btnSTC.addActionListener(e -> gestionAffichageDonnees.genererRapportSoldeToutCompte());
         btnSTC.setVisible(false);
         
         btnDF = new JButton("Declaration Fiscale");
         panelBoutons.add(btnDF);
-        btnDF.addActionListener(e -> gestionBoutonsRapports.genererRapportDeclarationFiscale());
+        btnDF.addActionListener(e -> gestionAffichageDonnees.genererRapportDeclarationFiscale());
         btnDF.setVisible(false);
         
         btnDO = new JButton("Diagnostics obligatoires");
         panelBoutons.add(btnDO);
-        btnDO.addActionListener(e -> gestionBoutonsRapports.genererRapportDiagnosticsObligatoires());
+        btnDO.addActionListener(e -> gestionAffichageDonnees.genererRapportDiagnosticsObligatoires());
         btnDO.setVisible(false);
         
         JButton btnLI = new JButton("Loyers impayés");
         panelBoutons.add(btnLI);
-        btnLI.addActionListener(e -> gestionBoutonsRapports.genererRapportLoyersImpayes());
+        btnLI.addActionListener(e -> gestionAffichageDonnees.genererRapportLoyersImpayes());
 
         // Panneau pour afficher les attributs de l'élément sélectionné
         panelAttributs = new JPanel();

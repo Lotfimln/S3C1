@@ -20,6 +20,6 @@ public class RequeteDeleteAssureur implements Requete<Assureur> {
 
 	@Override
 	public void parametres(PreparedStatement prSt, Assureur donnee) throws SQLException {
-		prSt.setInt(1, donnee.getIdAssureur());
+		return;
 	}
 }

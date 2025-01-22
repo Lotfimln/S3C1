@@ -23,6 +23,11 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import modele.dao.*;
+import rapport.RapportAnnuelImmeuble;
+import rapport.RapportDeclarationFiscale;
+import rapport.RapportDiagnosticsObligatoires;
+import rapport.RapportLoyersImpayes;
+import rapport.RapportSoldeToutCompte;
 import modele.*;
 
 import vue.AffichageDonnees;
@@ -381,17 +386,17 @@ public class GestionAffichageDonnees<T> {
                             switch (association.toLowerCase()) {
                             case "correspondre_locataire": // Locataire ↔ Contrat_de_location
                                 new DaoCorrespondre(CictOracleDataSource.getConnectionBD())
-                                        .delete(new Correspondre(idElementPrincipal, Integer.parseInt(idAssocie)));
+                                        .delete(idElementPrincipal, idAssocie);
                                 break;
 
                             case "correspondre_contratdelocation": // Contrat_de_location ↔ Locataire
                                 new DaoCorrespondre(CictOracleDataSource.getConnectionBD())
-                                        .delete(new Correspondre(idAssocie, Integer.parseInt(idElementPrincipal)));
+                                        .delete(idElementPrincipal, idAssocie);
                                 break;
 
                             case "colocataire": // Locataire ↔ Locataire
                                 new DaoColocataire(CictOracleDataSource.getConnectionBD())
-                                        .delete(new Colocataire(idElementPrincipal, idAssocie));
+                                        .delete(idElementPrincipal, idAssocie);
                                 break;
 
                             case "associer": // Louable ↔ Index_Compteur
@@ -401,7 +406,7 @@ public class GestionAffichageDonnees<T> {
 
                             case "apparaitre": // Charge ↔ Index_Compteur
                                 new DaoApparaitre(CictOracleDataSource.getConnectionBD())
-                                        .delete(new Apparaitre(Integer.parseInt(idElementPrincipal), Integer.parseInt(idAssocie)));
+                                        .delete(idElementPrincipal, idAssocie);
                                 break;
 
                             case "indexer": // Immeuble ↔ Index_Compteur
@@ -416,7 +421,7 @@ public class GestionAffichageDonnees<T> {
 
                             case "apparaitre_charge": // Charge ↔ Index_Compteur
                                 new DaoApparaitre(CictOracleDataSource.getConnectionBD())
-                                        .delete(new Apparaitre(Integer.parseInt(idElementPrincipal), Integer.parseInt(idAssocie)));
+                                        .delete(idElementPrincipal, idAssocie);
                                 break;
 
                             case "indexer_immeuble": // Immeuble ↔ Index_Compteur
@@ -493,7 +498,6 @@ public class GestionAffichageDonnees<T> {
 
                 if (composant instanceof JTextField) {
                     String nouvelleValeur = ((JTextField) composant).getText();
-
                     switch (champ.getType().getSimpleName()) {
                         case "Entreprise": {
                             // Gestion spécifique pour Entreprise
@@ -809,36 +813,23 @@ public class GestionAffichageDonnees<T> {
 			int ligneSelectionnee = tableListeElements.getSelectedRow();
 			
 			if (ligneSelectionnee >= 0) {
+				
 				// Récupérer l'ID de l'élément à partir de la première colonne
 				String idElement = tableListeElements.getValueAt(ligneSelectionnee, 0).toString();
 				
-				// Trouver l'élément correspondant via le DAO
-				T elementASupprimer = dao.findById(idElement);
+				// Supprimer l'élément de la base via le DAO
+				dao.delete(idElement);
 				
-				if (elementASupprimer != null) {
+				// Supprimer la ligne de la table graphique
+				DefaultTableModel tableModel = (DefaultTableModel) tableListeElements.getModel();
+				tableModel.removeRow(ligneSelectionnee);
 				
-					// Supprimer l'élément de la base via le DAO
-					dao.delete(elementASupprimer);
-					
-					// Supprimer la ligne de la table graphique
-					DefaultTableModel tableModel = (DefaultTableModel) tableListeElements.getModel();
-					tableModel.removeRow(ligneSelectionnee);
-					
-					// Réinitialiser les détails affichés à droite
-					JPanel panelAttributs = fenetreAffichageDonnees.getPanelAttributs();
-					panelAttributs.removeAll();
-					panelAttributs.revalidate();
-					panelAttributs.repaint();
+				// Réinitialiser les détails affichés à droite
+				JPanel panelAttributs = fenetreAffichageDonnees.getPanelAttributs();
+				panelAttributs.removeAll();
+				panelAttributs.revalidate();
+				panelAttributs.repaint();
 				
-				} else {
-					// L'élément n'existe pas ou a déjà été supprimé
-					javax.swing.JOptionPane.showMessageDialog(
-					fenetreAffichageDonnees, 
-					"L'élément sélectionné n'existe pas.", 
-					"Erreur", 
-					javax.swing.JOptionPane.WARNING_MESSAGE
-					);
-				}
 			} else {
 				// Aucun élément sélectionné
 				javax.swing.JOptionPane.showMessageDialog(
@@ -974,6 +965,192 @@ public class GestionAffichageDonnees<T> {
 	        return daoContratDeLocation.findById(id);
 	    }
 	    return null;
+	}
+
+	//////////////////////
+	// Boutons Rapports //
+	//////////////////////
+	
+	public void genererRapportAnnuelImmeuble() {
+	    try {
+	        JTable tableListeElements = fenetreAffichageDonnees.getTableListeElements();
+	        int ligneSelectionnee = tableListeElements.getSelectedRow();
+
+	        if (ligneSelectionnee >= 0) {
+	            // Récupérer l'ID de l'immeuble à partir de la première colonne de la table
+	            String idImmeubleStr = tableListeElements.getValueAt(ligneSelectionnee, 0).toString();
+
+	            // Convertir l'ID en entier si nécessaire
+	            int idImmeuble = Integer.parseInt(idImmeubleStr);
+
+	            // Appeler la méthode pour générer le rapport
+	            String[] args = {String.valueOf(idImmeuble)};
+	            RapportAnnuelImmeuble.main(args);
+
+	            JOptionPane.showMessageDialog(fenetreAffichageDonnees, 
+	                "Le rapport pour l'immeuble ID: " + idImmeuble + " a été généré avec succès.",
+	                "Succès", 
+	                JOptionPane.INFORMATION_MESSAGE);
+	        } else {
+	            JOptionPane.showMessageDialog(fenetreAffichageDonnees, 
+	                "Veuillez sélectionner un immeuble dans la liste à gauche.", 
+	                "Erreur", 
+	                JOptionPane.WARNING_MESSAGE);
+	        }
+	    } catch (NumberFormatException ex) {
+	        ex.printStackTrace();
+	        JOptionPane.showMessageDialog(fenetreAffichageDonnees, 
+	            "Erreur : L'ID de l'immeuble sélectionné est invalide.", 
+	            "Erreur", 
+	            JOptionPane.ERROR_MESSAGE);
+	    } catch (Exception ex) {
+	        ex.printStackTrace();
+	        JOptionPane.showMessageDialog(fenetreAffichageDonnees, 
+	            "Une erreur est survenue lors de la génération du rapport.", 
+	            "Erreur", 
+	            JOptionPane.ERROR_MESSAGE);
+	    }
+	}
+	
+	public void genererRapportSoldeToutCompte() {
+	    try {
+	        JTable tableListeElements = fenetreAffichageDonnees.getTableListeElements();
+	        int ligneSelectionnee = tableListeElements.getSelectedRow();
+
+	        if (ligneSelectionnee >= 0) {
+	            // Récupérer l'ID du logement à partir de la première colonne de la table
+	            String idLouableStr = tableListeElements.getValueAt(ligneSelectionnee, 0).toString();
+
+	            // Convertir l'ID en entier si nécessaire
+	            int idLouable = Integer.parseInt(idLouableStr);
+
+	            // Appeler la méthode pour générer le rapport
+	            String[] args = {String.valueOf(idLouable)};
+	            RapportSoldeToutCompte.main(args);
+
+	            JOptionPane.showMessageDialog(fenetreAffichageDonnees,
+	                "Le rapport de solde de tout compte pour le logement ID: " + idLouable + " a été généré avec succès.",
+	                "Succès",
+	                JOptionPane.INFORMATION_MESSAGE);
+	        } else {
+	            JOptionPane.showMessageDialog(fenetreAffichageDonnees,
+	                "Veuillez sélectionner un logement dans la liste à gauche.",
+	                "Erreur",
+	                JOptionPane.WARNING_MESSAGE);
+	        }
+	    } catch (NumberFormatException ex) {
+	        ex.printStackTrace();
+	        JOptionPane.showMessageDialog(fenetreAffichageDonnees,
+	            "Erreur : L'ID du logement sélectionné est invalide.",
+	            "Erreur",
+	            JOptionPane.ERROR_MESSAGE);
+	    } catch (Exception ex) {
+	        ex.printStackTrace();
+	        JOptionPane.showMessageDialog(fenetreAffichageDonnees,
+	            "Une erreur est survenue lors de la génération du rapport de solde de tout compte.",
+	            "Erreur",
+	            JOptionPane.ERROR_MESSAGE);
+	    }
+	}
+	
+	public void genererRapportLoyersImpayes() {
+	    try {
+	        // Appeler la méthode principale de RapportLoyersImpayes sans paramètre
+	        RapportLoyersImpayes.main(new String[0]);
+
+	        JOptionPane.showMessageDialog(fenetreAffichageDonnees,
+	            "Le rapport des loyers impayés a été généré avec succès.",
+	            "Succès",
+	            JOptionPane.INFORMATION_MESSAGE);
+	    } catch (Exception ex) {
+	        ex.printStackTrace();
+	        JOptionPane.showMessageDialog(fenetreAffichageDonnees,
+	            "Une erreur est survenue lors de la génération du rapport des loyers impayés.",
+	            "Erreur",
+	            JOptionPane.ERROR_MESSAGE);
+	    }
+	}
+
+	public void genererRapportDeclarationFiscale() {
+	    try {
+	        JTable tableListeElements = fenetreAffichageDonnees.getTableListeElements();
+	        int ligneSelectionnee = tableListeElements.getSelectedRow();
+
+	        if (ligneSelectionnee >= 0) {
+	            // Récupérer l'ID de l'immeuble à partir de la première colonne de la table
+	            String idImmeubleStr = tableListeElements.getValueAt(ligneSelectionnee, 0).toString();
+
+	            // Convertir l'ID en entier si nécessaire
+	            int idImmeuble = Integer.parseInt(idImmeubleStr);
+
+	            // Appeler la méthode pour générer le rapport
+	            String[] args = {String.valueOf(idImmeuble)};
+	            RapportDeclarationFiscale.main(args);
+
+	            JOptionPane.showMessageDialog(fenetreAffichageDonnees,
+	                "Le rapport de déclaration fiscale pour l'immeuble ID: " + idImmeuble + " a été généré avec succès.",
+	                "Succès",
+	                JOptionPane.INFORMATION_MESSAGE);
+	        } else {
+	            JOptionPane.showMessageDialog(fenetreAffichageDonnees,
+	                "Veuillez sélectionner un immeuble dans la liste à gauche.",
+	                "Erreur",
+	                JOptionPane.WARNING_MESSAGE);
+	        }
+	    } catch (NumberFormatException ex) {
+	        ex.printStackTrace();
+	        JOptionPane.showMessageDialog(fenetreAffichageDonnees,
+	            "Erreur : L'ID de l'immeuble sélectionné est invalide.",
+	            "Erreur",
+	            JOptionPane.ERROR_MESSAGE);
+	    } catch (Exception ex) {
+	        ex.printStackTrace();
+	        JOptionPane.showMessageDialog(fenetreAffichageDonnees,
+	            "Une erreur est survenue lors de la génération du rapport de déclaration fiscale.",
+	            "Erreur",
+	            JOptionPane.ERROR_MESSAGE);
+	    }
+	}
+
+	public void genererRapportDiagnosticsObligatoires() {
+	    try {
+	        JTable tableListeElements = fenetreAffichageDonnees.getTableListeElements();
+	        int ligneSelectionnee = tableListeElements.getSelectedRow();
+
+	        if (ligneSelectionnee >= 0) {
+	            // Récupérer l'ID de l'immeuble à partir de la première colonne de la table
+	            String idImmeubleStr = tableListeElements.getValueAt(ligneSelectionnee, 0).toString();
+
+	            // Convertir l'ID en entier si nécessaire
+	            int idImmeuble = Integer.parseInt(idImmeubleStr);
+
+	            // Appeler la méthode pour générer le rapport
+	            String[] args = {String.valueOf(idImmeuble)};
+	            RapportDiagnosticsObligatoires.main(args);
+
+	            JOptionPane.showMessageDialog(fenetreAffichageDonnees,
+	                "Le rapport des diagnostics obligatoires pour l'immeuble ID: " + idImmeuble + " a été généré avec succès.",
+	                "Succès",
+	                JOptionPane.INFORMATION_MESSAGE);
+	        } else {
+	            JOptionPane.showMessageDialog(fenetreAffichageDonnees,
+	                "Veuillez sélectionner un immeuble dans la liste à gauche.",
+	                "Erreur",
+	                JOptionPane.WARNING_MESSAGE);
+	        }
+	    } catch (NumberFormatException ex) {
+	        ex.printStackTrace();
+	        JOptionPane.showMessageDialog(fenetreAffichageDonnees,
+	            "Erreur : L'ID de l'immeuble sélectionné est invalide.",
+	            "Erreur",
+	            JOptionPane.ERROR_MESSAGE);
+	    } catch (Exception ex) {
+	        ex.printStackTrace();
+	        JOptionPane.showMessageDialog(fenetreAffichageDonnees,
+	            "Une erreur est survenue lors de la génération du rapport des diagnostics obligatoires.",
+	            "Erreur",
+	            JOptionPane.ERROR_MESSAGE);
+	    }
 	}
 
 }

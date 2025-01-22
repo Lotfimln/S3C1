@@ -20,6 +20,6 @@ public class RequeteDeleteQuittances implements Requete<Quittances> {
 
 	@Override
 	public void parametres(PreparedStatement prSt, Quittances donnee) throws SQLException {
-		prSt.setInt(1, donnee.getIdQuittances());
+		return;
 	}
 }

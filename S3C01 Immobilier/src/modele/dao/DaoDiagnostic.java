@@ -43,10 +43,10 @@ public class DaoDiagnostic implements Dao<Diagnostic> {
 	}
 
 	@Override
-	public void delete(Diagnostic donnees) throws SQLException {
+	public void delete(String... id) throws SQLException {
 		RequeteDeleteDiagnostic requeteDelete = new RequeteDeleteDiagnostic();
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteDelete.requete())) {
-			requeteDelete.parametres(prSt, donnees);
+			requeteDelete.parametres(prSt, id);
 			prSt.executeUpdate();
 		}
 	}

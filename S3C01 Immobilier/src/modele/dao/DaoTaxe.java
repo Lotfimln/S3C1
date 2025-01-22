@@ -42,10 +42,10 @@ public class DaoTaxe implements Dao<Taxe> {
 	}
 
 	@Override
-	public void delete(Taxe donnees) throws SQLException {
+	public void delete(String... id) throws SQLException {
 		RequeteDeleteTaxe requeteDelete = new RequeteDeleteTaxe();
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteDelete.requete())) {
-			requeteDelete.parametres(prSt, donnees);
+			requeteDelete.parametres(prSt, id);
 			prSt.executeUpdate();
 		}
 	}
@@ -62,8 +62,12 @@ public class DaoTaxe implements Dao<Taxe> {
 					int idImmeuble = rs.getInt("Id_Immeuble");
 	                Immeuble immeuble= daoImmeuble.findById(String.valueOf(idImmeuble));
 
-					return new Taxe(rs.getInt("Id_Taxe"), rs.getDouble("MontantTaxeFoncieres"),
-							rs.getDate("DatePaiement"), rs.getDate("DateTaxe"), immeuble);
+					return new Taxe(
+							rs.getInt("Id_Taxe"), 
+							rs.getDouble("MontantTaxeFoncieres"),
+							rs.getDate("DatePaiement"), 
+							rs.getDate("DateTaxe"), 
+							immeuble);
 				}
 			}
 		}
@@ -82,8 +86,12 @@ public class DaoTaxe implements Dao<Taxe> {
 				int idImmeuble = rs.getInt("Id_Immeuble");
                 Immeuble immeuble= daoImmeuble.findById(String.valueOf(idImmeuble));
 
-				taxes.add(new Taxe(rs.getInt("Id_Taxe"), rs.getDouble("MontantTaxeFoncieres"),
-						rs.getDate("DatePaiement"), rs.getDate("DateTaxe"), immeuble));
+				taxes.add(new Taxe(
+						rs.getInt("Id_Taxe"), 
+						rs.getDouble("MontantTaxeFoncieres"),
+						rs.getDate("DatePaiement"), 
+						rs.getDate("DateTaxe"), 
+						immeuble));
 			}
 		}
 		return taxes;

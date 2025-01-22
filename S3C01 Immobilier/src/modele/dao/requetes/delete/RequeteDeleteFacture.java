@@ -20,6 +20,6 @@ public class RequeteDeleteFacture implements Requete<Facture> {
 
 	@Override
 	public void parametres(PreparedStatement prSt, Facture donnee) throws SQLException {
-		prSt.setInt(1, donnee.getIdFacture());
+		return;
 	}
 }

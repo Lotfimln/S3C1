@@ -14,8 +14,6 @@ import modele.dao.requetes.select.RequeteSelectApparaitre;
 import modele.dao.requetes.select.RequeteSelectApparaitreByCharge;
 import modele.dao.requetes.select.RequeteSelectApparaitreByIndex;
 import modele.dao.requetes.update.RequeteUpdateApparaitre;
-import modele.dao.requetes.update.RequeteUpdateApparaitreByCharge;
-import modele.dao.requetes.update.RequeteUpdateApparaitreByIndexCompteur;
 import modele.dao.requetes.delete.RequeteDeleteApparaitreByCharge;
 import modele.dao.requetes.delete.RequeteDeleteApparaitreByIndexCompteur;
 
@@ -44,28 +42,12 @@ public class DaoApparaitre implements Dao<Apparaitre> {
             prSt.executeUpdate();
         }
     }
-    
-    public void updateByCharge(Apparaitre donnees) throws SQLException {
-        RequeteUpdateApparaitreByCharge requeteUpdate = new RequeteUpdateApparaitreByCharge();
-        try (PreparedStatement prSt = connection.prepareStatement(requeteUpdate.requete())) {
-            requeteUpdate.parametres(prSt, donnees);
-            prSt.executeUpdate();
-        }
-    }
-    
-    public void updateByIndexCompteur(Apparaitre donnees) throws SQLException {
-        RequeteUpdateApparaitreByIndexCompteur requeteUpdate = new RequeteUpdateApparaitreByIndexCompteur();
-        try (PreparedStatement prSt = connection.prepareStatement(requeteUpdate.requete())) {
-            requeteUpdate.parametres(prSt, donnees);
-            prSt.executeUpdate();
-        }
-    }
 
     @Override
-    public void delete(Apparaitre donnees) throws SQLException {
+    public void delete(String... id) throws SQLException {
         RequeteDeleteApparaitre requeteDelete = new RequeteDeleteApparaitre();
         try (PreparedStatement prSt = connection.prepareStatement(requeteDelete.requete())) {
-            requeteDelete.parametres(prSt, donnees);
+            requeteDelete.parametres(prSt, id);
             prSt.executeUpdate();
         }
     }

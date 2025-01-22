@@ -20,6 +20,6 @@ public class RequeteDeleteCorrespondreByContratDeLocation implements Requete<Cor
 
     @Override
     public void parametres(PreparedStatement prSt, Correspondre donnee) throws SQLException {
-        prSt.setInt(1, donnee.getIdContratDeLocation());
+		return;
     }
 }

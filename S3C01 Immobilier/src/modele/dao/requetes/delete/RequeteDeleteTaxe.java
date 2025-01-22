@@ -20,6 +20,6 @@ public class RequeteDeleteTaxe implements Requete<Taxe> {
 
 	@Override
 	public void parametres(PreparedStatement prSt, Taxe donnee) throws SQLException {
-		prSt.setInt(1, donnee.getIdTaxe());
+		return;
 	}
 }

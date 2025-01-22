@@ -41,10 +41,10 @@ public class DaoEntreprise implements Dao<Entreprise> {
 	}
 
 	@Override
-	public void delete(Entreprise donnees) throws SQLException {
+	public void delete(String... id) throws SQLException {
 		RequeteDeleteEntreprise requeteDelete = new RequeteDeleteEntreprise();
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteDelete.requete())) {
-			requeteDelete.parametres(prSt, donnees);
+			requeteDelete.parametres(prSt, id);
 			prSt.executeUpdate();
 		}
 	}

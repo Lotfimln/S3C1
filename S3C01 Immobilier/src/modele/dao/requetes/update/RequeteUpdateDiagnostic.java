@@ -17,6 +17,7 @@ public class RequeteUpdateDiagnostic implements Requete<Diagnostic> {
 	public void parametres(PreparedStatement prSt, Diagnostic data) throws SQLException {
 		prSt.setInt(1, data.getIdDiagnostic());
 		prSt.setString(2, data.getTypeDiagnostic());
+		
 		java.util.Date utilDate = data.getDateDiagnostic();
 	    if (utilDate != null) {
 	        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
@@ -24,13 +25,13 @@ public class RequeteUpdateDiagnostic implements Requete<Diagnostic> {
 	    } else {
 	        prSt.setNull(3, java.sql.Types.DATE);
 	    }
+	    
 		prSt.setInt(4, data.getLouable().getIdLouable());
 		prSt.setInt(5, data.getIdDiagnostic());
 	}
 
 	@Override
 	public void parametres(PreparedStatement prSt, String... id) throws SQLException {
-		// TODO Auto-generated method stub
-
+		return;
 	}
 }

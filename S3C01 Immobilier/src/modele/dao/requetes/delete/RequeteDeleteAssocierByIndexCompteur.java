@@ -20,6 +20,6 @@ public class RequeteDeleteAssocierByIndexCompteur implements Requete<Associer> {
 
     @Override
     public void parametres(PreparedStatement prSt, Associer donnee) throws SQLException {
-        prSt.setInt(1, donnee.getIdIndexCompteur());
+		return;
     }
 }

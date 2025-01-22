@@ -20,6 +20,6 @@ public class RequeteDeleteImmeuble implements Requete<Immeuble> {
 
 	@Override
 	public void parametres(PreparedStatement prSt, Immeuble donnee) throws SQLException {
-		prSt.setInt(1, donnee.getIdImmeuble());
+		return;
 	}
 }

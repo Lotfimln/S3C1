@@ -41,10 +41,10 @@ public class DaoIndexCompteur implements Dao<IndexCompteur> {
 	}
 
 	@Override
-	public void delete(IndexCompteur donnees) throws SQLException {
+	public void delete(String... id) throws SQLException {
 		RequeteDeleteIndexCompteur requeteDelete = new RequeteDeleteIndexCompteur();
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteDelete.requete())) {
-			requeteDelete.parametres(prSt, donnees);
+			requeteDelete.parametres(prSt, id);
 			prSt.executeUpdate();
 		}
 	}

@@ -20,6 +20,6 @@ public class RequeteDeleteCharge implements Requete<Charge> {
 
 	@Override
 	public void parametres(PreparedStatement prSt, Charge donnee) throws SQLException {
-		prSt.setInt(1, donnee.getIdCharge());
+		return;
 	}
 }

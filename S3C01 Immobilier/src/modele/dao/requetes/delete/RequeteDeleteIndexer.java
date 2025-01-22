@@ -21,7 +21,6 @@ public class RequeteDeleteIndexer implements Requete<Indexer> {
 
 	@Override
 	public void parametres(PreparedStatement prSt, Indexer donnee) throws SQLException {
-		prSt.setInt(1, donnee.getIdIndexCompteur());
-		prSt.setInt(2, donnee.getIdImmeuble());
+		return;
 	}
 }

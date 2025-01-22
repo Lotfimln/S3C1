@@ -44,10 +44,10 @@ public class DaoColocataire implements Dao<Colocataire> {
     }
 
     @Override
-    public void delete(Colocataire donnees) throws SQLException {
+    public void delete(String... id) throws SQLException {
         RequeteDeleteColocataire requeteDelete = new RequeteDeleteColocataire();
         try (PreparedStatement prSt = connection.prepareStatement(requeteDelete.requete())) {
-            requeteDelete.parametres(prSt, donnees);
+            requeteDelete.parametres(prSt, id);
             prSt.executeUpdate();
         }
     }

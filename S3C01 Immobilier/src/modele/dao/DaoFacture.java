@@ -45,10 +45,10 @@ public class DaoFacture implements Dao<Facture> {
 	}
 
 	@Override
-	public void delete(Facture donnees) throws SQLException {
+	public void delete(String... id) throws SQLException {
 		RequeteDeleteFacture requeteDelete = new RequeteDeleteFacture();
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteDelete.requete())) {
-			requeteDelete.parametres(prSt, donnees);
+			requeteDelete.parametres(prSt, id);
 			prSt.executeUpdate();
 		}
 	}

@@ -16,8 +16,6 @@ import modele.dao.requetes.select.RequeteSelectIndexer;
 import modele.dao.requetes.select.RequeteSelectIndexerByImmeuble;
 import modele.dao.requetes.select.RequeteSelectIndexerByIndexCompteur;
 import modele.dao.requetes.update.RequeteUpdateIndexer;
-import modele.dao.requetes.update.RequeteUpdateIndexerByImmeuble;
-import modele.dao.requetes.update.RequeteUpdateIndexerByIndexCompteur;
 
 public class DaoIndexer implements Dao<Indexer> {
 
@@ -44,30 +42,12 @@ public class DaoIndexer implements Dao<Indexer> {
 			prSt.executeUpdate();
 		}
 	}
-	
-
-	public void updateByIndexCompteur(Indexer donnees) throws SQLException {
-		RequeteUpdateIndexerByIndexCompteur requeteUpdate = new RequeteUpdateIndexerByIndexCompteur();
-		try (PreparedStatement prSt = this.connection.prepareStatement(requeteUpdate.requete())) {
-			requeteUpdate.parametres(prSt, donnees);
-			prSt.executeUpdate();
-		}
-	}
-	
-
-	public void updateByImmeuble(Indexer donnees) throws SQLException {
-		RequeteUpdateIndexerByImmeuble requeteUpdate = new RequeteUpdateIndexerByImmeuble();
-		try (PreparedStatement prSt = this.connection.prepareStatement(requeteUpdate.requete())) {
-			requeteUpdate.parametres(prSt, donnees);
-			prSt.executeUpdate();
-		}
-	}
 
 	@Override
-	public void delete(Indexer donnees) throws SQLException {
+	public void delete(String... id) throws SQLException {
 		RequeteDeleteIndexer requeteDelete = new RequeteDeleteIndexer();
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteDelete.requete())) {
-			requeteDelete.parametres(prSt, donnees);
+			requeteDelete.parametres(prSt, id);
 			prSt.executeUpdate();
 		}
 	}

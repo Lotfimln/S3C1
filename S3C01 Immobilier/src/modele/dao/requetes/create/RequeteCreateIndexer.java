@@ -15,11 +15,7 @@ public class RequeteCreateIndexer implements Requete<Indexer> {
 
 	@Override
 	public void parametres(PreparedStatement prSt, String... ids) throws SQLException {
-		prSt.setString(1, ids[0]);
-		prSt.setString(2, ids[1]);
-		prSt.setString(3, ids[2]);
-		prSt.setString(4, ids[3]);
-		prSt.setString(5, ids[4]);
+		return;
 	}
 
 	@Override

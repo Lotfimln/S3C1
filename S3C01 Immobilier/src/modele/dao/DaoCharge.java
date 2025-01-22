@@ -43,10 +43,10 @@ public class DaoCharge implements Dao<Charge> {
 	}
 
 	@Override
-	public void delete(Charge donnees) throws SQLException {
+	public void delete(String... id) throws SQLException {
 		RequeteDeleteCharge requeteDelete = new RequeteDeleteCharge();
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteDelete.requete())) {
-			requeteDelete.parametres(prSt, donnees);
+			requeteDelete.parametres(prSt, id);
 			prSt.executeUpdate();
 		}
 	}

@@ -2,8 +2,8 @@ package vue;
 
 import javax.swing.*;
 import controleur.GestionFenetrePrincipale;
-import modele.dao.ImportCSV;
-import modele.dao.LireCSV;
+import outils.ImportCSV;
+import outils.LireCSV;
 
 public class FenetrePrincipale extends JFrame {
 	/**

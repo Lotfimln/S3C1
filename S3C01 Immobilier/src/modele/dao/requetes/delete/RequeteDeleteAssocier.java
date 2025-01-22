@@ -21,7 +21,6 @@ public class RequeteDeleteAssocier implements Requete<Associer> {
 
 	@Override
 	public void parametres(PreparedStatement prSt, Associer donnee) throws SQLException {
-		prSt.setInt(1, donnee.getIdLouable());
-		prSt.setInt(2, donnee.getIdIndexCompteur());
+		return;
 	}
 }

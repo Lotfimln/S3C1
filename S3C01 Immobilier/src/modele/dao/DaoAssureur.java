@@ -41,10 +41,10 @@ public class DaoAssureur implements Dao<Assureur> {
     }
 
     @Override
-    public void delete(Assureur donnees) throws SQLException {
+    public void delete(String... id) throws SQLException {
         RequeteDeleteAssureur requeteDelete = new RequeteDeleteAssureur();
         try (PreparedStatement prSt = connection.prepareStatement(requeteDelete.requete())) {
-            requeteDelete.parametres(prSt, donnees);
+            requeteDelete.parametres(prSt, id);
             prSt.executeUpdate();
         }
     }

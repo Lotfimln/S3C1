@@ -20,6 +20,6 @@ public class RequeteDeleteEntreprise implements Requete<Entreprise> {
 
 	@Override
 	public void parametres(PreparedStatement prSt, Entreprise donnee) throws SQLException {
-		prSt.setInt(1, donnee.getIdEntreprise());
+		return;
 	}
 }

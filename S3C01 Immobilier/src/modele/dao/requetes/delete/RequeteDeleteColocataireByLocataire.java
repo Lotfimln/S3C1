@@ -20,6 +20,6 @@ public class RequeteDeleteColocataireByLocataire implements Requete<Colocataire>
 
 	@Override
 	public void parametres(PreparedStatement prSt, Colocataire donnee) throws SQLException {
-		prSt.setString(1, donnee.getIdLocataire());
+		return;
 	}
 }

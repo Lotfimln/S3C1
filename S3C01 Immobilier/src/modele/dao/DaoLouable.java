@@ -10,12 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 import modele.Assureur;
 import modele.Immeuble;
+import modele.Locataire;
 import modele.Louable;
 import modele.dao.requetes.create.RequeteCreateLouable;
 import modele.dao.requetes.delete.RequeteDeleteLouable;
 import modele.dao.requetes.update.RequeteUpdateLouable;
 import modele.dao.requetes.select.RequeteSelectLouableByID;
 import modele.dao.requetes.select.RequeteSelectLouableByImmeuble;
+import modele.dao.requetes.select.RequeteSelectLocataireByID;
 import modele.dao.requetes.select.RequeteSelectLouable;
 
 public class DaoLouable implements Dao<Louable> {
@@ -33,12 +35,6 @@ public class DaoLouable implements Dao<Louable> {
 			requeteCreate.parametres(prSt, donnees);
 			prSt.executeUpdate();
 			}
-		catch (SQLException e) {
-	            String messageErreur = "Erreur lors de la création du logement avec Id_Louable = " + donnees.getIdLouable() + 
-                        ". Détails : " + e.getMessage();
-	            System.err.println(messageErreur);
-	            throw new SQLException(messageErreur, e);
-		}
 	}
 
 	@Override
@@ -47,30 +43,15 @@ public class DaoLouable implements Dao<Louable> {
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteUpdate.requete())) {
 			requeteUpdate.parametres(prSt, donnees);
 			prSt.executeUpdate();
-		} catch (SQLException e) {
-            String messageErreur = "Erreur lors de la mise à jour du logement avec Id_Louable = " + donnees.getIdLouable() + 
-                    ". Détails : " + e.getMessage();
-            System.err.println(messageErreur);
-            throw new SQLException(messageErreur, e);
 		}
 	}
 
 	@Override
-	public void delete(Louable donnees) throws SQLException {
-		RequeteDeleteLouable requeteDeleteLogement = new RequeteDeleteLouable();
+	public void delete(String... id) throws SQLException {
 		RequeteDeleteLouable requeteDeleteLouable = new RequeteDeleteLouable();
-		try (PreparedStatement prSt = this.connection.prepareStatement(requeteDeleteLogement.requete())) {
-			requeteDeleteLogement.parametres(prSt, donnees);
-			prSt.executeUpdate();
-		}
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteDeleteLouable.requete())) {
-			requeteDeleteLouable.parametres(prSt, donnees);
+			requeteDeleteLouable.parametres(prSt, id);
 			prSt.executeUpdate();
-		} catch (SQLException e) {
-            String messageErreur = "Erreur lors de la suppression du logement avec Id_Louable = " + donnees.getIdLouable() +
-                    ". Détails : " + e.getMessage();
-            System.err.println(messageErreur);
-            throw new SQLException(messageErreur, e);
 		}
 	}
 
@@ -84,7 +65,7 @@ public class DaoLouable implements Dao<Louable> {
 	        requeteSelectById.parametres(prSt, id);
 	        try (ResultSet rs = prSt.executeQuery()) {
 	            if (rs.next()) {
-	                // Vérifiez les noms des colonnes ici
+	            	
 	                int idAssureur = rs.getInt("Id_Assureur");
 	                int idImmeuble = rs.getInt("Id_Immeuble");
 	                Assureur assureur = daoAssureur.findById(String.valueOf(idAssureur));
@@ -103,17 +84,12 @@ public class DaoLouable implements Dao<Louable> {
 	                    immeuble,
 	                    assureur
 	                );
-	            } else {
-	                throw new SQLException("Aucun louable trouvé avec Id_Louable = " + id[0]);
 	            }
 	        }
-	    } catch (SQLException e) {
-	        String messageErreur = "Erreur lors de la récupération du louable avec Id_Louable = " + id[0] +
-	                                ". Détails : " + e.getMessage();
-	        System.err.println(messageErreur);
-	        throw new SQLException(messageErreur, e);
 	    }
+	    return null;
 	}
+	    
 
 
 	@Override
@@ -126,6 +102,7 @@ public class DaoLouable implements Dao<Louable> {
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectAll.requete());
 				ResultSet rs = prSt.executeQuery()) {
 			while (rs.next()) {
+				
 				int idImmeuble = rs.getInt("Id_Immeuble");
                 int idAssureur = rs.getInt("Id_Assureur");
                 Immeuble immeuble = daoImmeuble.findById(String.valueOf(idImmeuble));
@@ -144,10 +121,6 @@ public class DaoLouable implements Dao<Louable> {
 						immeuble, 
 						assureur));
 			}
-        } catch (SQLException e) {
-            String messageErreur = "Erreur lors de la récupération de la liste des logements. Détails : " + e.getMessage();
-            System.err.println(messageErreur);
-            throw new SQLException(messageErreur, e);
         }
         return logements;
     }
@@ -156,22 +129,19 @@ public class DaoLouable implements Dao<Louable> {
 	    RequeteSelectLouableByImmeuble requeteSelectByImmeuble = new RequeteSelectLouableByImmeuble();
 	    DaoAssureur daoAssureur = new DaoAssureur(this.connection);
 	    DaoImmeuble daoImmeuble = new DaoImmeuble(this.connection);
-
-	    List<Louable> louables = new ArrayList<>(); // Liste pour stocker les résultats
+	    List<Louable> louables = new ArrayList<>(); 
 
 	    try (PreparedStatement prSt = this.connection.prepareStatement(requeteSelectByImmeuble.requete())) {
 	        requeteSelectByImmeuble.parametres(prSt, id);
 
 	        try (ResultSet rs = prSt.executeQuery()) {
-	            while (rs.next()) { // Parcourt chaque enregistrement trouvé
+	            while (rs.next()) {
 	                int idAssureur = rs.getInt("Id_Assureur");
 	                int idImmeuble = rs.getInt("Id_Immeuble");
 
-	                // Récupération des objets liés : Assureur et Immeuble
 	                Assureur assureur = daoAssureur.findById(String.valueOf(idAssureur));
 	                Immeuble immeuble = daoImmeuble.findById(String.valueOf(idImmeuble));
 
-	                // Création de l'objet Louable pour cet enregistrement
 	                Louable louable = new Louable(
 	                    rs.getInt("Id_Louable"),
 	                    rs.getString("TypeLouable"),
@@ -185,19 +155,10 @@ public class DaoLouable implements Dao<Louable> {
 	                    immeuble,
 	                    assureur
 	                );
-
-	                // Ajout de l'objet à la liste
 	                louables.add(louable);
 	            }
 	        }
-	    } catch (SQLException e) {
-	        String messageErreur = "Erreur lors de la récupération des louables pour Immeuble avec Id = " + id[0] +
-	                                ". Détails : " + e.getMessage();
-	        System.err.println(messageErreur);
-	        throw new SQLException(messageErreur, e);
 	    }
-
-	    // Retourne la liste des Louable trouvés
 	    return louables;
 	}
 
@@ -285,14 +246,11 @@ public class DaoLouable implements Dao<Louable> {
 	public List<Object[]> detecterLoyersImpayes() throws SQLException {
 	    List<Object[]> loyersImpayes = new ArrayList<>();
 
-	    // Requête pour exécuter la fonction pipeline
 	    String sql = "SELECT * FROM TABLE(DetecterLoyersImpayes)";
 
 	    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-	        // Exécuter la requête
 	        try (ResultSet rs = stmt.executeQuery()) {
 	            while (rs.next()) {
-	                // Ajouter chaque ligne sous forme de tableau d'objets
 	                loyersImpayes.add(new Object[]{
 	                    rs.getInt("ID_LOUABLE"),
 	                    rs.getString("ADRESSE"),
@@ -302,9 +260,6 @@ public class DaoLouable implements Dao<Louable> {
 	            }
 	        }
 	    }
-
 	    return loyersImpayes;
 	}
-
-
 }

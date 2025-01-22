@@ -20,6 +20,6 @@ public class RequeteDeleteIndexerByImmeuble implements Requete<Indexer> {
 
     @Override
     public void parametres(PreparedStatement prSt, Indexer donnee) throws SQLException {
-        prSt.setInt(1, donnee.getIdImmeuble());
+		return;
     }
 }

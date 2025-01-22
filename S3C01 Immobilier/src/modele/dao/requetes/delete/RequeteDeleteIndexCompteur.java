@@ -20,6 +20,6 @@ public class RequeteDeleteIndexCompteur implements Requete<IndexCompteur> {
 
 	@Override
 	public void parametres(PreparedStatement prSt, IndexCompteur donnee) throws SQLException {
-		prSt.setInt(1, donnee.getIdIndexCompteur());
+		return;
 	}
 }

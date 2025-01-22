@@ -45,10 +45,10 @@ public class DaoQuittances implements Dao<Quittances> {
 	}
 
 	@Override
-	public void delete(Quittances donnees) throws SQLException {
+	public void delete(String... id) throws SQLException {
 		RequeteDeleteQuittances requeteDelete = new RequeteDeleteQuittances();
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteDelete.requete())) {
-			requeteDelete.parametres(prSt, donnees);
+			requeteDelete.parametres(prSt, id);
 			prSt.executeUpdate();
 		}
 	}

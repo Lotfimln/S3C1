@@ -43,10 +43,10 @@ public class DaoImmeuble implements Dao<Immeuble> {
     }
 
     @Override
-    public void delete(Immeuble donnees) throws SQLException {
+    public void delete(String... id) throws SQLException {
         RequeteDeleteImmeuble requeteDelete = new RequeteDeleteImmeuble();
         try (PreparedStatement prSt = connection.prepareStatement(requeteDelete.requete())) {
-            requeteDelete.parametres(prSt, donnees);
+            requeteDelete.parametres(prSt, id);
             prSt.executeUpdate();
         }
     }

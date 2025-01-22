@@ -20,6 +20,6 @@ public class RequeteDeleteDiagnostic implements Requete<Diagnostic> {
 
 	@Override
 	public void parametres(PreparedStatement prSt, Diagnostic donnee) throws SQLException {
-		prSt.setInt(1, donnee.getIdDiagnostic());
+		return;
 	}
 }

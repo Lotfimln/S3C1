@@ -20,6 +20,6 @@ public class RequeteDeleteApparaitreByCharge implements Requete<Apparaitre> {
 
     @Override
     public void parametres(PreparedStatement prSt, Apparaitre donnee) throws SQLException {
-        prSt.setInt(1, donnee.getIdCharge());
+		return;
     }
 }

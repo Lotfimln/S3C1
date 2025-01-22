@@ -24,6 +24,6 @@ public class RequeteUpdateEntreprise implements Requete<Entreprise> {
 
 	@Override
 	public void parametres(PreparedStatement prSt, String... id) throws SQLException {
-		// TODO Auto-generated method stub
+		return;
 	}
 }

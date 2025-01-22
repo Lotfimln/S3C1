@@ -1,6 +1,10 @@
-package modele.dao;
+package outils;
 
 import modele.Quittances;
+import modele.dao.CictOracleDataSource;
+import modele.dao.DaoContratDeLocation;
+import modele.dao.DaoLocataire;
+import modele.dao.DaoQuittances;
 import modele.Locataire;
 import modele.Louable;
 import modele.ContratDeLocation;
@@ -10,6 +14,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+
 
 public class LireCSV {
 

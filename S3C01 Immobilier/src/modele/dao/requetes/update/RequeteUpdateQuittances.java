@@ -32,7 +32,6 @@ public class RequeteUpdateQuittances implements Requete<Quittances> {
 
 	@Override
 	public void parametres(PreparedStatement prSt, String... id) throws SQLException {
-		// TODO Auto-generated method stub
-
+		return;
 	}
 }

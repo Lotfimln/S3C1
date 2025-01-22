@@ -43,10 +43,10 @@ public class DaoLocataire implements Dao<Locataire> {
 	}
 
 	@Override
-	public void delete(Locataire donnees) throws SQLException {
+	public void delete(String... id) throws SQLException {
 		RequeteDeleteLocataire requeteDelete = new RequeteDeleteLocataire();
 		try (PreparedStatement prSt = this.connection.prepareStatement(requeteDelete.requete())) {
-			requeteDelete.parametres(prSt, donnees);
+			requeteDelete.parametres(prSt, id);
 			prSt.executeUpdate();
 		}
 	}

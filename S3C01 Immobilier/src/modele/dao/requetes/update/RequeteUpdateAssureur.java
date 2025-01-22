@@ -14,14 +14,10 @@ public class RequeteUpdateAssureur implements Requete<Assureur> {
 	}
 
 	@Override
-	public void parametres(PreparedStatement prSt, String... id) throws SQLException {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
 	public void parametres(PreparedStatement prSt, Assureur data) throws SQLException {
 		prSt.setInt(1, data.getIdAssureur());
 	    prSt.setString(2, data.getNom());
+	    
 	    java.util.Date utilDate = data.getDateAssurance();
 	    if (utilDate != null) {
 	        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
@@ -29,9 +25,17 @@ public class RequeteUpdateAssureur implements Requete<Assureur> {
 	    } else {
 	        prSt.setNull(3, java.sql.Types.DATE);
 	    }
+	    
 	    prSt.setInt(4, data.getPrime());
 	    prSt.setString(5, data.getTypeAssureur());
 	    prSt.setInt(6, data.getIdAssureur());
 	}
+	
+	@Override
+	public void parametres(PreparedStatement prSt, String... id) throws SQLException {
+		return;
+	}
+
+	
 
 }

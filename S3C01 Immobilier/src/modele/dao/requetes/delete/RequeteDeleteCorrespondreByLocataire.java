@@ -20,6 +20,6 @@ public class RequeteDeleteCorrespondreByLocataire implements Requete<Correspondr
 
     @Override
     public void parametres(PreparedStatement prSt, Correspondre donnee) throws SQLException {
-        prSt.setString(1, donnee.getIdLocataire());
+		return;
     }
 }

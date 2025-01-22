@@ -20,6 +20,6 @@ public class RequeteDeleteLouable implements Requete<Louable> {
 
 	@Override
 	public void parametres(PreparedStatement prSt, Louable donnee) throws SQLException {
-		prSt.setInt(1, donnee.getIdLouable());
+		return;
 	}
 }

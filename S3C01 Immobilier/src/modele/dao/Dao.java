@@ -10,7 +10,7 @@ public interface Dao<T> {
 
 	public void update(T donnees) throws SQLException;
 
-	public void delete(T donnees) throws SQLException;
+	public void delete(String...id) throws SQLException;
 
 	public T findById(String... id) throws SQLException;
 
