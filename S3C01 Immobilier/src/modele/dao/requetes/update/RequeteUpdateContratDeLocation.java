@@ -10,7 +10,7 @@ public class RequeteUpdateContratDeLocation implements Requete<ContratDeLocation
 
 	@Override
 	public String requete() {
-		return "UPDATE Contrat_de_location SET Id_Contrat_de_location = ?, DateDebut = ?, DateFin = ?, MontantLoyer = ?, ProvisionsCharges = ?, TypeContrat = ?, DateAnniversaire = ?, DateDerniereRegularisation = ?, IndiceICC = ?, MontantCaution = ?, Id_Louable = ? WHERE Id_Contrat_de_location = ?";
+		return "UPDATE Contrat_de_location SET Id_Contrat_de_location = ?, DateDebut = ?, DateFin = ?, MontantLoyer = ?, ProvisionsCharges = ?, TypeContrat = ?, DateAnniversaire = ?, DateDerniereRegularisation = ?, IndiceICC = ?, MontantCaution = ?, NomCaution = ?, AdresseCaution = ?, Id_Louable = ? WHERE Id_Contrat_de_location = ?";
 	}
 
 	@Override
@@ -48,15 +48,17 @@ prSt.setInt(1, donnees.getIdContratDeLocation());
 	    java.util.Date utilDate3 = donnees.getDateDerniereRegularisation();
 	    if (utilDate3 != null) {
 	        java.sql.Date sqlDate = new java.sql.Date(utilDate3.getTime());
-	        prSt.setDate(7, sqlDate);
+	        prSt.setDate(8, sqlDate);
 	    } else {
-	        prSt.setNull(7, java.sql.Types.DATE);
+	        prSt.setNull(8, java.sql.Types.DATE);
 	    }
 		
-		prSt.setDouble(8, donnees.getIndiceICC());
-		prSt.setDouble(9, donnees.getMontantCaution());
-		prSt.setInt(10, donnees.getLouable().getIdLouable());
-		prSt.setInt(11, donnees.getIdContratDeLocation());
+		prSt.setDouble(9, donnees.getIndiceICC());
+		prSt.setDouble(10, donnees.getMontantCaution());
+		prSt.setString(11, donnees.getNomCaution());
+		prSt.setString(12, donnees.getAdresseCaution());
+		prSt.setInt(13, donnees.getLouable().getIdLouable());
+		prSt.setInt(14, donnees.getIdContratDeLocation());
 	}
 
 	@Override

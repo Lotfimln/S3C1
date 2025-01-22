@@ -25,7 +25,7 @@ public class RequeteCreateQuittances implements Requete<Quittances> {
 
 	@Override
 	public void parametres(PreparedStatement prSt, Quittances donnees) throws SQLException {
-		prSt.setDouble(1, donnees.getMontantLoyer());
+		prSt.setDouble(1, donnees.getIdQuittances());
 
 		java.util.Date utilDate = donnees.getDatePaiement();
 	    if (utilDate != null) {

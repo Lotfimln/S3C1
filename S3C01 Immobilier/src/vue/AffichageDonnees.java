@@ -9,7 +9,6 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -19,10 +18,9 @@ import javax.swing.table.DefaultTableModel;
 
 import controleur.GestionAffichageDonnees;
 import controleur.GestionSelecteur;
+import controleur.ElementsSelectionnables;
+import controleur.GestionBoutonsRapports;
 import modele.dao.Dao;
-import rapport.RapportAnnuelImmeuble;
-
-import java.awt.GridBagLayout;
 
 public class AffichageDonnees extends JInternalFrame {
 
@@ -38,6 +36,7 @@ public class AffichageDonnees extends JInternalFrame {
     private JButton btnDO;
 
     private GestionAffichageDonnees gestionAffichageDonnees;
+    private GestionBoutonsRapports gestionBoutonsRapports;
 
     public AffichageDonnees(FenetrePrincipale fenetrePrincipale) {
         this.setTitle("Gestion Immobilière");
@@ -100,27 +99,27 @@ public class AffichageDonnees extends JInternalFrame {
 
         btnADI = new JButton("Annuel de l'immeuble");
         panelBoutons.add(btnADI);
-        btnADI.addActionListener(e -> gestionAffichageDonnees.genererRapportAnnuelImmeuble());
+        btnADI.addActionListener(e -> gestionBoutonsRapports.genererRapportAnnuelImmeuble());
         btnADI.setVisible(false);
         
         btnSTC = new JButton("Solde tout compte");
         panelBoutons.add(btnSTC);
-        btnSTC.addActionListener(e -> gestionAffichageDonnees.genererRapportSoldeToutCompte());
+        btnSTC.addActionListener(e -> gestionBoutonsRapports.genererRapportSoldeToutCompte());
         btnSTC.setVisible(false);
         
         btnDF = new JButton("Declaration Fiscale");
         panelBoutons.add(btnDF);
-        btnDF.addActionListener(e -> gestionAffichageDonnees.genererRapportDeclarationFiscale());
+        btnDF.addActionListener(e -> gestionBoutonsRapports.genererRapportDeclarationFiscale());
         btnDF.setVisible(false);
         
         btnDO = new JButton("Diagnostics obligatoires");
         panelBoutons.add(btnDO);
-        btnDO.addActionListener(e -> gestionAffichageDonnees.genererRapportDiagnosticsObligatoires());
+        btnDO.addActionListener(e -> gestionBoutonsRapports.genererRapportDiagnosticsObligatoires());
         btnDO.setVisible(false);
         
         JButton btnLI = new JButton("Loyers impayés");
         panelBoutons.add(btnLI);
-        btnLI.addActionListener(e -> gestionAffichageDonnees.genererRapportLoyersImpayes());
+        btnLI.addActionListener(e -> gestionBoutonsRapports.genererRapportLoyersImpayes());
 
         // Panneau pour afficher les attributs de l'élément sélectionné
         panelAttributs = new JPanel();
@@ -143,21 +142,22 @@ public class AffichageDonnees extends JInternalFrame {
         btnADI.addActionListener(e -> {
             // Génération de document (à implémenter si besoin)
         });
+    }  
+    
+    // Définit le DAO dans GestionAffichageDonnees
+    public void setDao(Dao<?> dao) {
+        if (gestionAffichageDonnees != null) {
+            gestionAffichageDonnees.setDao(dao); 
+        }
     }
 
-    // --- Getters et Setters pour interagir avec les contrôleurs ---
+    // Getters et Setters pour interagir avec les contrôleurs
     public JTable getTableListeElements() {
         return tableListeElements;
     }
 
     public JPanel getPanelAttributs() {
         return panelAttributs;
-    }
-    
-    public void setDao(Dao<?> dao) {
-        if (gestionAffichageDonnees != null) {
-            gestionAffichageDonnees.setDao(dao); // Définit le DAO dans GestionAffichageDonnees
-        }
     }
     
 	public boolean isArchiveCoche() {
@@ -195,7 +195,5 @@ public class AffichageDonnees extends JInternalFrame {
 	public void setBtnDO(JButton btnDO) {
 		this.btnDO = btnDO;
 	}
-
-	
 
 }

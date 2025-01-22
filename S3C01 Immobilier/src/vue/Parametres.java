@@ -326,8 +326,8 @@ public class Parametres extends JInternalFrame {
 	    properties.setProperty("mail", parametres[7]);
 
 	    // Sauvegarder dans un fichier
-	    try (FileOutputStream out = new FileOutputStream("config.properties")) {
-	        properties.store(out, "Paramètres utilisateur");
+	    try (FileOutputStream out = new FileOutputStream("autres/config.properties")) {
+	        properties.store(out, "Parametres utilisateur");
 	    } catch (IOException e) {
 	        JOptionPane.showMessageDialog(this, "Erreur lors de l'enregistrement : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
 	    }

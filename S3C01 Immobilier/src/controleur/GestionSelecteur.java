@@ -14,11 +14,11 @@ import javax.swing.table.DefaultTableModel;
 import modele.*;
 import modele.dao.*;
 import vue.AffichageDonnees;
-import vue.ElementsSelectionnables;
 
 public class GestionSelecteur implements ActionListener {
 
     private AffichageDonnees fenetreAffichageDonnees;
+    
 
     public GestionSelecteur(AffichageDonnees fenetreAffichageDonnees) {
         this.fenetreAffichageDonnees = fenetreAffichageDonnees;

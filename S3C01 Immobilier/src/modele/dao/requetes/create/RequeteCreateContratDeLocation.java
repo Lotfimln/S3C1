@@ -10,7 +10,7 @@ public class RequeteCreateContratDeLocation implements Requete<ContratDeLocation
 
 	@Override
 	public String requete() {
-		return "INSERT INTO Contrat_de_location (Id_Contrat_de_location, DateDebut, DateFin, MontantLoyer, ProvisionsCharges, TypeContrat, DateAnniversaire, DateDerniereRegulation, IndiceICC, MontantCaution, Id_Louable) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		return "INSERT INTO Contrat_de_location (Id_Contrat_de_location, DateDebut, DateFin, MontantLoyer, ProvisionsCharges, TypeContrat, DateAnniversaire, DateDerniereRegularisation, IndiceICC, MontantCaution, NomCaution, AdresseCaution, Id_Louable) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	}
 
 	@Override
@@ -26,6 +26,8 @@ public class RequeteCreateContratDeLocation implements Requete<ContratDeLocation
 		prSt.setString(9, id[8]);
 		prSt.setString(10, id[9]);
 		prSt.setString(11, id[10]);
+		prSt.setString(12, id[11]);
+		prSt.setString(13, id[12]);
 	}
 
 	@Override
@@ -63,13 +65,15 @@ public class RequeteCreateContratDeLocation implements Requete<ContratDeLocation
 	    java.util.Date utilDate3 = donnees.getDateDerniereRegularisation();
 	    if (utilDate3 != null) {
 	        java.sql.Date sqlDate = new java.sql.Date(utilDate3.getTime());
-	        prSt.setDate(7, sqlDate);
+	        prSt.setDate(8, sqlDate);
 	    } else {
-	        prSt.setNull(7, java.sql.Types.DATE);
+	        prSt.setNull(8, java.sql.Types.DATE);
 	    }
 		
-		prSt.setDouble(8, donnees.getIndiceICC());
-		prSt.setDouble(9, donnees.getMontantCaution());
-		prSt.setInt(10, donnees.getLouable().getIdLouable());
+		prSt.setDouble(9, donnees.getIndiceICC());
+		prSt.setDouble(10, donnees.getMontantCaution());
+		prSt.setString(11, donnees.getNomCaution());
+		prSt.setString(12, donnees.getAdresseCaution());
+		prSt.setInt(13, donnees.getLouable().getIdLouable());
 	}
 }

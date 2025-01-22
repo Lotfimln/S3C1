@@ -93,7 +93,7 @@ public class ContratDeLocation {
 	}
 	
 	public java.util.Date getDateDerniereRegularisation() {
-		return dateAnniversaire;
+		return dateDerniereRegularisation;
 	}
 
 	public void setDateDerniereRegularisation(java.util.Date dateDerniereRegularisation) {
