@@ -30,7 +30,7 @@ public class RapportAnnuelImmeuble {
             double travauxImmeuble = daoImmeuble.totalDesTravauxImmeuble(idImmeuble);
             double facturesImpayees = daoImmeuble.facturesImpayeParImmeuble(idImmeuble);
 
-            OutputStream fileOut = new FileOutputStream("src/rapport/RapportAnnuelImmeuble.docx");
+            OutputStream fileOut = new FileOutputStream("documents/rapports/RapportAnnuelImmeuble.docx");
             InputStream modele = new FileInputStream("src/rapport/vide.docx");
             XWPFDocument document = new XWPFDocument(modele);
 

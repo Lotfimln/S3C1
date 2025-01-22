@@ -23,7 +23,7 @@ public class RapportLoyersImpayes {
             List<Object[]> loyersImpayes = daoLouable.detecterLoyersImpayes();
 
             // Création du document Word
-            OutputStream fileOut = new FileOutputStream("src/rapport/RapportLoyersImpayes.docx");
+            OutputStream fileOut = new FileOutputStream("documents/rapports/RapportLoyersImpayes.docx");
             InputStream modele = new FileInputStream("src/rapport/vide.docx");
             XWPFDocument document = new XWPFDocument(modele);
 

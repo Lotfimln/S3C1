@@ -30,7 +30,7 @@ public class RapportDiagnosticsObligatoires {
             List<Louable> louables = daoLouable.findByImmeuble(String.valueOf(idImmeuble));
 
             // Création du document Word
-            OutputStream fileOut = new FileOutputStream("src/rapport/RapportDiagnosticsObligatoires.docx");
+            OutputStream fileOut = new FileOutputStream("documents/rapports/RapportDiagnosticsObligatoires.docx");
             InputStream modele = new FileInputStream("src/rapport/vide.docx");
             XWPFDocument document = new XWPFDocument(modele);
 

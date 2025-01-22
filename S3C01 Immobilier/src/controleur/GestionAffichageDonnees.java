@@ -48,10 +48,12 @@ public class GestionAffichageDonnees<T> {
         ajouterEcouteurTable();
     }
 
+    // Fonction pour changer la classe du Dao, utile pour afficher les donnees en fonction du selecteur
     public void setDao(Dao<T> dao) {
 		this.dao = dao;
 	}
     
+    // Ajoute les elecouteurs pour les tables crées dynamiquement
     private void ajouterEcouteurTable() {
         fenetreAffichageDonnees.getTableListeElements().addMouseListener(new MouseAdapter() {
             @Override
@@ -70,6 +72,8 @@ public class GestionAffichageDonnees<T> {
     // Affichage des attributs et des liaisons multiples //
     ///////////////////////////////////////////////////////
 
+    // affiche les attributs
+    // si l'attribut est une classe metier, alors on affiche son ID
 	private void afficherDetailsElement(String idElement) {
 	    try {
 	        elementSelectionne = dao.findById(idElement);
@@ -118,7 +122,7 @@ public class GestionAffichageDonnees<T> {
 	    }
 	}
 
-
+	// creation des champs en fonction des attributs d'une classe
     private Component creerComposantPourAttribut(Field champ, Object element) throws IllegalAccessException {
         Object valeur = champ.get(element);
         if (champ.getType() == int.class || champ.getType() == Integer.class ||
@@ -140,7 +144,7 @@ public class GestionAffichageDonnees<T> {
         return textField;
     }
    
-
+    // affiche les associations multiples sous forme de tableaux, avec des boutons pour interagir avec
     private void afficherAssociationsMultiples(String association, Object elementPrincipal) {
         try {
             JPanel panelAttributs = fenetreAffichageDonnees.getPanelAttributs();
@@ -467,6 +471,7 @@ public class GestionAffichageDonnees<T> {
         }
     }
 
+    // renvoie la valeur des champs convertis dans les bons types
     private Object casterValeur(String valeur, Class<?> type) {
         if (type == int.class || type == Integer.class) {
             return Integer.parseInt(valeur);
@@ -487,8 +492,8 @@ public class GestionAffichageDonnees<T> {
 	// Bouton de Mise a Jour //
 	///////////////////////////
     
-    
-    @SuppressWarnings("unchecked")
+    // Enregistre les modifications faites dans les champs
+	@SuppressWarnings("unchecked")
 	public void enregistrerModifications() {
         try {
             // Parcourt les attributs et met à jour l'objet avec les nouvelles valeurs des champs
@@ -641,6 +646,7 @@ public class GestionAffichageDonnees<T> {
     // Bouton MAJ table associative //
     //////////////////////////////////
     
+	// Met a jour les tables associatives
     private void mettreAJourAssociations(String association, Object elementPrincipal, JTable tableAssociations) {
         try {
             // Identifie l'élément principal
@@ -807,6 +813,7 @@ public class GestionAffichageDonnees<T> {
     // Bouton supprimer une ligne //
     ////////////////////////////////
     
+    // Supprime la ligne selectionnée dans la liste de gauche avec son ID
 	public void supprimerElement() {
 		try {
 			JTable tableListeElements = fenetreAffichageDonnees.getTableListeElements();
@@ -854,6 +861,9 @@ public class GestionAffichageDonnees<T> {
 	// Bouton ajouter (+) //
 	////////////////////////
 	
+	// Ajoute un element, en "dupliquant" l'element selectionné, mais en y mettant les changements
+	// faits dans les champs des attributs
+	// si vous voulez ajouter un element, changez l'id, puis faite "+"
 	public void ajouterElement() {
 	    try {
 	        // Récupère les champs de la classe de l'objet
@@ -928,13 +938,14 @@ public class GestionAffichageDonnees<T> {
 	    }
 	}
 
-
+	// si un champ contient une classe metier, renvoie vrai, faux sinon
 	private boolean estClasseMetier(Class<?> type) {
 	    // Liste des classes métier à vérifier
 	    return type == Louable.class || type == Diagnostic.class || type == Immeuble.class || type == Locataire.class || type == Entreprise.class
 	        || type == Assureur.class || type == Charge.class || type == Facture.class || type == ContratDeLocation.class;
 	}
 
+	// recupere le DAO correspondant au champ
 	private Object recupererObjetMetier(Class<?> type, String id) throws SQLException {
 	    if (type == Louable.class) {
 	        DaoLouable daoLouable = new DaoLouable(CictOracleDataSource.getConnectionBD());
@@ -971,6 +982,7 @@ public class GestionAffichageDonnees<T> {
 	// Boutons Rapports //
 	//////////////////////
 	
+	// On cherche l'immeuble selectionné, car c'est un parametre de RapportAnnuelImmeuble
 	public void genererRapportAnnuelImmeuble() {
 	    try {
 	        JTable tableListeElements = fenetreAffichageDonnees.getTableListeElements();
@@ -1012,6 +1024,7 @@ public class GestionAffichageDonnees<T> {
 	    }
 	}
 	
+	// On cherche le louable selectionné, car c'est un parametre de RapportSoldeToutCompte
 	public void genererRapportSoldeToutCompte() {
 	    try {
 	        JTable tableListeElements = fenetreAffichageDonnees.getTableListeElements();
@@ -1053,6 +1066,7 @@ public class GestionAffichageDonnees<T> {
 	    }
 	}
 	
+	// Pas de parametres, on appelle juste la classe
 	public void genererRapportLoyersImpayes() {
 	    try {
 	        // Appeler la méthode principale de RapportLoyersImpayes sans paramètre
@@ -1071,6 +1085,7 @@ public class GestionAffichageDonnees<T> {
 	    }
 	}
 
+	// On cherche l'immeuble selectionné, car c'est un parametre de RapportDeclarationFiscale
 	public void genererRapportDeclarationFiscale() {
 	    try {
 	        JTable tableListeElements = fenetreAffichageDonnees.getTableListeElements();
@@ -1112,6 +1127,7 @@ public class GestionAffichageDonnees<T> {
 	    }
 	}
 
+	// On cherche l'immeuble selectionné, car c'est un parametre de RapportDiagnosticsObligatoires
 	public void genererRapportDiagnosticsObligatoires() {
 	    try {
 	        JTable tableListeElements = fenetreAffichageDonnees.getTableListeElements();

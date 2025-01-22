@@ -89,6 +89,7 @@ public class AffichageDonnees extends JInternalFrame {
         mainPanel.add(panelBoutons, BorderLayout.NORTH);
         panelBoutons.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
+        // Ajouts des boutons avec les méthodes des controleurs correspondants
         JButton bouttonMAJ = new JButton("Mettre à jour");
         panelBoutons.add(bouttonMAJ);
         bouttonMAJ.addActionListener(e -> gestionAffichageDonnees.enregistrerModifications());

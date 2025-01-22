@@ -20,17 +20,13 @@ public class GestionParametres implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
 		switch (command) {
+		
 		case "Enregistrer":
 			String[] tabParametres = fenetreParametres.getParametres();
 			fenetreParametres.enregistrerDansFichier(tabParametres);
-		    JOptionPane.showMessageDialog(fenetreParametres, "Données enregistrées avec succès !");
-
-		    // Optionnel : Afficher les données enregistrées dans la console pour vérification
-		    System.out.println("Données enregistrées : ");
-		    for (String parametre : tabParametres) {
-		        System.out.println(parametre);
-		    }
+		    JOptionPane.showMessageDialog(fenetreParametres, "Données enregistrées avec succès !");		    
 		    break;
+		    
 		case "Annuler":
 			this.fenetreParametres.dispose();
 			break;

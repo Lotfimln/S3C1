@@ -26,7 +26,7 @@ public class RapportDeclarationFiscale {
             double totalCharges = daoImmeuble.totalChargesImmeuble(idImmeuble);
             double totalTaxes = daoImmeuble.facturesImpayeParImmeuble(idImmeuble);
 
-            OutputStream fileOut = new FileOutputStream("src/rapport/RapportDeclarationFiscale.docx");
+            OutputStream fileOut = new FileOutputStream("documents/rapports/RapportDeclarationFiscale.docx");
             InputStream modele = new FileInputStream("src/rapport/vide.docx");
             XWPFDocument document = new XWPFDocument(modele);
 

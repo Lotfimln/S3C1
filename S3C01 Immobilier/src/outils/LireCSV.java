@@ -49,6 +49,7 @@ public class LireCSV {
                     double montantLoyer = Double.parseDouble(elements[3].trim());
                     double montantProvision = Double.parseDouble(elements[4].trim());
                     
+                    // Création des DAOs
                     DaoLocataire daoLocataire = new DaoLocataire(CictOracleDataSource.getConnectionBD());
                     DaoContratDeLocation daoContratDeLocation = new DaoContratDeLocation(CictOracleDataSource.getConnectionBD());
 

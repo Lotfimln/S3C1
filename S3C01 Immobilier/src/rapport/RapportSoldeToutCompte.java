@@ -28,7 +28,7 @@ public class RapportSoldeToutCompte {
         double soldeToutCompte = dao.calculerSoldeDeToutCompte(idLouable);
 
         // Création du document Word
-        OutputStream fileOut = new FileOutputStream("src/rapport/RapportSoldeToutCompte.docx");
+        OutputStream fileOut = new FileOutputStream("documents/rapports/RapportSoldeToutCompte.docx");
         InputStream modele = new FileInputStream("src/rapport/vide.docx");
         XWPFDocument document = new XWPFDocument(modele);
 
