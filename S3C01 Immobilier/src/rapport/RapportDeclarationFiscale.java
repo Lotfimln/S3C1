@@ -65,7 +65,7 @@ public class RapportDeclarationFiscale {
 
     private static Properties chargerProprietaire() throws Exception {
         Properties proprietaire = new Properties();
-        try (InputStream input = new FileInputStream("config.properties")) {
+        try (InputStream input = new FileInputStream("autres/config.properties")) {
             proprietaire.load(input);
         }
         return proprietaire;
