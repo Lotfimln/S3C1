@@ -25,6 +25,7 @@ public class RequeteCreateLouable implements Requete<Louable> {
 		prSt.setString(8, id[7]);
 		prSt.setString(9, id[8]);
 		prSt.setString(10, id[9]);
+		prSt.setString(11, id[10]);
 	}
 
 	@Override
