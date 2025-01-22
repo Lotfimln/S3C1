@@ -1,159 +1,114 @@
 -------------------------- LOCATAIRE -------------------------------------
-
--- DÈclencheur pour vÈrifier la date de naissance du locataire
+-- D√©clencheur pour v√©rifier la date de naissance du locataire
 create or replace trigger checkLocataireDateNais before insert or update on Locataire
     for each row
     begin
-       if :NEW.DateNais >= SYSDATE then
-          -- Si la date de naissance est postÈrieure ou Ègale ‡ l'actuelle
-          raise_application_error(-20001, 'La date de naissance ne peut pas Ítre Ègale ou ultÈrieure ‡ la date actuelle.'); end if;
+       if :NEW.DateNaissance >= SYSDATE then
+          -- Si la date de naissance est post√©rieure ou √©gale √† l'actuelle
+          raise_application_error(-20001, 'La date de naissance ne peut pas √™tre √©gale ou ult√©rieure √† la date actuelle.'); end if;
     end;
 /
 
 -------------------------- LOUABLE -------------------------------------
 
--- DÈclencheur pour vÈrifier que la date d'acquisition du bien n'est pas ultÈrieure ‡ la date actuelle
+-- D√©clencheur pour v√©rifier que la date d'acquisition du bien n'est pas ult√©rieure √† la date actuelle
 create or replace trigger checkLouableDateAcqui before insert or update on Louable
     for each row
     begin
        if :NEW.DateAnniversaire > SYSDATE then
-          -- Si la la date d'acquisition est postÈrieure ‡ la date actuelle
-          raise_application_error(-20001, 'La date d''acquisition du logement ne peut pas Ítre ultÈrieure ‡ la date actuelle.'); end if;
+          -- Si la la date d'acquisition est post√©rieure √† la date actuelle
+          raise_application_error(-20001, 'La date d''acquisition du logement ne peut pas √™tre ult√©rieure √† la date actuelle.'); end if;
     end;
-/
-
--------------------------- GARAGE -------------------------------------
-
--- DÈclencheur pour vÈrifier que la date d'acquisition du bien n'est pas ultÈrieure ‡ la date actuelle
-create or replace trigger checkGarageDateAcqui before insert or update on Garage
-    for each row
-    begin
-       if :NEW.DateAcqui > SYSDATE then
-          -- Si la la date d'acquisition est postÈrieure ‡ la date actuelle
-          raise_application_error(-20001, 'La date d''acquisition du garage ne peut pas Ítre ultÈrieure ‡ la date actuelle.'); end if;
-    end;
-/
-
----------------------- IMMEUBLE ----------------------
-
--- DÈclencheur pour vÈrifier qu'un immeuble de type "maison" ne contient qu'un seul logement
-create or replace trigger checkImmeubleMais before insert or update on Immeuble
-    for each row
-    begin   
-        if :NEW.TypeImmeuble = 'Maison' then
-                -- Si le nombre de logements est supÈrieur ‡ 1
-                if :NEW.NbLogements > 1 then
-                    raise_application_error(-20023, 'Un immeuble de type "maison" ne peut contenir qu''un seul logement.'); end if; end if;
-        end;
 /
 
 ---------------------- DIAGNOSTIC ----------------------
 
--- DÈclencheur pour vÈrifier que la date de validitÈ du diagnostic est ultÈrieure ‡ la date actuelle
+-- D√©clencheur pour v√©rifier que la date de validit√© du diagnostic est ult√©rieure √† la date actuelle
 create or replace trigger checkDiagnosticDate before insert or update on Diagnostic
     for each row
     begin
         if :NEW.DateDiagnostic <= SYSDATE then
-          -- Si la date de validitÈ est antÈrieure ou Ègale ‡ l'actuelle
-          raise_application_error(-20001, 'La date de validitÈ doit Ítre ultÈrieure ‡ la date actuelle.'); end if;
+          -- Si la date de validit√© est ant√©rieure ou √©gale √† l'actuelle
+          raise_application_error(-20001, 'La date de validit√© doit √™tre ult√©rieure √† la date actuelle.'); end if;
     end;
 /
 
 ---------------------- QUITTANCES ----------------------
 
--- DÈclencheur pour attribuer une valeur par dÈfaut ‡ la date du dernier paiement si elle est NULL
-create or replace trigger checkQuittancesDefaultDate before insert on Quittances
-    for each row
-    declare
-        v_date_debut_location DATE;
-    begin
-        select DateDebut into v_date_debut_location from Contrat_de_location where Contrat_de_location.Id_Contrat_de_location=:NEW.Id_Contrat_de_location; --RÈcupÈration date de dÈbut de location
-        
-          if v_date_debut_location is null then
-            -- Si la date est null, attribuer la valeur de la date de dÈbut de location ‡ la date de la derniËre rÈgularisation
-            :NEW.DateDerPaiement := v_date_debut_location; end if;
-    end;
-/
-
--- DÈclencheur pour vÈrifier que la date de la derniËre rÈgularisation n'est pas ultÈrieure ‡ la date actuelle lors de l'insertion ou de la mise ‡ jour
+-- D√©clencheur pour v√©rifier que la date de la derni√®re r√©gularisation n'est pas ult√©rieure √† la date actuelle lors de l'insertion ou de la mise √† jour
 create or replace trigger checkQuittancesDerPaie before insert on Quittances
     for each row
     begin
-       if :NEW.DateDerPaiement > SYSDATE then
-          -- Si la date de la derniËre rÈgularisation est postÈrieure ‡ l'actuelle
-          raise_application_error(-20001, 'La date de la derniËre rÈgularisation ne peut pas Ítre ultÈrieure ‡ la date actuelle.'); end if;
+       if :NEW.DatePaiement  > SYSDATE then
+          -- Si la date de la derni√®re r√©gularisation est post√©rieure √† l'actuelle
+          raise_application_error(-20001, 'La date de la derni√®re r√©gularisation ne peut pas √™tre ult√©rieure √† la date actuelle.'); end if;
     end;
 /
 
 ---------------------- CONTRAT DE LOCATION ----------------------
 
--- DÈclencheur pour vÈrifier que la date de dÈbut de location n'est pas ultÈrieure ‡ l'actuelle
+-- D√©clencheur pour v√©rifier que la date de d√©but de location n'est pas ult√©rieure √† l'actuelle
 create or replace trigger checkDateDeb before insert or update on Contrat_de_location
     for each row
     begin
        if :NEW.DateDebut > SYSDATE then
-          -- Si la date de dÈbut de location est ultÈrieure ‡ l'actuelle
-          raise_application_error(-20001, 'La date de dÈbut de location ne peut pas Ítre ultÈrieure ‡ la date actuelle.'); end if;
+          -- Si la date de d√©but de location est ult√©rieure √† l'actuelle
+          raise_application_error(-20001, 'La date de d√©but de location ne peut pas √™tre ult√©rieure √† la date actuelle.'); end if;
     end;
 /
 
 
 ---------------------- FACTURE ----------------------
 
--- DÈclencheur pour vÈrifier que la date d'Èmission de la facture n'est pas ultÈrieure ‡ l'actuelle
+-- D√©clencheur pour v√©rifier que la date d'√©mission de la facture n'est pas ult√©rieure √† l'actuelle
 create or replace trigger checkDateFact before insert or update on Facture
     for each row
     begin
        if :NEW.DateFacture > SYSDATE then
-          -- Si la date de la facture est postÈrieure ‡ la date actuelle
-          raise_application_error(-20001, 'La date de la facture ne peut pas Ítre ultÈrieure ‡ la date actuelle.'); end if;
+          -- Si la date de la facture est post√©rieure √† la date actuelle
+          raise_application_error(-20001, 'La date de la facture ne peut pas √™tre ult√©rieure √† la date actuelle.'); end if;
     end;
 /
 
--- DÈclencheur pour vÈrifier que la date de paiement de la facture n'est pas ultÈrieure ‡ l'actuelle
+-- D√©clencheur pour v√©rifier que la date de paiement de la facture n'est pas ult√©rieure √† l'actuelle
 create or replace trigger checkDatePaie before insert on Facture
     for each row
     begin
        if :NEW.DateFacture > SYSDATE then
-        -- Si la date de paiement est ultÈrieure ‡ l'actuelle
-          raise_application_error(-20001, 'La date de paiement ne peut pas Ítre ultÈrieure ‡ la date actuelle.'); end if;
+        -- Si la date de paiement est ult√©rieure √† l'actuelle
+          raise_application_error(-20001, 'La date de paiement ne peut pas √™tre ult√©rieure √† la date actuelle.'); end if;
     end;
 /
 
--- DÈclencheur pour vÈrifier que la date d'Èmission de la facture
+-- D√©clencheur pour v√©rifier que la date d'√©mission de la facture
 create or replace trigger checkDateFactPaie before insert or update on Facture
     for each row
     begin
        if :NEW.DateFacture > :NEW.DatePaiement then 
-       -- Si la date de facturation est supÈrieure ‡ la date de paiement
-          raise_application_error(-20002, 'La date de paiement ne peut Ítre antÈrieure ‡ la date de facturation.'); end if;
+       -- Si la date de facturation est sup√©rieure √† la date de paiement
+          raise_application_error(-20002, 'La date de paiement ne peut √™tre ant√©rieure √† la date de facturation.'); end if;
     end;
 /
 
----------------------- INDEX COMPTEUR ----------------------
-
--- DÈclencheur pour vÈrifier que la date du relevÈ des compteurs
-create or replace trigger checkDateReleve before insert on Index_Compteur
-    for each row 
+-- D√©clencheur pour v√©rifier que la r√©f√©rence du devis est prise en charge
+create or replace trigger checkDateFactPaie before insert or update on Facture
+    for each row
     begin
-       if :NEW.DateReleve > SYSDATE then 
-       -- Si la date est supÈrieure ‡ l'actuelle
-          raise_application_error(-20001, 'La date du relevÈ ne peut pas Ítre ultÈrieure ‡ la date actuelle.'); end if;
+       if :NEW.REFERENCEDEVIS NOT IN ('Eau', 'Energie', 'Gaz', 'Travaux', 'Entretien', 'R√©novation', 'Travaux imputables', 'Ordures m√©nag√®res') then 
+       -- Si la date de facturation est sup√©rieure √† la date de paiement
+          raise_application_error(-20003, 'La r√©f√©rence de devis nest pas prise en charge, veuillez renseign√© le champs avec lun des exemples suivants : Eau/Energie/Gaz/Travaux/Entretien/R√©novation/Travaux imputables/Ordures m√©nag√®res.'); end if;
     end;
 /
+
 
 ---------------------- TAXE ----------------------
 
--- DÈclencheur pour vÈrifier les annÈes d'impÙt
+-- D√©clencheur pour v√©rifier les ann√©es d'imp√¥t
 create or replace trigger checkAnneeImpot before insert on Taxe
 for each row
-    declare
-        v_AnneeActuelle INT;
     begin    
-        v_AnneeActuelle := TO_NUMBER(TO_CHAR(SYSDATE, 'YYY')); -- Obtenir l'annÈe actuelle
-        
-        if :NEW.DateTaxe >= v_AnneeActuelle then 
-        -- Si la date est supÈrieure ‡ l'annÈe prÈcÈdante, annuler l'insertion
-            raise_application_error(-20001, 'L''annÈe de l''impÙt ne peut pas Ítre supÈrieur ‡ la derniËre annÈe.'); end if;
+        if :NEW.DateTaxe > SYSDATE then 
+        -- Si la date est sup√©rieure √† l'ann√©e pr√©c√©dante, annuler l'insertion
+            raise_application_error(-20001, 'L''ann√©e de l''imp√¥t ne peut pas √™tre sup√©rieur √† la derni√®re ann√©e.'); end if;
     end;
 /

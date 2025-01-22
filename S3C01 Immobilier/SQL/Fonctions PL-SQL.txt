@@ -569,17 +569,6 @@ END CalculerSommeFacturesNonPayees;
 /
 
 
-SET SERVEROUTPUT ON;
-DECLARE
-    v_SommeFactures NUMBER(10, 3);
-BEGIN
-    v_SommeFactures := CalculerSommeFacturesNonPayees(2);
-    DBMS_OUTPUT.PUT_LINE('Somme des factures non payées : ' || v_SommeFactures);
-END;
-/
-
-
-
 ----------------------------------------------
 --------- RECUPERATION LOYERS IMPAYES --------
 ----------------------------------------------

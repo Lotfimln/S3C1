@@ -224,8 +224,3 @@ CREATE TABLE Correspondre(
    FOREIGN KEY(Id_Locataire) REFERENCES Locataire(Id_Locataire) on delete cascade,
    FOREIGN KEY(Id_Contrat_de_location) REFERENCES Contrat_de_location(Id_Contrat_de_location) on delete cascade
 );
-
-
-
-
-

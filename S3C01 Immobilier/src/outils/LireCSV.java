@@ -3,6 +3,7 @@ package outils;
 import modele.Quittances;
 import modele.dao.CictOracleDataSource;
 import modele.dao.DaoContratDeLocation;
+import modele.dao.DaoCorrespondre;
 import modele.dao.DaoLocataire;
 import modele.dao.DaoQuittances;
 import modele.Locataire;
