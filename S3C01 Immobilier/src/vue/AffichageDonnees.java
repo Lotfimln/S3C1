@@ -64,6 +64,7 @@ public class AffichageDonnees extends JInternalFrame {
 
         caseArchive = new JCheckBox("Archivés");
         panelSelecteur.add(caseArchive);
+        caseArchive.setSelected(true);
 
         // Initialisation du tableau
         tableListeElements = new JTable();
