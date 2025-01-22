@@ -36,7 +36,9 @@ public class GestionSelecteur implements ActionListener {
             }
             
             afficherBoutonsSelonSelection(selection);
-
+            
+            
+            // Pour la table selectionnée, appelle la fonction afficherDonnees en passant le dao correspondant
             try {
                 switch (selection) {
                 case LOCATAIRE:
@@ -109,6 +111,7 @@ public class GestionSelecteur implements ActionListener {
         }
     }
     
+    // Sert a afficher les boutons pour generer les rapports en fonction de l'element selectionné
     private void afficherBoutonsSelonSelection(ElementsSelectionnables selection) {
         // Rendre visibles ou invisibles les boutons selon la sélection
         boolean isImmeuble = selection == ElementsSelectionnables.IMMEUBLE;
@@ -134,6 +137,7 @@ public class GestionSelecteur implements ActionListener {
         }
     }
 
+    // Affiche les donnees de l'elements selectionné dans la liste a gauche
     private <T> void afficherDonnees(Dao<T> dao, Class<T> type) throws SQLException {
         // Récupérer toutes les données du type spécifié depuis le DAO
         List<T> donnees = dao.findAll();

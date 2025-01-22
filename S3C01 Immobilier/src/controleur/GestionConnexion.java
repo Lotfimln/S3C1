@@ -54,6 +54,7 @@ public class GestionConnexion implements ActionListener {
                 break;
 
             case "Annuler":
+            	// Fermer la fenetre
                 this.fenetreConnexion.dispose();
                 break;
         }

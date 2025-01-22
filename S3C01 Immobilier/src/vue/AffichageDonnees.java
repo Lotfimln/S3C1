@@ -36,7 +36,8 @@ public class AffichageDonnees extends JInternalFrame {
 
     private GestionAffichageDonnees gestionAffichageDonnees;
 
-    public AffichageDonnees(FenetrePrincipale fenetrePrincipale) {
+    @SuppressWarnings("rawtypes")
+	public AffichageDonnees(FenetrePrincipale fenetrePrincipale) {
         this.setTitle("Gestion Immobilière");
         this.setBounds(100, 100, 1200, 700);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -144,7 +145,7 @@ public class AffichageDonnees extends JInternalFrame {
     }  
     
     // Définit le DAO dans GestionAffichageDonnees
-    public void setDao(Dao<?> dao) {
+	public void setDao(Dao<?> dao) {
         if (gestionAffichageDonnees != null) {
             gestionAffichageDonnees.setDao(dao); 
         }
