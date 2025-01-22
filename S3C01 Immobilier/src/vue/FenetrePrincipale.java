@@ -12,7 +12,6 @@ public class FenetrePrincipale extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JMenuItem menuItemConnecter;
 	private JMenuItem menuItemDeconnecter;
-	private boolean estConnecte = false;
 
 	public FenetrePrincipale() {
 		this.setTitle("Immo' Gestion 31");
@@ -81,7 +80,6 @@ public class FenetrePrincipale extends JFrame {
 	}
 
 	public void setConnecte(boolean connecte) {
-		this.estConnecte = connecte;
 		this.menuItemDeconnecter.setEnabled(connecte);
 		this.menuItemConnecter.setEnabled(!connecte);
 	}

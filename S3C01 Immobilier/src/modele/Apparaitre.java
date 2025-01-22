@@ -30,7 +30,7 @@ public class Apparaitre {
 
 	@Override
 	public String toString() {
-		return null;
+		return "";
 	}
 
 	@Override

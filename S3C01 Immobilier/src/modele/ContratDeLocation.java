@@ -13,14 +13,14 @@ public class ContratDeLocation {
     private java.util.Date dateDerniereRegularisation;
     private double indiceICC;
     private double montantCaution;
-    private String NomCaution;
-    private String AdresseCaution;
+    private String nomCaution;
+    private String adresseCaution;
 
     private Louable louable; // Relation avec Louable
 
     public ContratDeLocation(int idContratDeLocation, java.util.Date dateDebut, java.util.Date dateFin, double montantLoyer,
                               double provisionsCharges, String typeContrat, java.util.Date dateAnniversaire, java.util.Date dateDerniereRegularisation, double indiceICC,
-                              double montantCaution, String NomCaution, String AdresseCaution, Louable louable) {
+                              double montantCaution, String nomCaution, String adresseCaution, Louable louable) {
         this.idContratDeLocation = idContratDeLocation;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
@@ -32,8 +32,8 @@ public class ContratDeLocation {
         this.indiceICC = indiceICC;
         this.montantCaution = montantCaution;
         this.louable = louable;
-        this.NomCaution = NomCaution;
-        this.AdresseCaution = AdresseCaution;
+        this.nomCaution = nomCaution;
+        this.adresseCaution = adresseCaution;
     }
 
 	public int getIdContratDeLocation() {
@@ -125,19 +125,19 @@ public class ContratDeLocation {
 	}
 
 	public String getNomCaution() {
-		return NomCaution;
+		return nomCaution;
 	}
 
 	public void setNomCaution(String nomCaution) {
-		NomCaution = nomCaution;
+		this.nomCaution = nomCaution;
 	}
 
 	public String getAdresseCaution() {
-		return AdresseCaution;
+		return adresseCaution;
 	}
 
 	public void setAdresseCaution(String adresseCaution) {
-		AdresseCaution = adresseCaution;
+		this.adresseCaution = adresseCaution;
 	}
 
 	@Override
@@ -147,7 +147,7 @@ public class ContratDeLocation {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(AdresseCaution, dateDerniereRegularisation, NomCaution, dateAnniversaire, dateDebut,
+		return Objects.hash(adresseCaution, dateDerniereRegularisation, nomCaution, dateAnniversaire, dateDebut,
 				dateFin, idContratDeLocation, indiceICC, louable, montantCaution, montantLoyer, provisionsCharges,
 				typeContrat);
 	}
@@ -161,9 +161,9 @@ public class ContratDeLocation {
 			return false;
 		}
 		ContratDeLocation other = (ContratDeLocation) obj;
-		return Objects.equals(AdresseCaution, other.AdresseCaution)
+		return Objects.equals(adresseCaution, other.adresseCaution)
 				&& Objects.equals(dateDerniereRegularisation, other.dateDerniereRegularisation)
-				&& Objects.equals(NomCaution, other.NomCaution)
+				&& Objects.equals(nomCaution, other.nomCaution)
 				&& Objects.equals(dateAnniversaire, other.dateAnniversaire)
 				&& Objects.equals(dateDebut, other.dateDebut) && Objects.equals(dateFin, other.dateFin)
 				&& idContratDeLocation == other.idContratDeLocation

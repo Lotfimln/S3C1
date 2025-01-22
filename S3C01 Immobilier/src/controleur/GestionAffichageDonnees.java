@@ -23,12 +23,8 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import modele.dao.*;
-import rapport.RapportAnnuelImmeuble;
-import rapport.RapportDeclarationFiscale;
-import rapport.RapportDiagnosticsObligatoires;
-import rapport.RapportLoyersImpayes;
-import rapport.RapportSoldeToutCompte;
 import modele.*;
+
 import vue.AffichageDonnees;
 
 public class GestionAffichageDonnees<T> {
@@ -181,7 +177,7 @@ public class GestionAffichageDonnees<T> {
                     if (elementPrincipal instanceof Locataire) {
                         String idLocataire = ((Locataire) elementPrincipal).getIdLocataire();
                         DaoColocataire daoColocataire = new DaoColocataire(CictOracleDataSource.getConnectionBD());
-                        List<Colocataire> colocataires = daoColocataire.findByLocataire(new String[]{idLocataire});
+                        List<Colocataire> colocataires = daoColocataire.findByLocataire(idLocataire);
 
                         // Création du modèle
                         DefaultTableModel model = new DefaultTableModel(new String[]{"Colocataires associés"}, 0);
@@ -311,7 +307,6 @@ public class GestionAffichageDonnees<T> {
                                 indexer.getPrixAbonnement(),
                                 indexer.getDateRegularisation()
                             });
-                            System.out.println(indexer);
                         }
                     }
                     break;
@@ -347,9 +342,7 @@ public class GestionAffichageDonnees<T> {
             
             // Ajouts des controleurs
             
-            boutonMAJ.addActionListener(e -> {
-                mettreAJourAssociations(association, elementPrincipal, tableAssociations);
-            });
+            boutonMAJ.addActionListener(e -> mettreAJourAssociations(association, elementPrincipal, tableAssociations));
 
             boutonAjouter.addActionListener(e -> {
                 // Vérifie que la table est bien initialisée

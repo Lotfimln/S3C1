@@ -30,7 +30,7 @@ public class Correspondre {
 
 	@Override
 	public String toString() {
-		return null;
+		return "";
 	}
 
 	@Override

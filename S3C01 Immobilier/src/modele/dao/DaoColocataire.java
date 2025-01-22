@@ -8,14 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import modele.Colocataire;
-import modele.Correspondre;
 import modele.Locataire;
 import modele.dao.requetes.create.RequeteCreateColocataire;
 import modele.dao.requetes.delete.RequeteDeleteColocataire;
 import modele.dao.requetes.delete.RequeteDeleteColocataireByLocataire;
 import modele.dao.requetes.delete.RequeteDeleteLocataire;
 import modele.dao.requetes.select.RequeteSelectColocataire;
-import modele.dao.requetes.select.RequeteSelectColocataireByID;
 import modele.dao.requetes.select.RequeteSelectColocataireByLocataire;
 import modele.dao.requetes.select.RequeteSelectColocataireByLocataire1;
 import modele.dao.requetes.update.RequeteUpdateColocataire;

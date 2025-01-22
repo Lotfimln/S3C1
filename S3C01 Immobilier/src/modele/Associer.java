@@ -61,7 +61,7 @@ public class Associer {
     
 	@Override
 	public String toString() {
-		return null;
+		return "";
 	}
 	
 	@Override

@@ -8,7 +8,6 @@ import java.util.Properties;
 import org.apache.poi.xwpf.usermodel.*;
 import modele.dao.CictOracleDataSource;
 import modele.dao.DaoImmeuble;
-import modele.dao.DaoLouable;
 
 public class RapportDeclarationFiscale {
 
@@ -20,7 +19,6 @@ public class RapportDeclarationFiscale {
     public static void creerRapport(int idImmeuble) {
         try {
             DaoImmeuble daoImmeuble = new DaoImmeuble(CictOracleDataSource.getConnectionBD());
-            DaoLouable daoLouable = new DaoLouable(CictOracleDataSource.getConnectionBD());
             Properties proprietaire = chargerProprietaire();
 
             double totalRevenus = daoImmeuble.totalLoyersPayes(idImmeuble);
